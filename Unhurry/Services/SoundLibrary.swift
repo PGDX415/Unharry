@@ -50,11 +50,18 @@ final class SoundLibrary {
         case campfire   = "ai_fire_camp"
 
         // ── 新增 ──
-        case windBreeze  = "ai_wind_breeze"    // 微风
-        case streamFlow  = "ai_stream_flow"    // 溪流
-        case thunderSlow = "ai_thunder_slow"    // 远雷
-        case forestNight = "ai_forest_night"    // 夜林
-        case fanHum      = "ai_fan_hum"         // 风扇
+        case windBreeze   = "ai_wind_breeze"     // 微风
+        case streamFlow   = "ai_stream_flow"     // 溪流
+        case thunderSlow  = "ai_thunder_slow"     // 远雷
+        case forestNight  = "ai_forest_night"     // 夜林
+        case fanHum       = "ai_fan_hum"          // 风扇
+        case roofRain     = "ai_roof_rain"        // 屋檐听雨
+        case carRain      = "ai_car_rain"         // 雨打车窗
+        case waterfall    = "ai_waterfall"         // 瀑布
+        case summerBugs   = "ai_summer_bugs"       // 夏夜虫鸣
+        case bambooWind   = "ai_bamboo_wind"       // 风吹竹林
+        case guqin        = "ai_guqin"             // 古琴
+        case heartbeat    = "ai_heartbeat"          // 心跳
 
         var fileName: String { rawValue }
         var fileExtension: String { "mp3" }
@@ -85,6 +92,27 @@ final class SoundLibrary {
             case .fanHum:
                 return SoundTrack(id: rawValue, name: "风扇", category: .whiteNoise,
                                   fileName: fileName, fileExtension: fileExtension, defaultVolume: 0.3)
+            case .roofRain:
+                return SoundTrack(id: rawValue, name: "屋檐听雨", category: .rain,
+                                  fileName: fileName, fileExtension: fileExtension, defaultVolume: 0.45)
+            case .carRain:
+                return SoundTrack(id: rawValue, name: "雨打车窗", category: .rain,
+                                  fileName: fileName, fileExtension: fileExtension, defaultVolume: 0.4)
+            case .waterfall:
+                return SoundTrack(id: rawValue, name: "瀑布", category: .water,
+                                  fileName: fileName, fileExtension: fileExtension, defaultVolume: 0.4)
+            case .summerBugs:
+                return SoundTrack(id: rawValue, name: "夏夜虫鸣", category: .nature,
+                                  fileName: fileName, fileExtension: fileExtension, defaultVolume: 0.3)
+            case .bambooWind:
+                return SoundTrack(id: rawValue, name: "风吹竹林", category: .nature,
+                                  fileName: fileName, fileExtension: fileExtension, defaultVolume: 0.35)
+            case .guqin:
+                return SoundTrack(id: rawValue, name: "古琴", category: .meditation,
+                                  fileName: fileName, fileExtension: fileExtension, defaultVolume: 0.4)
+            case .heartbeat:
+                return SoundTrack(id: rawValue, name: "心跳", category: .whiteNoise,
+                                  fileName: fileName, fileExtension: fileExtension, defaultVolume: 0.25)
             }
         }
     }
