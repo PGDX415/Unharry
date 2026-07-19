@@ -34,29 +34,55 @@ let radiusB: CGFloat = 255  // 内圈（稍小）
 let offsetX: CGFloat = 65
 let offsetY: CGFloat = 55
 
-// MARK: - 星星参数
-// 两颗四角星，置于月牙右上方，一明一暗
-struct Star {
-    let center: CGPoint
-    let outerRadius: CGFloat  // 外尖半径
-    let innerRadius: CGFloat  // 内谷半径
-    let opacity: CGFloat
+// MARK: - 闲眠人形（月牙中侧卧）
+
+/// 在月牙中画一个侧卧入睡的人形剪影
+/// 位置：月牙最粗处（左上），身体自然弯曲呼应月牙弧线
+func drawSleepingFigure(context: CGContext, moonColor: CGColor) {
+    let bodyColor = moonColor  // 与月牙同色
+
+    // 头部（圆形）
+    let headCenter = CGPoint(x: 355, y: 375)
+    let headRadius: CGFloat = 42
+
+    // 身体（侧卧弧线，类似 C 形回卷）
+    let bodyPath = CGMutablePath()
+    bodyPath.move(to: CGPoint(x: 395, y: 365))       // 颈
+    bodyPath.addCurve(
+        to: CGPoint(x: 495, y: 440),                  // 膝
+        control1: CGPoint(x: 440, y: 340),
+        control2: CGPoint(x: 500, y: 390)
+    )
+    bodyPath.addCurve(
+        to: CGPoint(x: 430, y: 480),                  // 脚
+        control1: CGPoint(x: 490, y: 490),
+        control2: CGPoint(x: 460, y: 490)
+    )
+    bodyPath.addCurve(
+        to: CGPoint(x: 380, y: 440),                  // 臀
+        control1: CGPoint(x: 400, y: 470),
+        control2: CGPoint(x: 380, y: 460)
+    )
+    bodyPath.addCurve(
+        to: CGPoint(x: 395, y: 365),                  // 回到颈
+        control1: CGPoint(x: 380, y: 405),
+        control2: CGPoint(x: 380, y: 380)
+    )
+    bodyPath.closeSubpath()
+
+    // 绘制
+    context.setFillColor(bodyColor)
+
+    // 头部
+    context.beginPath()
+    context.addArc(center: headCenter, radius: headRadius, startAngle: 0, endAngle: 2 * .pi, clockwise: false)
+    context.fillPath()
+
+    // 身体
+    context.beginPath()
+    context.addPath(bodyPath)
+    context.fillPath()
 }
-// 对齐 ContentView moon.stars.fill SF Symbol 中星星的相对位置
-let stars: [Star] = [
-    Star(
-        center: CGPoint(x: 670, y: 280),
-        outerRadius: 60,
-        innerRadius: 24,
-        opacity: 1.0
-    ),
-    Star(
-        center: CGPoint(x: 370, y: 310),
-        outerRadius: 42,
-        innerRadius: 16,
-        opacity: 0.7
-    ),
-]
 
 // MARK: - 渲染
 let colorSpace = CGColorSpace(name: CGColorSpace.sRGB)!
@@ -117,38 +143,8 @@ context.fillPath(using: .evenOdd)
 
 context.restoreGState()
 
-// 3. 画星星（四角星，扁平几何造型）
-for star in stars {
-    let starPath = CGMutablePath()
-    let angles: [CGFloat] = [
-        -.pi / 2,           // 上
-        -.pi / 4,           // 右上谷
-        0,                  // 右
-        .pi / 4,            // 右下谷
-        .pi / 2,            // 下
-        .pi * 3 / 4,        // 左下谷
-        .pi,                // 左
-        .pi * 5 / 4,        // 左上谷
-    ]
-
-    for (i, angle) in angles.enumerated() {
-        let isTip = i % 2 == 0
-        let r = isTip ? star.outerRadius : star.innerRadius
-        let x = star.center.x + cos(angle) * r
-        let y = star.center.y + sin(angle) * r
-
-        if i == 0 {
-            starPath.move(to: CGPoint(x: x, y: y))
-        } else {
-            starPath.addLine(to: CGPoint(x: x, y: y))
-        }
-    }
-    starPath.closeSubpath()
-
-    context.setFillColor(moonColor.copy(alpha: star.opacity)!)
-    context.addPath(starPath)
-    context.fillPath()
-}
+// 3. 画闲眠人形（月牙中侧卧）
+drawSleepingFigure(context: context, moonColor: moonColor)
 
 // 4. 导出
 guard let image = context.makeImage() else {
@@ -175,7 +171,5 @@ guard CGImageDestinationFinalize(destination) else {
 
 print("✅ Icon generated: \(outputURL.path)")
 print("   Size: \(image.width)×\(image.height)")
-print("   Moon:  CircleA(center:\(Int(centerX)),\(Int(centerY)) r:\(Int(radiusA))) - CircleB(r:\(Int(radiusB)) offset:\(Int(offsetX)),\(Int(offsetY)))")
-for (i, s) in stars.enumerated() {
-    print("   Star\(i+1): center(\(Int(s.center.x)),\(Int(s.center.y))) outer:\(Int(s.outerRadius)) inner:\(Int(s.innerRadius)) opacity:\(s.opacity)")
-}
+print("   Moon: CircleA(\(Int(centerX)),\(Int(centerY)) r:\(Int(radiusA))) - CircleB(r:\(Int(radiusB)) dx:\(Int(offsetX)) dy:\(Int(offsetY)))")
+print("   Figure: 侧卧人形 @ 月牙左上粗部")
