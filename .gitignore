@@ -1,0 +1,12 @@
+# Xcode
+*.pbxproj.backup
+*.xcuserdata
+*.xcworkspace/xcuserdata
+DerivedData/
+.build/
+
+# SwiftPM
+.build/
+
+# macOS
+.DS_Store

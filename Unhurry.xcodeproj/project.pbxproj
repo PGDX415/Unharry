@@ -6,133 +6,359 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		096F7FE1676A5E3658CB32C6 /* AudioServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4D90D3BA990CDA0619CE4A /* AudioServiceProtocol.swift */; };
+		24C2E2A4D17F8A89EABA5AA1 /* AudioTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0158939461D8D2BADC60684 /* AudioTestHelpers.swift */; };
+		30260D30BFA053C6EF5C8994 /* AudioSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A804160ED82C06AAA3C829 /* AudioSessionManager.swift */; };
+		402EBBC3FB487EC1C1CC935B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B879FB9BDE56B91A200F43C /* Assets.xcassets */; };
+		427DF40E5BC7A06C78CA1F1F /* SoundTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57782B46D242303E244A21FD /* SoundTrack.swift */; };
+		42AD8B47405B93A92D233B42 /* NoiseGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E332F16A2F6A35FFEE1649 /* NoiseGeneratorTests.swift */; };
+		43B877CC6599F09AF70D86EB /* SoundCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E01DF2DEB9BA6E75BA0C612C /* SoundCategory.swift */; };
+		5503A6C9933137B0A762A469 /* AVAudioPCMBuffer+TestTone.swift in Sources */ = {isa = PBXBuildFile; fileRef = C183323AD91CDB137F7C4061 /* AVAudioPCMBuffer+TestTone.swift */; };
+		5A639CC012C213E8C33041D0 /* AudioServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 858D27EB4FF16FD5260FDD56 /* AudioServiceTests.swift */; };
+		6A0323E57ADD3C50600F7952 /* UnhurryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7756D98C241798772FF113 /* UnhurryApp.swift */; };
+		6FF8FBA63AE2D7D0FD1F4214 /* SoundLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A2051C42B066F062576332 /* SoundLibrary.swift */; };
+		7A6AC4E8F13DEB0741A854C7 /* SleepTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA089EE214C9919718FBE61 /* SleepTimer.swift */; };
+		81BF57499037809A7622321B /* AudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99AA12AED0CD184FD50991A /* AudioService.swift */; };
+		B5D604B687B42C589A11D8F1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87F320BA273676D0C4F85AA /* ContentView.swift */; };
+		BFF591CE561BEA9B17A83E85 /* NoiseGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E938E643F0D74FC827830370 /* NoiseGenerator.swift */; };
+		D2BB3212783C259121F41BF0 /* SleepTimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E008D8EFC8B6FBA65826997 /* SleepTimerTests.swift */; };
+		EB310644D6DA74A14FEDBAE7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F61AAF460487502E4A34E9E /* AppDelegate.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2D56130E7A8D09FA672677A4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BBC4C593F8EFBA39FE96258F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2F80AF7AAC940B5DA840ECFA;
+			remoteInfo = Unhurry;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
-		40275ADA300C9EF200F7CA7F /* Unhurry.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Unhurry.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F61AAF460487502E4A34E9E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		2CA089EE214C9919718FBE61 /* SleepTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepTimer.swift; sourceTree = "<group>"; };
+		32E332F16A2F6A35FFEE1649 /* NoiseGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseGeneratorTests.swift; sourceTree = "<group>"; };
+		4B879FB9BDE56B91A200F43C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4C7756D98C241798772FF113 /* UnhurryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnhurryApp.swift; sourceTree = "<group>"; };
+		57782B46D242303E244A21FD /* SoundTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundTrack.swift; sourceTree = "<group>"; };
+		858D27EB4FF16FD5260FDD56 /* AudioServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioServiceTests.swift; sourceTree = "<group>"; };
+		90C8B4F64CAEBA198F828FA7 /* Unhurry.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Unhurry.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		931B27D89BDC736DB9CBE1D1 /* UnhurryTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = UnhurryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9E008D8EFC8B6FBA65826997 /* SleepTimerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepTimerTests.swift; sourceTree = "<group>"; };
+		A4A804160ED82C06AAA3C829 /* AudioSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSessionManager.swift; sourceTree = "<group>"; };
+		B8A2051C42B066F062576332 /* SoundLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundLibrary.swift; sourceTree = "<group>"; };
+		B99AA12AED0CD184FD50991A /* AudioService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioService.swift; sourceTree = "<group>"; };
+		C0158939461D8D2BADC60684 /* AudioTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioTestHelpers.swift; sourceTree = "<group>"; };
+		C183323AD91CDB137F7C4061 /* AVAudioPCMBuffer+TestTone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVAudioPCMBuffer+TestTone.swift"; sourceTree = "<group>"; };
+		C87F320BA273676D0C4F85AA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		CD4D90D3BA990CDA0619CE4A /* AudioServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioServiceProtocol.swift; sourceTree = "<group>"; };
+		E01DF2DEB9BA6E75BA0C612C /* SoundCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundCategory.swift; sourceTree = "<group>"; };
+		E938E643F0D74FC827830370 /* NoiseGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseGenerator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		40275ADC300C9EF200F7CA7F /* Unhurry */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
+/* Begin PBXGroup section */
+		1E1FC264BB7F023710C9F89C /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C183323AD91CDB137F7C4061 /* AVAudioPCMBuffer+TestTone.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		3574DDA8F0DE50EED316B507 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
+		36781F50E02DA53BE0E28E5C /* Unhurry */ = {
+			isa = PBXGroup;
+			children = (
+				4B879FB9BDE56B91A200F43C /* Assets.xcassets */,
+				7E64A16D2FD0694CD17D124C /* App */,
+				1E1FC264BB7F023710C9F89C /* Extensions */,
+				D2AAC17683E94387AD2816D9 /* Models */,
+				A01E44ADEC27FAEDD6ABA974 /* Resources */,
+				63C9E86FB5168580A8F177B7 /* Services */,
+				80B18DD3BBBA2B0301C8F737 /* ViewModels */,
+				90E27E9414ED8F097EC8F738 /* Views */,
+			);
 			path = Unhurry;
 			sourceTree = "<group>";
 		};
-/* End PBXFileSystemSynchronizedRootGroup section */
-
-/* Begin PBXFrameworksBuildPhase section */
-		40275AD7300C9EF200F7CA7F /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXFrameworksBuildPhase section */
-
-/* Begin PBXGroup section */
-		40275AD1300C9EF200F7CA7F = {
+		3D9263020239E8C190942C7D = {
 			isa = PBXGroup;
 			children = (
-				40275ADC300C9EF200F7CA7F /* Unhurry */,
-				40275ADB300C9EF200F7CA7F /* Products */,
+				36781F50E02DA53BE0E28E5C /* Unhurry */,
+				66488D3B295CC51E2DA1BFBD /* UnhurryTests */,
+				782E0ED15FD26FD95CE8C2F2 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		40275ADB300C9EF200F7CA7F /* Products */ = {
+		5C69B9496AD170CE08B83D30 /* TestHelpers */ = {
 			isa = PBXGroup;
 			children = (
-				40275ADA300C9EF200F7CA7F /* Unhurry.app */,
+				C0158939461D8D2BADC60684 /* AudioTestHelpers.swift */,
+			);
+			path = TestHelpers;
+			sourceTree = "<group>";
+		};
+		63C9E86FB5168580A8F177B7 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				B99AA12AED0CD184FD50991A /* AudioService.swift */,
+				CD4D90D3BA990CDA0619CE4A /* AudioServiceProtocol.swift */,
+				A4A804160ED82C06AAA3C829 /* AudioSessionManager.swift */,
+				E938E643F0D74FC827830370 /* NoiseGenerator.swift */,
+				2CA089EE214C9919718FBE61 /* SleepTimer.swift */,
+				B8A2051C42B066F062576332 /* SoundLibrary.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		66488D3B295CC51E2DA1BFBD /* UnhurryTests */ = {
+			isa = PBXGroup;
+			children = (
+				ED4F5E381262A7D561B7C218 /* Services */,
+				5C69B9496AD170CE08B83D30 /* TestHelpers */,
+			);
+			path = UnhurryTests;
+			sourceTree = "<group>";
+		};
+		782E0ED15FD26FD95CE8C2F2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				90C8B4F64CAEBA198F828FA7 /* Unhurry.app */,
+				931B27D89BDC736DB9CBE1D1 /* UnhurryTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		7BD0A5AFD018AB5EE2D73386 /* Timer */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Timer;
+			sourceTree = "<group>";
+		};
+		7E64A16D2FD0694CD17D124C /* App */ = {
+			isa = PBXGroup;
+			children = (
+				1F61AAF460487502E4A34E9E /* AppDelegate.swift */,
+				4C7756D98C241798772FF113 /* UnhurryApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		80B18DD3BBBA2B0301C8F737 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		90E27E9414ED8F097EC8F738 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C87F320BA273676D0C4F85AA /* ContentView.swift */,
+				B17FE0D21700EB479976CB93 /* Settings */,
+				9904FAAD596019B7CDFF83CB /* SleepTracking */,
+				3574DDA8F0DE50EED316B507 /* Sounds */,
+				C47738C681E110DF16CB0C24 /* Stories */,
+				7BD0A5AFD018AB5EE2D73386 /* Timer */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		9904FAAD596019B7CDFF83CB /* SleepTracking */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = SleepTracking;
+			sourceTree = "<group>";
+		};
+		A01E44ADEC27FAEDD6ABA974 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		B17FE0D21700EB479976CB93 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		C47738C681E110DF16CB0C24 /* Stories */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Stories;
+			sourceTree = "<group>";
+		};
+		D2AAC17683E94387AD2816D9 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E01DF2DEB9BA6E75BA0C612C /* SoundCategory.swift */,
+				57782B46D242303E244A21FD /* SoundTrack.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		ED4F5E381262A7D561B7C218 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				858D27EB4FF16FD5260FDD56 /* AudioServiceTests.swift */,
+				32E332F16A2F6A35FFEE1649 /* NoiseGeneratorTests.swift */,
+				9E008D8EFC8B6FBA65826997 /* SleepTimerTests.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		40275AD9300C9EF200F7CA7F /* Unhurry */ = {
+		2F80AF7AAC940B5DA840ECFA /* Unhurry */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 40275AE7300C9EF400F7CA7F /* Build configuration list for PBXNativeTarget "Unhurry" */;
+			buildConfigurationList = 91FAF0BEB7DD983F0DCD5DA0 /* Build configuration list for PBXNativeTarget "Unhurry" */;
 			buildPhases = (
-				40275AD6300C9EF200F7CA7F /* Sources */,
-				40275AD7300C9EF200F7CA7F /* Frameworks */,
-				40275AD8300C9EF200F7CA7F /* Resources */,
+				19FD133D6FB6A9286E788F76 /* Sources */,
+				90F53A951263D94DF47F1E4E /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				40275ADC300C9EF200F7CA7F /* Unhurry */,
-			);
 			name = Unhurry;
 			packageProductDependencies = (
 			);
 			productName = Unhurry;
-			productReference = 40275ADA300C9EF200F7CA7F /* Unhurry.app */;
+			productReference = 90C8B4F64CAEBA198F828FA7 /* Unhurry.app */;
 			productType = "com.apple.product-type.application";
+		};
+		5DE898099C1718AA5A5715D7 /* UnhurryTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9DD883643DE74912FC868914 /* Build configuration list for PBXNativeTarget "UnhurryTests" */;
+			buildPhases = (
+				C4590F818B11373FA3AC978D /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				20BBCF2C2247BEEEE009FB28 /* PBXTargetDependency */,
+			);
+			name = UnhurryTests;
+			packageProductDependencies = (
+			);
+			productName = UnhurryTests;
+			productReference = 931B27D89BDC736DB9CBE1D1 /* UnhurryTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		40275AD2300C9EF200F7CA7F /* Project object */ = {
+		BBC4C593F8EFBA39FE96258F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2660;
-				LastUpgradeCheck = 2660;
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
 				TargetAttributes = {
-					40275AD9300C9EF200F7CA7F = {
-						CreatedOnToolsVersion = 26.6;
+					2F80AF7AAC940B5DA840ECFA = {
+						DevelopmentTeam = SJ8DC28NRH;
+						ProvisioningStyle = Automatic;
+					};
+					5DE898099C1718AA5A5715D7 = {
+						DevelopmentTeam = SJ8DC28NRH;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
-			buildConfigurationList = 40275AD5300C9EF200F7CA7F /* Build configuration list for PBXProject "Unhurry" */;
+			buildConfigurationList = 8387040210A506E4A118FE87 /* Build configuration list for PBXProject "Unhurry" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				en,
 			);
-			mainGroup = 40275AD1300C9EF200F7CA7F;
+			mainGroup = 3D9263020239E8C190942C7D;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 40275ADB300C9EF200F7CA7F /* Products */;
+			productRefGroup = 782E0ED15FD26FD95CE8C2F2 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				40275AD9300C9EF200F7CA7F /* Unhurry */,
+				2F80AF7AAC940B5DA840ECFA /* Unhurry */,
+				5DE898099C1718AA5A5715D7 /* UnhurryTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		40275AD8300C9EF200F7CA7F /* Resources */ = {
+		90F53A951263D94DF47F1E4E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				402EBBC3FB487EC1C1CC935B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		40275AD6300C9EF200F7CA7F /* Sources */ = {
+		19FD133D6FB6A9286E788F76 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5503A6C9933137B0A762A469 /* AVAudioPCMBuffer+TestTone.swift in Sources */,
+				EB310644D6DA74A14FEDBAE7 /* AppDelegate.swift in Sources */,
+				81BF57499037809A7622321B /* AudioService.swift in Sources */,
+				096F7FE1676A5E3658CB32C6 /* AudioServiceProtocol.swift in Sources */,
+				30260D30BFA053C6EF5C8994 /* AudioSessionManager.swift in Sources */,
+				B5D604B687B42C589A11D8F1 /* ContentView.swift in Sources */,
+				BFF591CE561BEA9B17A83E85 /* NoiseGenerator.swift in Sources */,
+				7A6AC4E8F13DEB0741A854C7 /* SleepTimer.swift in Sources */,
+				43B877CC6599F09AF70D86EB /* SoundCategory.swift in Sources */,
+				6FF8FBA63AE2D7D0FD1F4214 /* SoundLibrary.swift in Sources */,
+				427DF40E5BC7A06C78CA1F1F /* SoundTrack.swift in Sources */,
+				6A0323E57ADD3C50600F7952 /* UnhurryApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C4590F818B11373FA3AC978D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A639CC012C213E8C33041D0 /* AudioServiceTests.swift in Sources */,
+				24C2E2A4D17F8A89EABA5AA1 /* AudioTestHelpers.swift in Sources */,
+				42AD8B47405B93A92D233B42 /* NoiseGeneratorTests.swift in Sources */,
+				D2BB3212783C259121F41BF0 /* SleepTimerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		20BBCF2C2247BEEEE009FB28 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2F80AF7AAC940B5DA840ECFA /* Unhurry */;
+			targetProxy = 2D56130E7A8D09FA672677A4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
-		40275AE5300C9EF400F7CA7F /* Debug */ = {
+		0C70AAE3FCACA2B179D331E1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -160,17 +386,15 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = SJ8DC28NRH;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
 					"$(inherited)",
+					"DEBUG=1",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -178,25 +402,108 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		40275AE6300C9EF400F7CA7F /* Release */ = {
+		3001D7D9B81F6129CA93E4CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = SJ8DC28NRH;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gongdexin.paul.UnhurryTests;
+				SDKROOT = iphoneos;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Unhurry.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Unhurry";
+			};
+			name = Debug;
+		};
+		690922C1BD95C99E0E153159 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = SJ8DC28NRH;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gongdexin.paul.UnhurryTests;
+				SDKROOT = iphoneos;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Unhurry.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Unhurry";
+			};
+			name = Release;
+		};
+		72DA1BDAACE64C284C4A0D06 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = SJ8DC28NRH;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UIBackgroundModes = (
+					audio,
+				);
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gongdexin.paul.Unhurry;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		84E44E8ED786F102A1C0E69B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -224,11 +531,9 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = SJ8DC28NRH;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -236,21 +541,24 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				VALIDATE_PRODUCT = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
-		40275AE8300C9EF400F7CA7F /* Debug */ = {
+		EF6D5036BB7C021A758F8A9F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SJ8DC28NRH;
@@ -258,6 +566,9 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UIBackgroundModes = (
+					audio,
+				);
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -267,71 +578,47 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gongdexin.paul.Unhurry;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		40275AE9300C9EF400F7CA7F /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = SJ8DC28NRH;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.gongdexin.paul.Unhurry;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		40275AD5300C9EF200F7CA7F /* Build configuration list for PBXProject "Unhurry" */ = {
+		8387040210A506E4A118FE87 /* Build configuration list for PBXProject "Unhurry" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				40275AE5300C9EF400F7CA7F /* Debug */,
-				40275AE6300C9EF400F7CA7F /* Release */,
+				0C70AAE3FCACA2B179D331E1 /* Debug */,
+				84E44E8ED786F102A1C0E69B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
-		40275AE7300C9EF400F7CA7F /* Build configuration list for PBXNativeTarget "Unhurry" */ = {
+		91FAF0BEB7DD983F0DCD5DA0 /* Build configuration list for PBXNativeTarget "Unhurry" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				40275AE8300C9EF400F7CA7F /* Debug */,
-				40275AE9300C9EF400F7CA7F /* Release */,
+				EF6D5036BB7C021A758F8A9F /* Debug */,
+				72DA1BDAACE64C284C4A0D06 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
+		};
+		9DD883643DE74912FC868914 /* Build configuration list for PBXNativeTarget "UnhurryTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3001D7D9B81F6129CA93E4CF /* Debug */,
+				690922C1BD95C99E0E153159 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 40275AD2300C9EF200F7CA7F /* Project object */;
+	rootObject = BBC4C593F8EFBA39FE96258F /* Project object */;
 }
