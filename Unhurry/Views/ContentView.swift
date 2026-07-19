@@ -16,6 +16,7 @@ struct ContentView: View {
             VStack(spacing: 0) {
                 brandHeader
                 storyEntry
+                breathEntry
                 TimerControlView(viewModel: timerVM)
                 SoundLibraryView(viewModel: playerVM)
                 ActiveMixerPanel(viewModel: playerVM)
@@ -23,6 +24,25 @@ struct ContentView: View {
             .background(Color(red: 0.216, green: 0.184, blue: 0.322))
             .foregroundStyle(Color(red: 0.941, green: 0.902, blue: 0.824))
         }
+    }
+
+    // MARK: - Breath Entry
+
+    private var breathEntry: some View {
+        NavigationLink(destination: BreathView()) {
+            HStack {
+                Label("呼吸练习", systemImage: "wind")
+                    .font(.subheadline)
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 10)
+            .background(Color(red: 0.941, green: 0.902, blue: 0.824).opacity(0.06))
+        }
+        .buttonStyle(.plain)
     }
 
     // MARK: - Story Entry
