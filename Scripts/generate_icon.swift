@@ -44,13 +44,13 @@ struct Star {
 }
 let stars: [Star] = [
     Star(
-        center: CGPoint(x: 700, y: 200),
+        center: CGPoint(x: 650, y: 320),
         outerRadius: 44,
         innerRadius: 16,
         opacity: 1.0
     ),
     Star(
-        center: CGPoint(x: 820, y: 170),
+        center: CGPoint(x: 750, y: 280),
         outerRadius: 30,
         innerRadius: 11,
         opacity: 0.65
