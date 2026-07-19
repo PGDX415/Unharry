@@ -44,14 +44,19 @@ final class SoundLibrary {
 
     /// AI 生成的自然音（ElevenLabs 等工具生成，放入 Resources/Audio/）
     enum AINature: String, CaseIterable {
+        // ── 已入库 ──
         case lightRain  = "ai_rain_light"
         case oceanCalm  = "ai_ocean_calm"
         case campfire   = "ai_fire_camp"
 
-        /// Bundle 中的文件名（不含扩展名）
-        var fileName: String { rawValue }
+        // ── 新增 ──
+        case windBreeze  = "ai_wind_breeze"    // 微风
+        case streamFlow  = "ai_stream_flow"    // 溪流
+        case thunderSlow = "ai_thunder_slow"    // 远雷
+        case forestNight = "ai_forest_night"    // 夜林
+        case fanHum      = "ai_fan_hum"         // 风扇
 
-        /// 扩展名（ElevenLabs 输出 `.mp3`，后续可转 `.m4a`）
+        var fileName: String { rawValue }
         var fileExtension: String { "mp3" }
 
         var track: SoundTrack {
@@ -65,6 +70,21 @@ final class SoundLibrary {
             case .campfire:
                 return SoundTrack(id: rawValue, name: "篝火", category: .nature,
                                   fileName: fileName, fileExtension: fileExtension, defaultVolume: 0.35)
+            case .windBreeze:
+                return SoundTrack(id: rawValue, name: "微风", category: .nature,
+                                  fileName: fileName, fileExtension: fileExtension, defaultVolume: 0.3)
+            case .streamFlow:
+                return SoundTrack(id: rawValue, name: "溪流", category: .water,
+                                  fileName: fileName, fileExtension: fileExtension, defaultVolume: 0.4)
+            case .thunderSlow:
+                return SoundTrack(id: rawValue, name: "远雷", category: .rain,
+                                  fileName: fileName, fileExtension: fileExtension, defaultVolume: 0.35)
+            case .forestNight:
+                return SoundTrack(id: rawValue, name: "夜林", category: .nature,
+                                  fileName: fileName, fileExtension: fileExtension, defaultVolume: 0.35)
+            case .fanHum:
+                return SoundTrack(id: rawValue, name: "风扇", category: .whiteNoise,
+                                  fileName: fileName, fileExtension: fileExtension, defaultVolume: 0.3)
             }
         }
     }
