@@ -111,14 +111,13 @@ final class SoundLibrary {
     // MARK: - Private: AI Nature Sounds (Bundle Files)
 
     private func preloadAINatureSounds(into audioService: AudioServiceProtocol) {
-        let audioDir = "Audio"  // Resources/Audio/
-
         for item in AINature.allCases {
             let track = item.track
+            // xcodegen 会将 Resources/Audio/ 下的文件平铺到 Bundle 根目录
             guard let url = Bundle.main.url(
                 forResource: track.fileName,
                 withExtension: track.fileExtension,
-                subdirectory: audioDir
+                subdirectory: nil
             ) else {
                 print("""
                 ⚠️  AI 音频文件缺失: \(track.fileName).\(track.fileExtension)
