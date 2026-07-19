@@ -23,6 +23,7 @@ targets:
         DEVELOPMENT_TEAM: SJ8DC28NRH
         PRODUCT_BUNDLE_IDENTIFIER: com.gongdexin.paul.Unhurry
         GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: 闲眠
         INFOPLIST_KEY_UIBackgroundModes:
           - audio
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
