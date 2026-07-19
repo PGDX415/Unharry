@@ -44,13 +44,13 @@ struct Star {
 }
 let stars: [Star] = [
     Star(
-        center: CGPoint(x: 730, y: 240),
+        center: CGPoint(x: 700, y: 200),
         outerRadius: 44,
         innerRadius: 16,
         opacity: 1.0
     ),
     Star(
-        center: CGPoint(x: 810, y: 310),
+        center: CGPoint(x: 820, y: 170),
         outerRadius: 30,
         innerRadius: 11,
         opacity: 0.65
@@ -76,32 +76,45 @@ guard let context = CGContext(
 context.setFillColor(bgColor)
 context.fill(CGRect(x: 0, y: 0, width: size, height: size))
 
-// 2. 画月牙（even-odd fill 实现布尔相减）
-let path = CGMutablePath()
+// 2. 画月牙（Clip 到 Circle A + even-odd 相减，消除 B 外溢残影）
+context.saveGState()
 
-// Circle A（正向圆）
-path.addArc(
+// Clip 区域 = Circle A
+context.beginPath()
+context.addArc(
     center: CGPoint(x: centerX, y: centerY),
     radius: radiusA,
     startAngle: 0,
     endAngle: 2 * .pi,
     clockwise: false
 )
-path.closeSubpath()
+context.closePath()
+context.clip()
 
-// Circle B（减去圆）
-path.addArc(
+// Even-odd：CircleA - CircleB（仅 Clip 内的部分可见）
+let moonPath = CGMutablePath()
+moonPath.addArc(
+    center: CGPoint(x: centerX, y: centerY),
+    radius: radiusA,
+    startAngle: 0,
+    endAngle: 2 * .pi,
+    clockwise: false
+)
+moonPath.closeSubpath()
+moonPath.addArc(
     center: CGPoint(x: centerX + offsetX, y: centerY + offsetY),
     radius: radiusB,
     startAngle: 0,
     endAngle: 2 * .pi,
     clockwise: false
 )
-path.closeSubpath()
+moonPath.closeSubpath()
 
 context.setFillColor(moonColor)
-context.addPath(path)
+context.addPath(moonPath)
 context.fillPath(using: .evenOdd)
+
+context.restoreGState()
 
 // 3. 画星星（四角星，扁平几何造型）
 for star in stars {
