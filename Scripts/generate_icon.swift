@@ -42,15 +42,16 @@ struct Star {
     let innerRadius: CGFloat  // 内谷半径
     let opacity: CGFloat
 }
+// 对齐 ContentView moon.stars.fill SF Symbol 中星星的相对位置
 let stars: [Star] = [
     Star(
-        center: CGPoint(x: 700, y: 290),
+        center: CGPoint(x: 670, y: 280),
         outerRadius: 60,
         innerRadius: 24,
         opacity: 1.0
     ),
     Star(
-        center: CGPoint(x: 785, y: 350),
+        center: CGPoint(x: 370, y: 310),
         outerRadius: 42,
         innerRadius: 16,
         opacity: 0.7
