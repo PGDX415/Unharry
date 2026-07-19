@@ -8,8 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		096F7FE1676A5E3658CB32C6 /* AudioServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4D90D3BA990CDA0619CE4A /* AudioServiceProtocol.swift */; };
+		17CC7DEC9B1C03BA65FADC20 /* TimerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835AC1F2F44DBCE94A633AA5 /* TimerViewModel.swift */; };
+		1CF3BC208D145EAE7C3A9061 /* ActiveMixerPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE8A71CFC81B58BA87B9B70 /* ActiveMixerPanel.swift */; };
 		24C2E2A4D17F8A89EABA5AA1 /* AudioTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0158939461D8D2BADC60684 /* AudioTestHelpers.swift */; };
 		30260D30BFA053C6EF5C8994 /* AudioSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A804160ED82C06AAA3C829 /* AudioSessionManager.swift */; };
+		3818EA2B3F27110C51EFEE08 /* SoundLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F535724712AE0F15D4A9F /* SoundLibraryView.swift */; };
 		402EBBC3FB487EC1C1CC935B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B879FB9BDE56B91A200F43C /* Assets.xcassets */; };
 		427DF40E5BC7A06C78CA1F1F /* SoundTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57782B46D242303E244A21FD /* SoundTrack.swift */; };
 		42AD8B47405B93A92D233B42 /* NoiseGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E332F16A2F6A35FFEE1649 /* NoiseGeneratorTests.swift */; };
@@ -20,9 +23,11 @@
 		6FF8FBA63AE2D7D0FD1F4214 /* SoundLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A2051C42B066F062576332 /* SoundLibrary.swift */; };
 		7A6AC4E8F13DEB0741A854C7 /* SleepTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA089EE214C9919718FBE61 /* SleepTimer.swift */; };
 		81BF57499037809A7622321B /* AudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99AA12AED0CD184FD50991A /* AudioService.swift */; };
+		9A5639F8CA71B63443707E47 /* TimerControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A01270434FA0A5EA064CCD7 /* TimerControlView.swift */; };
 		B5D604B687B42C589A11D8F1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87F320BA273676D0C4F85AA /* ContentView.swift */; };
 		BFF591CE561BEA9B17A83E85 /* NoiseGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E938E643F0D74FC827830370 /* NoiseGenerator.swift */; };
 		D2BB3212783C259121F41BF0 /* SleepTimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E008D8EFC8B6FBA65826997 /* SleepTimerTests.swift */; };
+		DCE73DE29A794079E1A329DB /* SoundPlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24AF58F6D76DC20EC504ECE7 /* SoundPlayerViewModel.swift */; };
 		EB310644D6DA74A14FEDBAE7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F61AAF460487502E4A34E9E /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
@@ -37,12 +42,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		040F535724712AE0F15D4A9F /* SoundLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundLibraryView.swift; sourceTree = "<group>"; };
+		0DE8A71CFC81B58BA87B9B70 /* ActiveMixerPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveMixerPanel.swift; sourceTree = "<group>"; };
 		1F61AAF460487502E4A34E9E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		24AF58F6D76DC20EC504ECE7 /* SoundPlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayerViewModel.swift; sourceTree = "<group>"; };
 		2CA089EE214C9919718FBE61 /* SleepTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepTimer.swift; sourceTree = "<group>"; };
 		32E332F16A2F6A35FFEE1649 /* NoiseGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseGeneratorTests.swift; sourceTree = "<group>"; };
 		4B879FB9BDE56B91A200F43C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4C7756D98C241798772FF113 /* UnhurryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnhurryApp.swift; sourceTree = "<group>"; };
 		57782B46D242303E244A21FD /* SoundTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundTrack.swift; sourceTree = "<group>"; };
+		5A01270434FA0A5EA064CCD7 /* TimerControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerControlView.swift; sourceTree = "<group>"; };
+		835AC1F2F44DBCE94A633AA5 /* TimerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewModel.swift; sourceTree = "<group>"; };
 		858D27EB4FF16FD5260FDD56 /* AudioServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioServiceTests.swift; sourceTree = "<group>"; };
 		90C8B4F64CAEBA198F828FA7 /* Unhurry.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Unhurry.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		931B27D89BDC736DB9CBE1D1 /* UnhurryTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = UnhurryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -70,6 +80,8 @@
 		3574DDA8F0DE50EED316B507 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				0DE8A71CFC81B58BA87B9B70 /* ActiveMixerPanel.swift */,
+				040F535724712AE0F15D4A9F /* SoundLibraryView.swift */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -140,6 +152,7 @@
 		7BD0A5AFD018AB5EE2D73386 /* Timer */ = {
 			isa = PBXGroup;
 			children = (
+				5A01270434FA0A5EA064CCD7 /* TimerControlView.swift */,
 			);
 			path = Timer;
 			sourceTree = "<group>";
@@ -156,6 +169,8 @@
 		80B18DD3BBBA2B0301C8F737 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				24AF58F6D76DC20EC504ECE7 /* SoundPlayerViewModel.swift */,
+				835AC1F2F44DBCE94A633AA5 /* TimerViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -315,6 +330,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5503A6C9933137B0A762A469 /* AVAudioPCMBuffer+TestTone.swift in Sources */,
+				1CF3BC208D145EAE7C3A9061 /* ActiveMixerPanel.swift in Sources */,
 				EB310644D6DA74A14FEDBAE7 /* AppDelegate.swift in Sources */,
 				81BF57499037809A7622321B /* AudioService.swift in Sources */,
 				096F7FE1676A5E3658CB32C6 /* AudioServiceProtocol.swift in Sources */,
@@ -324,7 +340,11 @@
 				7A6AC4E8F13DEB0741A854C7 /* SleepTimer.swift in Sources */,
 				43B877CC6599F09AF70D86EB /* SoundCategory.swift in Sources */,
 				6FF8FBA63AE2D7D0FD1F4214 /* SoundLibrary.swift in Sources */,
+				3818EA2B3F27110C51EFEE08 /* SoundLibraryView.swift in Sources */,
+				DCE73DE29A794079E1A329DB /* SoundPlayerViewModel.swift in Sources */,
 				427DF40E5BC7A06C78CA1F1F /* SoundTrack.swift in Sources */,
+				9A5639F8CA71B63443707E47 /* TimerControlView.swift in Sources */,
+				17CC7DEC9B1C03BA65FADC20 /* TimerViewModel.swift in Sources */,
 				6A0323E57ADD3C50600F7952 /* UnhurryApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
