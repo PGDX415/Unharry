@@ -8,12 +8,12 @@ import Foundation
 
 /// 内置音效目录。
 ///
-/// 管理所有可用音效的元数据，并在初始化时将「种子音频」预加载到 AudioService。
+/// 管理所有可用音效的元数据，并在初始化时预加载到 AudioService。
 ///
-/// ## 当前状态
-/// - 包含 3 种代码生成的噪声（白噪音、粉噪音、棕噪音）作为种子音频
-/// - 后续 Phase：替换为 AI 生成的自然音（雨声、海浪等），
-///   并扩展为从 Bundle 或远端加载的完整音效库
+/// ## 音效来源
+/// - **代码生成**：白噪音、粉噪音、棕噪音（零版权，永远可用）
+/// - **AI 生成**：雨声、海浪、篝火（ElevenLabs 等工具生成 `.mp3` 放入 Bundle）
+/// - 后续扩展：远程 URL 流式加载 + 本地缓存
 final class SoundLibrary {
 
     // MARK: - Properties
@@ -21,79 +21,120 @@ final class SoundLibrary {
     /// 所有可用音效的元数据列表
     let tracks: [SoundTrack]
 
-    /// 种子音频（代码生成，零版权）
-    enum BuiltIn: String, CaseIterable {
-        case whiteNoise  = "builtin_white_noise"
-        case pinkNoise   = "builtin_pink_noise"
-        case brownNoise  = "builtin_brown_noise"
+    /// 代码生成的噪声（零版权，永远可用）
+    enum GeneratedNoise: String, CaseIterable {
+        case whiteNoise = "builtin_white_noise"
+        case pinkNoise  = "builtin_pink_noise"
+        case brownNoise = "builtin_brown_noise"
 
         var track: SoundTrack {
             switch self {
             case .whiteNoise:
-                return SoundTrack(
-                    id: rawValue,
-                    name: "白噪音",
-                    category: .whiteNoise,
-                    fileName: rawValue,
-                    fileExtension: "caf",
-                    defaultVolume: 0.4
-                )
+                return SoundTrack(id: rawValue, name: "白噪音", category: .whiteNoise,
+                                  fileName: rawValue, fileExtension: "caf", defaultVolume: 0.4)
             case .pinkNoise:
-                return SoundTrack(
-                    id: rawValue,
-                    name: "粉噪音",
-                    category: .whiteNoise,
-                    fileName: rawValue,
-                    fileExtension: "caf",
-                    defaultVolume: 0.4
-                )
+                return SoundTrack(id: rawValue, name: "粉噪音", category: .whiteNoise,
+                                  fileName: rawValue, fileExtension: "caf", defaultVolume: 0.4)
             case .brownNoise:
-                return SoundTrack(
-                    id: rawValue,
-                    name: "棕噪音",
-                    category: .whiteNoise,
-                    fileName: rawValue,
-                    fileExtension: "caf",
-                    defaultVolume: 0.35
-                )
+                return SoundTrack(id: rawValue, name: "棕噪音", category: .whiteNoise,
+                                  fileName: rawValue, fileExtension: "caf", defaultVolume: 0.35)
+            }
+        }
+    }
+
+    /// AI 生成的自然音（ElevenLabs 等工具生成，放入 Resources/Audio/）
+    enum AINature: String, CaseIterable {
+        case lightRain  = "ai_rain_light"
+        case oceanCalm  = "ai_ocean_calm"
+        case campfire   = "ai_fire_camp"
+
+        /// Bundle 中的文件名（不含扩展名）
+        var fileName: String { rawValue }
+
+        /// 扩展名（ElevenLabs 输出 `.mp3`，后续可转 `.m4a`）
+        var fileExtension: String { "mp3" }
+
+        var track: SoundTrack {
+            switch self {
+            case .lightRain:
+                return SoundTrack(id: rawValue, name: "轻雨", category: .rain,
+                                  fileName: fileName, fileExtension: fileExtension, defaultVolume: 0.45)
+            case .oceanCalm:
+                return SoundTrack(id: rawValue, name: "海浪", category: .water,
+                                  fileName: fileName, fileExtension: fileExtension, defaultVolume: 0.45)
+            case .campfire:
+                return SoundTrack(id: rawValue, name: "篝火", category: .nature,
+                                  fileName: fileName, fileExtension: fileExtension, defaultVolume: 0.35)
             }
         }
     }
 
     // MARK: - Init
 
-    /// 初始化音效库。
-    ///
-    /// 当前阶段：将所有 `BuiltIn` 种子音频通过代码生成注册到 `AudioService`，
-    /// 后续可扩展为从 Bundle 文件或远程 URL 加载。
     init() {
-        self.tracks = BuiltIn.allCases.map { $0.track }
+        // 合并所有音效：代码生成 + AI 自然音
+        let noiseTracks = GeneratedNoise.allCases.map { $0.track }
+        let aiTracks = AINature.allCases.map { $0.track }
+        self.tracks = noiseTracks + aiTracks
     }
 
     // MARK: - Preload
 
-    /// 将种子音频生成并注册到 AudioService。
+    /// 预加载所有音效到 AudioService。
     ///
-    /// 在 App 启动时调用一次。生成 5 秒的循环噪声 buffer，
-    /// 直接注入 AudioService 而非走文件 I/O。
-    /// - Parameter audioService: 目标音频服务
+    /// - 代码生成的噪声：直接生成 buffer 注入
+    /// - AI 自然音：从 Bundle 读取音频文件
+    /// - 文件不存在时：打印 warning 但不崩溃（等待用户放入文件）
     func preloadBuiltInSounds(into audioService: AudioServiceProtocol) {
-        let duration: TimeInterval = 5.0  // 5 秒循环 buffer
+        preloadGeneratedNoise(into: audioService)
+        preloadAINatureSounds(into: audioService)
+    }
 
-        for builtin in BuiltIn.allCases {
+    // MARK: - Private: Generated Noise
+
+    private func preloadGeneratedNoise(into audioService: AudioServiceProtocol) {
+        let duration: TimeInterval = 5.0
+
+        for item in GeneratedNoise.allCases {
             let buffer: AVAudioPCMBuffer?
-            switch builtin {
-            case .whiteNoise:
-                buffer = NoiseGenerator.whiteNoise(duration: duration)
-            case .pinkNoise:
-                buffer = NoiseGenerator.pinkNoise(duration: duration)
-            case .brownNoise:
-                buffer = NoiseGenerator.brownNoise(duration: duration)
+            switch item {
+            case .whiteNoise:  buffer = NoiseGenerator.whiteNoise(duration: duration)
+            case .pinkNoise:   buffer = NoiseGenerator.pinkNoise(duration: duration)
+            case .brownNoise:  buffer = NoiseGenerator.brownNoise(duration: duration)
+            }
+            if let buffer = buffer {
+                audioService.registerBuffer(buffer, forSound: item.rawValue)
+            }
+        }
+    }
+
+    // MARK: - Private: AI Nature Sounds (Bundle Files)
+
+    private func preloadAINatureSounds(into audioService: AudioServiceProtocol) {
+        let audioDir = "Audio"  // Resources/Audio/
+
+        for item in AINature.allCases {
+            let track = item.track
+            guard let url = Bundle.main.url(
+                forResource: track.fileName,
+                withExtension: track.fileExtension,
+                subdirectory: audioDir
+            ) else {
+                print("""
+                ⚠️  AI 音频文件缺失: \(track.fileName).\(track.fileExtension)
+                   请放入 Unhurry/Resources/Audio/ 目录。
+                   ElevenLabs 生成 prompt 见 CLAUDE.md 或 ElevenLabs 章节。
+                """)
+                continue
             }
 
-            if let buffer = buffer {
-                audioService.registerBuffer(buffer, forSound: builtin.rawValue)
+            do {
+                try audioService.loadSound(id: track.id, from: url)
+                print("✅ Loaded: \(track.name) (\(track.fileName).\(track.fileExtension))")
+            } catch {
+                print("❌ Failed to load \(track.name): \(error)")
             }
         }
     }
 }
+
