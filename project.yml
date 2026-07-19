@@ -21,6 +21,7 @@ targets:
     resources:
       - path: Unhurry/Resources/Audio
         type: folder
+      - path: Unhurry/Base.lproj/LaunchScreen.storyboard
     dependencies:
       - target: UnhurryWidget
     settings:
@@ -28,19 +29,7 @@ targets:
         DEVELOPMENT_TEAM: SJ8DC28NRH
         PRODUCT_BUNDLE_IDENTIFIER: com.gongdexin.paul.Unhurry
         CODE_SIGN_ENTITLEMENTS: Unhurry/Unhurry.entitlements
-        GENERATE_INFOPLIST_FILE: YES
-        INFOPLIST_KEY_CFBundleDisplayName: 闲眠
-        INFOPLIST_KEY_UIBackgroundModes:
-          - audio
-        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
-        INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
-        INFOPLIST_KEY_UILaunchScreen_Generation: YES
-        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
-        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
-        INFOPLIST_KEY_CFBundleURLTypes:
-          - CFBundleURLName: com.gongdexin.paul.Unhurry
-            CFBundleURLSchemes:
-              - unhurry
+        INFOPLIST_FILE: Unhurry/Info.plist
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         ENABLE_PREVIEWS: YES

@@ -2,11 +2,12 @@ import CoreGraphics
 import Foundation
 import ImageIO
 import UniformTypeIdentifiers
+import AppKit
 
 // MARK: - 配置
 let size = 1024
 
-// 暮色紫 #372f52
+// 暮色紫 #372f52（与 App 背景一致）
 let bgColor = CGColor(
     red: 0x37 / 255.0,
     green: 0x2F / 255.0,
@@ -14,77 +15,52 @@ let bgColor = CGColor(
     alpha: 1.0
 )
 
-// 暖白 #f0e6d2
-let moonColor = CGColor(
-    red: 0xF0 / 255.0,
-    green: 0xE6 / 255.0,
-    blue: 0xD2 / 255.0,
+// 金色 #E8C547
+let accentColor = CGColor(
+    red: 0xE8 / 255.0,
+    green: 0xC5 / 255.0,
+    blue: 0x47 / 255.0,
     alpha: 1.0
 )
 
-// MARK: - 月牙几何参数
-// 两个圆形布尔相减：CircleA - CircleB = 月牙
-// 不对称设计：不同半径 + 对角线偏移
-let centerX: CGFloat = 512
-let centerY: CGFloat = 510
-let radiusA: CGFloat = 285  // 外圈（稍大）
-let radiusB: CGFloat = 255  // 内圈（稍小）
+// MARK: - 渲染 SF Symbol
 
-// 偏移：右下方向 → 月牙粗端在左上，细端在右下
-let offsetX: CGFloat = 65
-let offsetY: CGFloat = 55
+let symbolName = "moon.stars.fill"
+let pointSize: CGFloat = 280
 
-// MARK: - 闲眠人形（月牙中侧卧）
-
-/// 在月牙中画一个侧卧入睡的人形剪影
-/// 位置：月牙最粗处（左上），身体自然弯曲呼应月牙弧线
-func drawSleepingFigure(context: CGContext, moonColor: CGColor) {
-    let bodyColor = moonColor  // 与月牙同色
-
-    // 头部（圆形）
-    let headCenter = CGPoint(x: 355, y: 375)
-    let headRadius: CGFloat = 42
-
-    // 身体（侧卧弧线，类似 C 形回卷）
-    let bodyPath = CGMutablePath()
-    bodyPath.move(to: CGPoint(x: 395, y: 365))       // 颈
-    bodyPath.addCurve(
-        to: CGPoint(x: 495, y: 440),                  // 膝
-        control1: CGPoint(x: 440, y: 340),
-        control2: CGPoint(x: 500, y: 390)
-    )
-    bodyPath.addCurve(
-        to: CGPoint(x: 430, y: 480),                  // 脚
-        control1: CGPoint(x: 490, y: 490),
-        control2: CGPoint(x: 460, y: 490)
-    )
-    bodyPath.addCurve(
-        to: CGPoint(x: 380, y: 440),                  // 臀
-        control1: CGPoint(x: 400, y: 470),
-        control2: CGPoint(x: 380, y: 460)
-    )
-    bodyPath.addCurve(
-        to: CGPoint(x: 395, y: 365),                  // 回到颈
-        control1: CGPoint(x: 380, y: 405),
-        control2: CGPoint(x: 380, y: 380)
-    )
-    bodyPath.closeSubpath()
-
-    // 绘制
-    context.setFillColor(bodyColor)
-
-    // 头部
-    context.beginPath()
-    context.addArc(center: headCenter, radius: headRadius, startAngle: 0, endAngle: 2 * .pi, clockwise: false)
-    context.fillPath()
-
-    // 身体
-    context.beginPath()
-    context.addPath(bodyPath)
-    context.fillPath()
+// 使用 AppKit 渲染 SF Symbol
+let config = NSImage.SymbolConfiguration(
+    pointSize: pointSize,
+    weight: .regular,
+    scale: .large
+)
+guard let symbolImage = NSImage(systemSymbolName: symbolName, accessibilityDescription: nil)?
+    .withSymbolConfiguration(config)
+else {
+    print("ERROR: Failed to load SF Symbol: \(symbolName)")
+    exit(1)
 }
 
-// MARK: - 渲染
+// 着色
+let tinted = NSImage(size: symbolImage.size)
+tinted.lockFocus()
+NSColor(cgColor: accentColor)?.set()
+NSRect(origin: .zero, size: symbolImage.size).fill()
+symbolImage.draw(
+    in: NSRect(origin: .zero, size: symbolImage.size),
+    from: .zero,
+    operation: .destinationIn,
+    fraction: 1.0
+)
+tinted.unlockFocus()
+
+guard let tintedCGImage = tinted.cgImage(forProposedRect: nil, context: nil, hints: nil) else {
+    print("ERROR: Failed to get CGImage from tinted NSImage")
+    exit(1)
+}
+
+// MARK: - 绘制到上下文
+
 let colorSpace = CGColorSpace(name: CGColorSpace.sRGB)!
 guard let context = CGContext(
     data: nil,
@@ -103,50 +79,18 @@ guard let context = CGContext(
 context.setFillColor(bgColor)
 context.fill(CGRect(x: 0, y: 0, width: size, height: size))
 
-// 2. 画月牙（Clip 到 Circle A + even-odd 相减，消除 B 外溢残影）
-context.saveGState()
-
-// Clip 区域 = Circle A
-context.beginPath()
-context.addArc(
-    center: CGPoint(x: centerX, y: centerY),
-    radius: radiusA,
-    startAngle: 0,
-    endAngle: 2 * .pi,
-    clockwise: false
+// 2. 居中绘制 SF Symbol
+let iconWidth = CGFloat(tintedCGImage.width)
+let iconHeight = CGFloat(tintedCGImage.height)
+let iconRect = CGRect(
+    x: (CGFloat(size) - iconWidth) / 2,
+    y: (CGFloat(size) - iconHeight) / 2,
+    width: iconWidth,
+    height: iconHeight
 )
-context.closePath()
-context.clip()
+context.draw(tintedCGImage, in: iconRect)
 
-// Even-odd：CircleA - CircleB（仅 Clip 内的部分可见）
-let moonPath = CGMutablePath()
-moonPath.addArc(
-    center: CGPoint(x: centerX, y: centerY),
-    radius: radiusA,
-    startAngle: 0,
-    endAngle: 2 * .pi,
-    clockwise: false
-)
-moonPath.closeSubpath()
-moonPath.addArc(
-    center: CGPoint(x: centerX + offsetX, y: centerY + offsetY),
-    radius: radiusB,
-    startAngle: 0,
-    endAngle: 2 * .pi,
-    clockwise: false
-)
-moonPath.closeSubpath()
-
-context.setFillColor(moonColor)
-context.addPath(moonPath)
-context.fillPath(using: .evenOdd)
-
-context.restoreGState()
-
-// 3. 画闲眠人形（月牙中侧卧）
-drawSleepingFigure(context: context, moonColor: moonColor)
-
-// 4. 导出
+// 3. 导出
 guard let image = context.makeImage() else {
     print("ERROR: Failed to create CGImage")
     exit(1)
@@ -171,5 +115,4 @@ guard CGImageDestinationFinalize(destination) else {
 
 print("✅ Icon generated: \(outputURL.path)")
 print("   Size: \(image.width)×\(image.height)")
-print("   Moon: CircleA(\(Int(centerX)),\(Int(centerY)) r:\(Int(radiusA))) - CircleB(r:\(Int(radiusB)) dx:\(Int(offsetX)) dy:\(Int(offsetY)))")
-print("   Figure: 侧卧人形 @ 月牙左上粗部")
+print("   Symbol: \(symbolName) @ \(Int(pointSize))pt")

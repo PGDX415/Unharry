@@ -25,6 +25,7 @@
 		427DF40E5BC7A06C78CA1F1F /* SoundTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57782B46D242303E244A21FD /* SoundTrack.swift */; };
 		42AD8B47405B93A92D233B42 /* NoiseGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E332F16A2F6A35FFEE1649 /* NoiseGeneratorTests.swift */; };
 		43B877CC6599F09AF70D86EB /* SoundCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E01DF2DEB9BA6E75BA0C612C /* SoundCategory.swift */; };
+		440912E136752167BD4424F3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5FF3104E99E6692474E3D95 /* LaunchScreen.storyboard */; };
 		49B20054D2739E2DA6B69EAA /* ai_singing_bowl.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D46190D64BB6C27C5EF2138F /* ai_singing_bowl.mp3 */; };
 		5503A6C9933137B0A762A469 /* AVAudioPCMBuffer+TestTone.swift in Sources */ = {isa = PBXBuildFile; fileRef = C183323AD91CDB137F7C4061 /* AVAudioPCMBuffer+TestTone.swift */; };
 		56DD3249478CC020D1132AB1 /* ai_thunder_slow.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9880534B98849A2B45681C69 /* ai_thunder_slow.mp3 */; };
@@ -113,9 +114,11 @@
 		24AF58F6D76DC20EC504ECE7 /* SoundPlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayerViewModel.swift; sourceTree = "<group>"; };
 		2CA089EE214C9919718FBE61 /* SleepTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepTimer.swift; sourceTree = "<group>"; };
 		32E332F16A2F6A35FFEE1649 /* NoiseGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseGeneratorTests.swift; sourceTree = "<group>"; };
+		37B4468A9CE3DA708AF0D18B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		40207D90B103FAE1E83BA696 /* ai_underwater_piano.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ai_underwater_piano.mp3; sourceTree = "<group>"; };
 		4B879FB9BDE56B91A200F43C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4C7756D98C241798772FF113 /* UnhurryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnhurryApp.swift; sourceTree = "<group>"; };
+		4D947FF652F559C59AAE0E13 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		57782B46D242303E244A21FD /* SoundTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundTrack.swift; sourceTree = "<group>"; };
 		5A01270434FA0A5EA064CCD7 /* TimerControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerControlView.swift; sourceTree = "<group>"; };
 		5AFC8C6640DEB7B1B58AED49 /* UnhurryWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnhurryWidget.swift; sourceTree = "<group>"; };
@@ -194,9 +197,11 @@
 			isa = PBXGroup;
 			children = (
 				4B879FB9BDE56B91A200F43C /* Assets.xcassets */,
+				37B4468A9CE3DA708AF0D18B /* Info.plist */,
 				BDCEBC5CFAABCB31DD3BB7A4 /* Unhurry.entitlements */,
 				7E64A16D2FD0694CD17D124C /* App */,
 				1E1FC264BB7F023710C9F89C /* Extensions */,
+				B5FF3104E99E6692474E3D95 /* LaunchScreen.storyboard */,
 				D2AAC17683E94387AD2816D9 /* Models */,
 				A01E44ADEC27FAEDD6ABA974 /* Resources */,
 				63C9E86FB5168580A8F177B7 /* Services */,
@@ -514,6 +519,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				402EBBC3FB487EC1C1CC935B /* Assets.xcassets in Resources */,
+				440912E136752167BD4424F3 /* LaunchScreen.storyboard in Resources */,
 				DC810224987410215BB4E1C7 /* ai_bamboo_wind.mp3 in Resources */,
 				7400C6E524757108D8DB71FC /* ai_car_rain.mp3 in Resources */,
 				5CAEC717BBC325CF2CC51FB0 /* ai_cello_nocturne.mp3 in Resources */,
@@ -615,6 +621,17 @@
 			targetProxy = DBA35A300C3E944C9B6DB40C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		B5FF3104E99E6692474E3D95 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4D947FF652F559C59AAE0E13 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		00A4EE2ABF3BF245FB6610C9 /* Release */ = {
@@ -763,17 +780,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SJ8DC28NRH;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "闲眠";
-				INFOPLIST_KEY_CFBundleURLTypes = "[[\"CFBundleURLSchemes\": [\"unhurry\"], \"CFBundleURLName\": \"com.gongdexin.paul.Unhurry\"]]";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UIBackgroundModes = (
-					audio,
-				);
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_FILE = Unhurry/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -883,17 +890,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SJ8DC28NRH;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "闲眠";
-				INFOPLIST_KEY_CFBundleURLTypes = "[[\"CFBundleURLSchemes\": [\"unhurry\"], \"CFBundleURLName\": \"com.gongdexin.paul.Unhurry\"]]";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UIBackgroundModes = (
-					audio,
-				);
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_FILE = Unhurry/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
