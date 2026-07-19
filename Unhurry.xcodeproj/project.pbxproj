@@ -20,6 +20,9 @@
 		2DDF6050F2EC4C6D3302A6A1 /* StoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA23C3D196B84ECBA66F19FD /* StoryItem.swift */; };
 		30260D30BFA053C6EF5C8994 /* AudioSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A804160ED82C06AAA3C829 /* AudioSessionManager.swift */; };
 		3818EA2B3F27110C51EFEE08 /* SoundLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F535724712AE0F15D4A9F /* SoundLibraryView.swift */; };
+		40275B42300D6D0A00F7CA7F /* story_cloud.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 40275B40300D6D0A00F7CA7F /* story_cloud.mp3 */; };
+		40275B43300D6D0A00F7CA7F /* meditation_gratitude.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 40275B3F300D6D0A00F7CA7F /* meditation_gratitude.mp3 */; };
+		40275B44300D6D0A00F7CA7F /* story_star.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 40275B41300D6D0A00F7CA7F /* story_star.mp3 */; };
 		402EBBC3FB487EC1C1CC935B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B879FB9BDE56B91A200F43C /* Assets.xcassets */; };
 		427DF40E5BC7A06C78CA1F1F /* SoundTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57782B46D242303E244A21FD /* SoundTrack.swift */; };
 		42AD8B47405B93A92D233B42 /* NoiseGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E332F16A2F6A35FFEE1649 /* NoiseGeneratorTests.swift */; };
@@ -108,6 +111,9 @@
 		2CA089EE214C9919718FBE61 /* SleepTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepTimer.swift; sourceTree = "<group>"; };
 		32E332F16A2F6A35FFEE1649 /* NoiseGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseGeneratorTests.swift; sourceTree = "<group>"; };
 		40207D90B103FAE1E83BA696 /* ai_underwater_piano.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ai_underwater_piano.mp3; sourceTree = "<group>"; };
+		40275B3F300D6D0A00F7CA7F /* meditation_gratitude.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = meditation_gratitude.mp3; sourceTree = "<group>"; };
+		40275B40300D6D0A00F7CA7F /* story_cloud.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = story_cloud.mp3; sourceTree = "<group>"; };
+		40275B41300D6D0A00F7CA7F /* story_star.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = story_star.mp3; sourceTree = "<group>"; };
 		4B879FB9BDE56B91A200F43C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4C7756D98C241798772FF113 /* UnhurryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnhurryApp.swift; sourceTree = "<group>"; };
 		57782B46D242303E244A21FD /* SoundTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundTrack.swift; sourceTree = "<group>"; };
@@ -147,7 +153,7 @@
 		CA23C3D196B84ECBA66F19FD /* StoryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryItem.swift; sourceTree = "<group>"; };
 		CD4D90D3BA990CDA0619CE4A /* AudioServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioServiceProtocol.swift; sourceTree = "<group>"; };
 		D322D91DC77E81F92530A4E2 /* ai_fire_camp.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ai_fire_camp.mp3; sourceTree = "<group>"; };
-		D40F315FF90B37EDF96FE226 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		D40F315FF90B37EDF96FE226 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		D46190D64BB6C27C5EF2138F /* ai_singing_bowl.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ai_singing_bowl.mp3; sourceTree = "<group>"; };
 		D4C1732DB1639B42A19CE19B /* ai_cello_nocturne.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ai_cello_nocturne.mp3; sourceTree = "<group>"; };
 		D50004F277CE66A847926E72 /* ai_waterfall.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ai_waterfall.mp3; sourceTree = "<group>"; };
@@ -345,6 +351,9 @@
 		D6728F5549366E18225D7E92 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
+				40275B3F300D6D0A00F7CA7F /* meditation_gratitude.mp3 */,
+				40275B40300D6D0A00F7CA7F /* story_cloud.mp3 */,
+				40275B41300D6D0A00F7CA7F /* story_star.mp3 */,
 				D40F315FF90B37EDF96FE226 /* .gitkeep */,
 				8279917F3EBDD188F529890F /* ai_bamboo_wind.mp3 */,
 				C66FA3368B0DB7415D61AE8B /* ai_car_rain.mp3 */,
@@ -512,6 +521,9 @@
 				8BC3604F78E9C3E350CC297B /* ai_waterfall.mp3 in Resources */,
 				024851B0C9E1314F96641B79 /* ai_wind_breeze.mp3 in Resources */,
 				59B1B5D8CC3D24AC6277B5AE /* meditation_body_scan.mp3 in Resources */,
+				40275B42300D6D0A00F7CA7F /* story_cloud.mp3 in Resources */,
+				40275B43300D6D0A00F7CA7F /* meditation_gratitude.mp3 in Resources */,
+				40275B44300D6D0A00F7CA7F /* story_star.mp3 in Resources */,
 				6BD31B59FADFDEF0E9CD5379 /* meditation_breath.mp3 in Resources */,
 				EAC53A340D8B286CFE936189 /* story_moon.mp3 in Resources */,
 			);
@@ -737,12 +749,10 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "闲眠";
-				INFOPLIST_KEY_CFBundleURLTypes = "[[\"CFBundleURLSchemes\": [\"unhurry\"], \"CFBundleURLName\": \"com.gongdexin.paul.Unhurry\"]]";
+				INFOPLIST_KEY_CFBundleURLTypes = "[[\"CFBundleURLName\": \"com.gongdexin.paul.Unhurry\", \"CFBundleURLSchemes\": [\"unhurry\"]]]";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UIBackgroundModes = (
-					audio,
-				);
+				INFOPLIST_KEY_UIBackgroundModes = audio;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -857,12 +867,10 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "闲眠";
-				INFOPLIST_KEY_CFBundleURLTypes = "[[\"CFBundleURLSchemes\": [\"unhurry\"], \"CFBundleURLName\": \"com.gongdexin.paul.Unhurry\"]]";
+				INFOPLIST_KEY_CFBundleURLTypes = "[[\"CFBundleURLName\": \"com.gongdexin.paul.Unhurry\", \"CFBundleURLSchemes\": [\"unhurry\"]]]";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UIBackgroundModes = (
-					audio,
-				);
+				INFOPLIST_KEY_UIBackgroundModes = audio;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
