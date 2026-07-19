@@ -34,6 +34,29 @@ let radiusB: CGFloat = 255  // 内圈（稍小）
 let offsetX: CGFloat = 65
 let offsetY: CGFloat = 55
 
+// MARK: - 星星参数
+// 两颗四角星，置于月牙右上方，一明一暗
+struct Star {
+    let center: CGPoint
+    let outerRadius: CGFloat  // 外尖半径
+    let innerRadius: CGFloat  // 内谷半径
+    let opacity: CGFloat
+}
+let stars: [Star] = [
+    Star(
+        center: CGPoint(x: 740, y: 250),
+        outerRadius: 22,
+        innerRadius: 8,
+        opacity: 1.0
+    ),
+    Star(
+        center: CGPoint(x: 810, y: 310),
+        outerRadius: 14,
+        innerRadius: 5,
+        opacity: 0.55
+    ),
+]
+
 // MARK: - 渲染
 let colorSpace = CGColorSpace(name: CGColorSpace.sRGB)!
 guard let context = CGContext(
@@ -80,7 +103,40 @@ context.setFillColor(moonColor)
 context.addPath(path)
 context.fillPath(using: .evenOdd)
 
-// 3. 导出
+// 3. 画星星（四角星，扁平几何造型）
+for star in stars {
+    let starPath = CGMutablePath()
+    let angles: [CGFloat] = [
+        -.pi / 2,           // 上
+        -.pi / 4,           // 右上谷
+        0,                  // 右
+        .pi / 4,            // 右下谷
+        .pi / 2,            // 下
+        .pi * 3 / 4,        // 左下谷
+        .pi,                // 左
+        .pi * 5 / 4,        // 左上谷
+    ]
+
+    for (i, angle) in angles.enumerated() {
+        let isTip = i % 2 == 0
+        let r = isTip ? star.outerRadius : star.innerRadius
+        let x = star.center.x + cos(angle) * r
+        let y = star.center.y + sin(angle) * r
+
+        if i == 0 {
+            starPath.move(to: CGPoint(x: x, y: y))
+        } else {
+            starPath.addLine(to: CGPoint(x: x, y: y))
+        }
+    }
+    starPath.closeSubpath()
+
+    context.setFillColor(moonColor.copy(alpha: star.opacity)!)
+    context.addPath(starPath)
+    context.fillPath()
+}
+
+// 4. 导出
 guard let image = context.makeImage() else {
     print("ERROR: Failed to create CGImage")
     exit(1)
@@ -105,4 +161,7 @@ guard CGImageDestinationFinalize(destination) else {
 
 print("✅ Icon generated: \(outputURL.path)")
 print("   Size: \(image.width)×\(image.height)")
-print("   Moon: CircleA(center:\(Int(centerX)),\(Int(centerY)) r:\(Int(radiusA))) - CircleB(r:\(Int(radiusB)) offset:\(Int(offsetX)),\(Int(offsetY)))")
+print("   Moon:  CircleA(center:\(Int(centerX)),\(Int(centerY)) r:\(Int(radiusA))) - CircleB(r:\(Int(radiusB)) offset:\(Int(offsetX)),\(Int(offsetY)))")
+for (i, s) in stars.enumerated() {
+    print("   Star\(i+1): center(\(Int(s.center.x)),\(Int(s.center.y))) outer:\(Int(s.outerRadius)) inner:\(Int(s.innerRadius)) opacity:\(s.opacity)")
+}
