@@ -32,6 +32,24 @@ struct UnhurryApp: App {
                 .onAppear {
                     soundLibrary.preloadBuiltInSounds(into: audioService)
                 }
+                .onOpenURL { url in
+                    handleDeepLink(url)
+                }
         }
+    }
+
+    // MARK: - Deep Link
+
+    /// 处理 Widget 点击传入的 URL（unhurry://play?id=UUID）
+    private func handleDeepLink(_ url: URL) {
+        guard url.scheme == "unhurry",
+              url.host == "play",
+              let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+              let idString = components.queryItems?.first(where: { $0.name == "id" })?.value,
+              let uuid = UUID(uuidString: idString),
+              let preset = playerVM.presets.first(where: { $0.id == uuid })
+        else { return }
+
+        playerVM.loadPreset(preset)
     }
 }

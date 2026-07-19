@@ -5,37 +5,83 @@
 
 import SwiftUI
 
-/// 故事/冥想播放器——TTS 朗读 + 文字稿同步滚动。
+/// 故事/冥想播放器——TTS 朗读 / 预录音频 + 文字稿同步滚动。
 struct StoryPlayerView: View {
 
     let viewModel: StoryPlayerViewModel
     let story: StoryItem
 
     @Environment(\.dismiss) private var dismiss
+    @State private var countdown: Int = 3
 
     private let accentColor = Color(red: 0.941, green: 0.902, blue: 0.824)
+    private let bgColor = Color(red: 0.216, green: 0.184, blue: 0.322)
 
     var body: some View {
-        VStack(spacing: 0) {
-            // 顶部信息栏
-            headerBar
+        ZStack {
+            // 播放主界面
+            VStack(spacing: 0) {
+                headerBar
 
-            // 文字稿（可滚动）
-            if let story = viewModel.currentStory {
-                textContent(story.content)
+                if let story = viewModel.currentStory {
+                    textContent(story.content)
+                }
+
+                controlBar
             }
 
-            // 底部播放控制
-            controlBar
+            // 准备缓冲遮罩
+            if viewModel.isPreparing {
+                preparationOverlay
+            }
         }
-        .background(Color(red: 0.216, green: 0.184, blue: 0.322))
+        .background(bgColor)
         .foregroundStyle(accentColor)
         .navigationBarBackButtonHidden(true)
         .onAppear {
             viewModel.play(story)
+            startCountdown()
         }
         .onDisappear {
             viewModel.stop()
+        }
+    }
+
+    // MARK: - Preparation Overlay
+
+    private var preparationOverlay: some View {
+        VStack(spacing: 24) {
+            Spacer()
+
+            Image(systemName: story.category.iconName)
+                .font(.system(size: 48))
+                .foregroundStyle(accentColor.opacity(0.6))
+
+            Text(story.title)
+                .font(.title2)
+                .fontWeight(.medium)
+
+            Text("闭上眼睛，放松身体……")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+
+            Text("\(countdown)")
+                .font(.system(size: 64, design: .rounded))
+                .fontWeight(.thin)
+                .foregroundStyle(accentColor.opacity(0.6))
+                .contentTransition(.numericText())
+
+            Text("轻点屏幕 立即开始")
+                .font(.caption)
+                .foregroundStyle(.tertiary)
+                .padding(.top, 8)
+
+            Spacer()
+        }
+        .frame(maxWidth: .infinity)
+        .background(bgColor.opacity(0.95))
+        .onTapGesture {
+            viewModel.skipPreparation()
         }
     }
 
@@ -87,11 +133,11 @@ struct StoryPlayerView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
-            .onChange(of: viewModel.highlightedRange?.location) { _, _ in
+            .onChange(of: viewModel.highlightedRange) { _, _ in
                 // 自动滚动到当前朗读位置
-                if let range = viewModel.highlightedRange,
-                   range.location < fullText.count {
-                    let index = fullText.index(fullText.startIndex, offsetBy: range.location)
+                if let range = viewModel.highlightedRange {
+                    let targetPos = min(range.location + range.length, fullText.count)
+                    let index = fullText.index(fullText.startIndex, offsetBy: max(0, targetPos - 1))
                     let lineID = String(fullText[..<index].filter { $0 == "\n" }.count)
                     withAnimation {
                         proxy.scrollTo(lineID, anchor: .center)
@@ -151,11 +197,28 @@ struct StoryPlayerView: View {
         )
     }
 
+    // MARK: - Countdown
+
+    private func startCountdown() {
+        countdown = 3
+        Task {
+            for i in (1...3).reversed() {
+                try? await Task.sleep(for: .seconds(1))
+                guard viewModel.isPreparing else { return }
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    countdown = i - 1
+                }
+            }
+        }
+    }
+
     // MARK: - Actions
 
     private func seekBackward() {
         guard let range = viewModel.highlightedRange else { return }
-        let newLocation = max(0, range.location - 35)
+        // 使用高亮区段末端作为「当前朗读位置」
+        let currentPos = range.location + range.length
+        let newLocation = max(0, currentPos - 35)
         viewModel.seek(to: newLocation)
     }
 }

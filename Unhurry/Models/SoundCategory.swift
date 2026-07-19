@@ -27,6 +27,9 @@ enum SoundCategory: String, CaseIterable, Identifiable {
     /// 睡前故事
     case story
 
+    /// AI 生成助眠音乐（八音盒、颂钵、大提琴等）
+    case music
+
     var id: String { rawValue }
 
     /// 分类中文显示名
@@ -38,6 +41,7 @@ enum SoundCategory: String, CaseIterable, Identifiable {
         case .whiteNoise: return "白噪音"
         case .meditation: return "冥想"
         case .story:      return "睡前故事"
+        case .music:      return "助眠音乐"
         }
     }
 
@@ -50,6 +54,7 @@ enum SoundCategory: String, CaseIterable, Identifiable {
         case .whiteNoise: return "waveform"
         case .meditation: return "sparkles"
         case .story:      return "book.fill"
+        case .music:      return "music.note"
         }
     }
 }

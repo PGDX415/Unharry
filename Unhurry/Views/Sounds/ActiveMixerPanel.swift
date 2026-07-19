@@ -5,40 +5,179 @@
 
 import SwiftUI
 
-/// 混音面板——展示当前活跃音轨及其独立音量滑块。
+/// 混音面板——展示活跃音轨音量滑块 + 保存/加载预设。
 struct ActiveMixerPanel: View {
 
     let viewModel: SoundPlayerViewModel
 
+    @State private var showSaveAlert = false
+    @State private var presetName = ""
+    @State private var presetToDelete: MixPreset?
+
+    private let accentColor = Color(red: 0.941, green: 0.902, blue: 0.824)
+
     var body: some View {
-        if viewModel.isAnythingPlaying {
-            VStack(alignment: .leading, spacing: 0) {
-                Divider()
-                    .background(Color(red: 0.941, green: 0.902, blue: 0.824).opacity(0.2))
+        VStack(alignment: .leading, spacing: 0) {
+            Divider()
+                .background(accentColor.opacity(0.2))
 
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack {
-                        Label("正在播放", systemImage: "speaker.wave.2.fill")
-                            .font(.subheadline)
-                            .fontWeight(.medium)
-                            .foregroundStyle(.secondary)
+            // ── 预设快捷栏（始终可见） ──
+            if !viewModel.presets.isEmpty {
+                presetBar
+            }
 
-                        Spacer()
+            // ── 活跃/等待中音轨 ──
+            if viewModel.isAnythingPlaying || viewModel.isSoundPreparing {
+                activeMixerSection
+            }
+        }
+        .alert("保存组合", isPresented: $showSaveAlert) {
+            TextField("组合名称", text: $presetName)
+            Button("取消", role: .cancel) { presetName = "" }
+            Button("保存") {
+                let name = presetName.trimmingCharacters(in: .whitespaces)
+                if !name.isEmpty {
+                    viewModel.saveCurrentMix(name: name)
+                }
+                presetName = ""
+            }
+        } message: {
+            let count = viewModel.activeTrackIds.count
+            Text("将当前 \(count) 个音效的组合保存为预设，下次一键召回。")
+        }
+        .confirmationDialog(
+            "删除预设？",
+            isPresented: Binding(
+                get: { presetToDelete != nil },
+                set: { if !$0 { presetToDelete = nil } }
+            ),
+            titleVisibility: .visible
+        ) {
+            Button("删除", role: .destructive) {
+                if let preset = presetToDelete {
+                    viewModel.deletePreset(preset)
+                }
+                presetToDelete = nil
+            }
+            Button("取消", role: .cancel) { presetToDelete = nil }
+        } message: {
+            if let preset = presetToDelete {
+                Text("确定删除「\(preset.name)」？此操作不可撤销。")
+            }
+        }
+    }
 
-                        Button(action: { viewModel.stopAll() }) {
-                            Text("全部停止")
-                                .font(.caption)
-                                .foregroundStyle(.red.opacity(0.8))
-                        }
-                    }
+    // MARK: - Preset Bar
 
-                    ForEach(Array(viewModel.activeTrackIds), id: \.self) { trackId in
-                        volumeRow(for: trackId)
+    private var presetBar: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Label("我的组合", systemImage: "rectangle.stack.fill")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .padding(.horizontal, 20)
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(viewModel.presets) { preset in
+                        presetChip(preset)
                     }
                 }
                 .padding(.horizontal, 20)
-                .padding(.vertical, 14)
             }
+        }
+        .padding(.vertical, 10)
+    }
+
+    private func presetChip(_ preset: MixPreset) -> some View {
+        Button(action: { viewModel.loadPreset(preset) }) {
+            HStack(spacing: 4) {
+                Image(systemName: "play.fill")
+                    .font(.system(size: 8))
+                Text(preset.name)
+                    .font(.caption2)
+                    .lineLimit(1)
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 7)
+            .background(accentColor.opacity(0.12))
+            .clipShape(Capsule())
+        }
+        .buttonStyle(.plain)
+        .contextMenu {
+            Button(role: .destructive) {
+                presetToDelete = preset
+            } label: {
+                Label("删除", systemImage: "trash")
+            }
+        }
+    }
+
+    // MARK: - Active Mixer
+
+    private var activeMixerSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Label(
+                    viewModel.isSoundPreparing ? "准备中" : "正在播放",
+                    systemImage: viewModel.isSoundPreparing ? "hourglass" : "speaker.wave.2.fill"
+                )
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundStyle(.secondary)
+
+                Spacer()
+
+                // 只有真正在播放时才能保存
+                if viewModel.isAnythingPlaying {
+                    Button(action: {
+                        presetName = ""
+                        showSaveAlert = true
+                    }) {
+                        Label("保存", systemImage: "square.and.arrow.down")
+                            .font(.caption)
+                            .foregroundStyle(accentColor.opacity(0.7))
+                    }
+                }
+
+                Button(action: { viewModel.stopAll() }) {
+                    Text("全部停止")
+                        .font(.caption)
+                        .foregroundStyle(.red.opacity(0.8))
+                }
+            }
+
+            // 等待中的音效（缓冲期间）
+            ForEach(Array(viewModel.pendingTrackIds), id: \.self) { trackId in
+                pendingRow(for: trackId)
+            }
+
+            // 活跃音效
+            ForEach(Array(viewModel.activeTrackIds), id: \.self) { trackId in
+                volumeRow(for: trackId)
+            }
+        }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 14)
+    }
+
+    // MARK: - Pending Row
+
+    private func pendingRow(for trackId: String) -> some View {
+        HStack(spacing: 10) {
+            Image(systemName: "hourglass")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .frame(width: 20)
+
+            Text(viewModel.name(for: trackId))
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            Spacer()
+
+            ProgressView()
+                .scaleEffect(0.6)
+                .tint(accentColor)
         }
     }
 
@@ -63,7 +202,7 @@ struct ActiveMixerPanel: View {
                 get: { Double(volume) },
                 set: { viewModel.setVolume(Float($0), for: trackId) }
             ), in: 0...1)
-                .tint(Color(red: 0.941, green: 0.902, blue: 0.824))
+                .tint(accentColor)
 
             Text(String(format: "%.0f%%", volume * 100))
                 .font(.caption2)

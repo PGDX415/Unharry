@@ -5,6 +5,8 @@
 
 import SwiftUI
 import Observation
+import MediaPlayer
+import WidgetKit
 
 /// 音效播放 ViewModel。
 ///
@@ -12,6 +14,7 @@ import Observation
 /// - 管理播放/停止状态
 /// - 追踪活跃音轨及其独立音量
 /// - 提供分类视图数据
+/// - 管理锁屏控制（NowPlaying + RemoteCommand）
 @MainActor
 @Observable
 final class SoundPlayerViewModel {
@@ -27,16 +30,61 @@ final class SoundPlayerViewModel {
     /// 是否至少有一个音效在播放
     var isAnythingPlaying: Bool { !activeTrackIds.isEmpty }
 
+    /// 播放前准备缓冲中
+    private(set) var isSoundPreparing = false
+
+    /// 等待缓冲结束后播放的音效 ID（含组合加载）
+    private(set) var pendingTrackIds: Set<String> = []
+
+    /// 所有已播放 + 等待中的音效（用于 UI 高亮）
+    var allActiveOrPendingIds: Set<String> { activeTrackIds.union(pendingTrackIds) }
+
+    /// 是否被系统远程暂停（锁屏/控制中心）
+    private(set) var isSystemPaused = false
+
+    /// 已保存的混音预设
+    private(set) var presets: [MixPreset] = []
+
+    // MARK: - Constants
+
+    /// 音频播放前准备缓冲时间（秒）
+    static let soundPrepareDelay: TimeInterval = 3.0
+
     // MARK: - Dependencies
 
     private let audioService: AudioServiceProtocol
+    private let nowPlaying: NowPlayingController
     let tracks: [SoundTrack]
+
+    // MARK: - Private: Preparation
+
+    private var prepareTimer: Timer?
+    private var pendingVolumes: [String: Float] = [:]
+
+    // MARK: - Private: NowPlaying
+
+    private var playbackStartDate: Date?
+    private var nowPlayingTimer: Timer?
+    /// 系统暂停前保存的音效快照，供恢复使用
+    private var savedTrackIds: Set<String> = []
+    private var savedVolumes: [String: Float] = [:]
+
+    // MARK: - Persistence
+
+    private static let presetsKey = "com.unhurry.mixpresets"
 
     // MARK: - Init
 
-    init(audioService: AudioServiceProtocol, soundLibrary: SoundLibrary) {
+    init(
+        audioService: AudioServiceProtocol,
+        soundLibrary: SoundLibrary,
+        nowPlayingController: NowPlayingController = NowPlayingController()
+    ) {
         self.audioService = audioService
         self.tracks = soundLibrary.tracks
+        self.nowPlaying = nowPlayingController
+        loadPresetsFromDisk()
+        setupRemoteCommands()
     }
 
     // MARK: - Computed
@@ -50,28 +98,90 @@ final class SoundPlayerViewModel {
 
     // MARK: - Actions
 
-    /// 切换音效播放/停止。
+    /// 切换音效播放/停止（3 秒缓冲后播放）。
     func toggleTrack(_ track: SoundTrack) {
         if activeTrackIds.contains(track.id) {
+            // 已在播放 → 立即停止
             stopTrack(track)
+        } else if pendingTrackIds.contains(track.id) {
+            // 在等待队列中 → 取消
+            cancelPendingTrack(track.id)
         } else {
-            playTrack(track)
+            // 新音效 → 安排缓冲播放
+            schedulePlay(trackId: track.id, volume: track.defaultVolume, loop: track.isLoopable)
         }
     }
 
-    /// 播放指定音效。
-    func playTrack(_ track: SoundTrack) {
+    /// 直接播放指定音效（不经过缓冲，用于内部 flush）。
+    private func executePlay(trackId: String, volume: Float, loop: Bool) {
         do {
-            try audioService.play(
-                soundId: track.id,
-                volume: track.defaultVolume,
-                loop: track.isLoopable
-            )
-            activeTrackIds.insert(track.id)
-            volumes[track.id] = track.defaultVolume
+            try audioService.play(soundId: trackId, volume: volume, loop: loop)
+            activeTrackIds.insert(trackId)
+            volumes[trackId] = volume
         } catch {
-            print("⚠️ Failed to play \(track.name): \(error)")
+            print("⚠️ Failed to play \(trackId): \(error)")
         }
+    }
+
+    /// 将音效加入等待队列，开始 3 秒缓冲计时。
+    private func schedulePlay(trackId: String, volume: Float, loop: Bool) {
+        pendingTrackIds.insert(trackId)
+        pendingVolumes[trackId] = volume
+
+        // 如果还没在倒计时，启动
+        if prepareTimer == nil {
+            isSoundPreparing = true
+            prepareTimer = Timer.scheduledTimer(
+                withTimeInterval: Self.soundPrepareDelay,
+                repeats: false
+            ) { [weak self] _ in
+                Task { @MainActor [weak self] in
+                    self?.flushPending()
+                }
+            }
+            RunLoop.main.add(prepareTimer!, forMode: .common)
+        }
+        // loop 信息暂时存 volume 里，flush 时按 track 的 isLoopable 播
+    }
+
+    /// 缓冲结束，一次性播放所有等待中的音效。
+    private func flushPending() {
+        prepareTimer?.invalidate()
+        prepareTimer = nil
+        isSoundPreparing = false
+
+        let ids = pendingTrackIds
+        pendingTrackIds.removeAll()
+
+        for trackId in ids {
+            let volume = pendingVolumes[trackId] ?? 0.5
+            pendingVolumes.removeValue(forKey: trackId)
+            let loop = tracks.first { $0.id == trackId }?.isLoopable ?? true
+            executePlay(trackId: trackId, volume: volume, loop: loop)
+        }
+
+        // 有音效开始播放 → 更新锁屏
+        if !activeTrackIds.isEmpty {
+            startNowPlaying()
+        }
+    }
+
+    /// 取消等待中的单个音效。
+    private func cancelPendingTrack(_ trackId: String) {
+        pendingTrackIds.remove(trackId)
+        pendingVolumes.removeValue(forKey: trackId)
+        if pendingTrackIds.isEmpty {
+            cancelPreparation()
+        }
+    }
+
+    /// 取消整个准备缓冲。
+    func cancelPreparation() {
+        prepareTimer?.invalidate()
+        prepareTimer = nil
+        isSoundPreparing = false
+        pendingTrackIds.removeAll()
+        pendingVolumes.removeAll()
     }
 
     /// 停止指定音效。
@@ -79,6 +189,9 @@ final class SoundPlayerViewModel {
         audioService.stop(soundId: track.id)
         activeTrackIds.remove(track.id)
         volumes.removeValue(forKey: track.id)
+        if activeTrackIds.isEmpty {
+            clearNowPlaying()
+        }
     }
 
     /// 设置指定音效的音量。
@@ -87,15 +200,216 @@ final class SoundPlayerViewModel {
         volumes[trackId] = volume
     }
 
-    /// 停止所有音效。
+    /// 停止所有音效 + 取消缓冲 + 清除锁屏。
     func stopAll() {
+        cancelPreparation()
         audioService.stopAll()
         activeTrackIds.removeAll()
         volumes.removeAll()
+        clearNowPlaying()
     }
 
     /// 获取指定音效的名称。
     func name(for trackId: String) -> String {
         tracks.first { $0.id == trackId }?.name ?? trackId
+    }
+
+    // MARK: - Presets
+
+    /// 将当前活跃音效组合保存为预设。
+    func saveCurrentMix(name: String) {
+        guard !activeTrackIds.isEmpty else { return }
+        let preset = MixPreset(
+            name: name,
+            trackIds: Array(activeTrackIds),
+            volumes: volumes.filter { activeTrackIds.contains($0.key) }
+        )
+        presets.append(preset)
+        persistPresets()
+    }
+
+    /// 加载预设：停止所有 → 3 秒缓冲 → 播放预设中的所有音效。
+    func loadPreset(_ preset: MixPreset) {
+        stopAll()
+        for trackId in preset.trackIds {
+            let volume = preset.volumes[trackId] ?? 0.5
+            schedulePlay(trackId: trackId, volume: volume, loop: true)
+        }
+    }
+
+    /// 删除指定预设。
+    func deletePreset(_ preset: MixPreset) {
+        presets.removeAll { $0.id == preset.id }
+        persistPresets()
+    }
+
+    // MARK: - NowPlaying & Remote Commands
+
+    private func setupRemoteCommands() {
+        nowPlaying.onPlay = { [weak self] in
+            Task { @MainActor [weak self] in
+                self?.handleRemotePlay()
+            }
+        }
+        nowPlaying.onPause = { [weak self] in
+            Task { @MainActor [weak self] in
+                self?.handleRemotePause()
+            }
+        }
+        nowPlaying.onTogglePlayPause = { [weak self] in
+            Task { @MainActor [weak self] in
+                self?.handleRemoteToggle()
+            }
+        }
+        nowPlaying.onNextTrack = { [weak self] in
+            Task { @MainActor [weak self] in
+                self?.handleRemoteNext()
+            }
+        }
+        nowPlaying.onPreviousTrack = { [weak self] in
+            Task { @MainActor [weak self] in
+                self?.handleRemotePrevious()
+            }
+        }
+    }
+
+    private func startNowPlaying() {
+        let names = activeTrackIds.compactMap { name(for: $0) }
+        let title = names.isEmpty ? "闲眠" : names.joined(separator: " · ")
+        nowPlaying.updateNowPlaying(
+            title: title,
+            artist: "闲眠",
+            isPlaying: true
+        )
+        playbackStartDate = Date()
+        isSystemPaused = false
+        startNowPlayingTimer()
+    }
+
+    private func clearNowPlaying() {
+        nowPlaying.clear()
+        stopNowPlayingTimer()
+        playbackStartDate = nil
+        savedTrackIds.removeAll()
+        savedVolumes.removeAll()
+        isSystemPaused = false
+    }
+
+    private func startNowPlayingTimer() {
+        stopNowPlayingTimer()
+        nowPlayingTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { [weak self] _ in
+            Task { @MainActor [weak self] in
+                self?.refreshNowPlayingElapsed()
+            }
+        }
+        RunLoop.main.add(nowPlayingTimer!, forMode: .common)
+    }
+
+    private func stopNowPlayingTimer() {
+        nowPlayingTimer?.invalidate()
+        nowPlayingTimer = nil
+    }
+
+    private func refreshNowPlayingElapsed() {
+        guard let start = playbackStartDate, !activeTrackIds.isEmpty else { return }
+        let names = activeTrackIds.compactMap { name(for: $0) }
+        let title = names.isEmpty ? "闲眠" : names.joined(separator: " · ")
+        nowPlaying.updateNowPlaying(
+            title: title,
+            artist: "闲眠",
+            isPlaying: !isSystemPaused,
+            elapsed: Date().timeIntervalSince(start)
+        )
+    }
+
+    // MARK: - Remote Command Handlers
+
+    private func handleRemotePlay() {
+        guard isSystemPaused, !savedTrackIds.isEmpty else { return }
+        // 恢复之前被远程暂停的音效
+        for trackId in savedTrackIds {
+            try? audioService.resume(soundId: trackId)
+        }
+        activeTrackIds = savedTrackIds
+        volumes = savedVolumes
+        isSystemPaused = false
+        startNowPlaying()
+    }
+
+    private func handleRemotePause() {
+        guard !activeTrackIds.isEmpty, !isSystemPaused else { return }
+        savedTrackIds = activeTrackIds
+        savedVolumes = volumes
+        for trackId in activeTrackIds {
+            audioService.pause(soundId: trackId)
+        }
+        isSystemPaused = true
+        stopNowPlayingTimer()
+        // 更新锁屏为暂停状态
+        let names = activeTrackIds.compactMap { name(for: $0) }
+        let title = names.isEmpty ? "闲眠" : names.joined(separator: " · ")
+        nowPlaying.updateNowPlaying(title: title, artist: "闲眠", isPlaying: false)
+    }
+
+    private func handleRemoteToggle() {
+        if isSystemPaused {
+            handleRemotePlay()
+        } else if !activeTrackIds.isEmpty {
+            handleRemotePause()
+        }
+    }
+
+    private func handleRemoteNext() {
+        guard !presets.isEmpty else { return }
+        // 找当前匹配的预设索引，跳到下一个
+        let currentIds = activeTrackIds
+        let currentIndex = presets.firstIndex { Set($0.trackIds) == currentIds } ?? -1
+        let nextIndex = (currentIndex + 1) % presets.count
+        loadPreset(presets[nextIndex])
+    }
+
+    private func handleRemotePrevious() {
+        guard !presets.isEmpty else { return }
+        let currentIds = activeTrackIds
+        let currentIndex = presets.firstIndex { Set($0.trackIds) == currentIds } ?? presets.count
+        let prevIndex = (currentIndex - 1 + presets.count) % presets.count
+        loadPreset(presets[prevIndex])
+    }
+
+    // MARK: - Private: Persistence
+
+    /// App Group 共享 UserDefaults（Widget 可读取）
+    private static var sharedDefaults: UserDefaults {
+        UserDefaults(suiteName: "group.com.gongdexin.paul.Unhurry") ?? .standard
+    }
+
+    private func loadPresetsFromDisk() {
+        let defaults = Self.sharedDefaults
+        if let data = defaults.data(forKey: Self.presetsKey) {
+            decodePresets(from: data)
+        } else if let data = UserDefaults.standard.data(forKey: Self.presetsKey) {
+            // 从旧存储迁移到 App Group
+            decodePresets(from: data)
+            defaults.set(data, forKey: Self.presetsKey)
+        }
+    }
+
+    private func decodePresets(from data: Data) {
+        do {
+            presets = try JSONDecoder().decode([MixPreset].self, from: data)
+        } catch {
+            print("⚠️ Failed to load presets: \(error)")
+        }
+    }
+
+    private func persistPresets() {
+        do {
+            let data = try JSONEncoder().encode(presets)
+            Self.sharedDefaults.set(data, forKey: Self.presetsKey)
+            // 通知 Widget 刷新
+            WidgetCenter.shared.reloadAllTimelines()
+        } catch {
+            print("⚠️ Failed to save presets: \(error)")
+        }
     }
 }

@@ -10,9 +10,16 @@ struct SoundLibraryView: View {
 
     let viewModel: SoundPlayerViewModel
 
+    private let accentColor = Color(red: 0.941, green: 0.902, blue: 0.824)
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
+                // 缓冲提示
+                if viewModel.isSoundPreparing {
+                    preparingBanner
+                }
+
                 ForEach(viewModel.categorizedTracks, id: \.0) { category, tracks in
                     categorySection(category: category, tracks: tracks)
                 }
@@ -20,6 +27,29 @@ struct SoundLibraryView: View {
             .padding(.horizontal, 20)
             .padding(.vertical, 16)
         }
+    }
+
+    // MARK: - Preparing Banner
+
+    private var preparingBanner: some View {
+        HStack(spacing: 10) {
+            ProgressView()
+                .tint(accentColor)
+            Text("即将开始播放……")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Spacer()
+            Button("取消") {
+                viewModel.cancelPreparation()
+            }
+            .font(.caption2)
+            .foregroundStyle(accentColor.opacity(0.6))
+        }
+        .padding(12)
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .fill(accentColor.opacity(0.06))
+        )
     }
 
     // MARK: - Category Section
@@ -46,11 +76,19 @@ struct SoundLibraryView: View {
 
     private func soundButton(for track: SoundTrack) -> some View {
         let isActive = viewModel.activeTrackIds.contains(track.id)
+        let isPending = viewModel.pendingTrackIds.contains(track.id)
+        let isOn = isActive || isPending
 
         return Button(action: { viewModel.toggleTrack(track) }) {
             VStack(spacing: 6) {
-                Image(systemName: isActive ? "stop.circle.fill" : "play.circle.fill")
-                    .font(.title)
+                if isPending {
+                    Image(systemName: "hourglass")
+                        .font(.title)
+                        .symbolEffect(.pulse)
+                } else {
+                    Image(systemName: isActive ? "stop.circle.fill" : "play.circle.fill")
+                        .font(.title)
+                }
                 Text(track.name)
                     .font(.caption2)
                     .lineLimit(1)
@@ -59,9 +97,9 @@ struct SoundLibraryView: View {
             .padding(.vertical, 14)
             .background(
                 RoundedRectangle(cornerRadius: 14)
-                    .fill(isActive
-                        ? Color(red: 0.941, green: 0.902, blue: 0.824).opacity(0.2)
-                        : Color(red: 0.941, green: 0.902, blue: 0.824).opacity(0.08)
+                    .fill(isOn
+                        ? accentColor.opacity(isPending ? 0.12 : 0.2)
+                        : accentColor.opacity(0.08)
                     )
             )
         }

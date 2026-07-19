@@ -117,13 +117,46 @@ final class SoundLibrary {
         }
     }
 
+    /// AI 生成助眠音乐（八音盒、颂钵、大提琴等）
+    enum AIMusic: String, CaseIterable {
+        case musicBox        = "ai_music_box"          // 八音盒
+        case singingBowl     = "ai_singing_bowl"       // 颂钵疗愈
+        case celloNocturne   = "ai_cello_nocturne"     // 大提琴夜曲
+        case underwaterPiano = "ai_underwater_piano"   // 水中钢琴
+        case deepSpace       = "ai_deep_space"         // 深空漫游
+
+        var fileName: String { rawValue }
+        var fileExtension: String { "mp3" }
+
+        var track: SoundTrack {
+            switch self {
+            case .musicBox:
+                return SoundTrack(id: rawValue, name: "八音盒", category: .music,
+                                  fileName: fileName, fileExtension: fileExtension, defaultVolume: 0.25)
+            case .singingBowl:
+                return SoundTrack(id: rawValue, name: "颂钵疗愈", category: .music,
+                                  fileName: fileName, fileExtension: fileExtension, defaultVolume: 0.35)
+            case .celloNocturne:
+                return SoundTrack(id: rawValue, name: "大提琴夜曲", category: .music,
+                                  fileName: fileName, fileExtension: fileExtension, defaultVolume: 0.35)
+            case .underwaterPiano:
+                return SoundTrack(id: rawValue, name: "水中钢琴", category: .music,
+                                  fileName: fileName, fileExtension: fileExtension, defaultVolume: 0.3)
+            case .deepSpace:
+                return SoundTrack(id: rawValue, name: "深空漫游", category: .music,
+                                  fileName: fileName, fileExtension: fileExtension, defaultVolume: 0.3)
+            }
+        }
+    }
+
     // MARK: - Init
 
     init() {
-        // 合并所有音效：代码生成 + AI 自然音
+        // 合并所有音效：代码生成 + AI 自然音 + AI 音乐
         let noiseTracks = GeneratedNoise.allCases.map { $0.track }
-        let aiTracks = AINature.allCases.map { $0.track }
-        self.tracks = noiseTracks + aiTracks
+        let aiNatureTracks = AINature.allCases.map { $0.track }
+        let aiMusicTracks = AIMusic.allCases.map { $0.track }
+        self.tracks = noiseTracks + aiNatureTracks + aiMusicTracks
     }
 
     // MARK: - Preload
@@ -136,6 +169,7 @@ final class SoundLibrary {
     func preloadBuiltInSounds(into audioService: AudioServiceProtocol) {
         preloadGeneratedNoise(into: audioService)
         preloadAINatureSounds(into: audioService)
+        preloadAIMusic(into: audioService)
     }
 
     // MARK: - Private: Generated Noise
@@ -171,6 +205,38 @@ final class SoundLibrary {
                 ⚠️  AI 音频文件缺失: \(track.fileName).\(track.fileExtension)
                    请放入 Unhurry/Resources/Audio/ 目录。
                    ElevenLabs 生成 prompt 见 CLAUDE.md 或 ElevenLabs 章节。
+                """)
+                continue
+            }
+
+            do {
+                try audioService.loadSound(id: track.id, from: url)
+                print("✅ Loaded: \(track.name) (\(track.fileName).\(track.fileExtension))")
+            } catch {
+                print("❌ Failed to load \(track.name): \(error)")
+            }
+        }
+    }
+
+    // MARK: - Private: AI Music (Bundle Files)
+
+    private func preloadAIMusic(into audioService: AudioServiceProtocol) {
+        for item in AIMusic.allCases {
+            let track = item.track
+            guard let url = Bundle.main.url(
+                forResource: track.fileName,
+                withExtension: track.fileExtension,
+                subdirectory: nil
+            ) else {
+                print("""
+                ⚠️  AI 音乐文件缺失: \(track.fileName).\(track.fileExtension)
+                   请放入 Unhurry/Resources/Audio/ 目录。
+                   参考 prompt：
+                   八音盒 → slow music box lullaby, soft crystal tone, gentle looping melody
+                   颂钵 → Tibetan singing bowl resonance, single note long sustain, healing frequency
+                   大提琴 → slow cello nocturne, deep warm long bow strokes, minimal melody
+                   水中钢琴 → underwater muffled piano, slow sparse notes, bubbling ambience
+                   深空 → slow evolving ambient drone, deep sub-bass, weightless floating
                 """)
                 continue
             }

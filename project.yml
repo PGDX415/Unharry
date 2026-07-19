@@ -21,10 +21,13 @@ targets:
     resources:
       - path: Unhurry/Resources/Audio
         type: folder
+    dependencies:
+      - target: UnhurryWidget
     settings:
       base:
         DEVELOPMENT_TEAM: SJ8DC28NRH
         PRODUCT_BUNDLE_IDENTIFIER: com.gongdexin.paul.Unhurry
+        CODE_SIGN_ENTITLEMENTS: Unhurry/Unhurry.entitlements
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_CFBundleDisplayName: 闲眠
         INFOPLIST_KEY_UIBackgroundModes:
@@ -34,6 +37,10 @@ targets:
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        INFOPLIST_KEY_CFBundleURLTypes:
+          - CFBundleURLName: com.gongdexin.paul.Unhurry
+            CFBundleURLSchemes:
+              - unhurry
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         ENABLE_PREVIEWS: YES
@@ -48,6 +55,27 @@ targets:
           - "@executable_path/Frameworks"
         STRING_CATALOG_GENERATE_SYMBOLS: YES
         SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY: YES
+
+  UnhurryWidget:
+    type: app-extension
+    platform: iOS
+    deploymentTarget: "18.0"
+    sources:
+      - path: UnhurryWidget
+      - path: Unhurry/Models/MixPreset.swift
+    settings:
+      base:
+        DEVELOPMENT_TEAM: SJ8DC28NRH
+        PRODUCT_BUNDLE_IDENTIFIER: com.gongdexin.paul.Unhurry.widget
+        CODE_SIGN_ENTITLEMENTS: UnhurryWidget/UnhurryWidget.entitlements
+        INFOPLIST_FILE: UnhurryWidget/Info.plist
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        SWIFT_VERSION: "5.0"
+        SWIFT_APPROACHABLE_CONCURRENCY: YES
+        CURRENT_PROJECT_VERSION: 1
+        MARKETING_VERSION: 1.0
+        CODE_SIGN_STYLE: Automatic
+        SKIP_INSTALL: YES
 
   UnhurryTests:
     type: bundle.unit-test

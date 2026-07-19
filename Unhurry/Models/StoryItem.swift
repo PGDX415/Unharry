@@ -7,19 +7,29 @@ import Foundation
 
 /// 睡前故事 / 冥想引导条目。
 ///
-/// 包含全文内容（用于 TTS 朗读 + 屏幕滚动展示）。
-/// 后续阶段可扩展 `audioURL` 字段以替换 TTS 为预录音频。
+/// 包含全文内容（用于屏幕滚动展示）。
+/// 支持两种播放模式：
+/// - **TTS 模式**（`audioFileName == nil`）：使用 AVSpeechSynthesizer 实时合成语音
+/// - **音频模式**（`audioFileName != nil`）：使用预录 AI 音频，文字稿同步高亮
 struct StoryItem: Identifiable, Hashable {
     let id: String
     let title: String
     let category: StoryCategory
     /// 简短描述
     let summary: String
-    /// 全文内容（TTS 朗读 + 屏幕展示）
+    /// 全文内容（屏幕展示 + 进度同步）
     let content: String
-    /// 预估时长（秒），基于文本长度粗略估计
+    /// 预录音频文件名（不含扩展名），位于 Bundle 根目录。
+    /// 非 nil 时优先播放音频而非 TTS。
+    var audioFileName: String? = nil
+    /// 预录音频扩展名
+    var audioFileExtension: String = "mp3"
+
+    /// 是否有预录音频
+    var hasAudio: Bool { audioFileName != nil }
+
+    /// 预估时长（秒）
     var estimatedDuration: TimeInterval {
-        // 中文 TTS 约每秒 3-4 字
         Double(content.count) / 3.5
     }
 }
@@ -50,8 +60,11 @@ enum StoryCategory: String, CaseIterable, Identifiable {
 
 extension StoryItem {
 
-    /// 原型阶段的内置故事（TTS 朗读）。
-    /// 后续替换为专业配音音频 + 文字稿。
+    /// 内置故事列表。
+    ///
+    /// - `audioFileName` 非 nil → 播放预录音频
+    /// - `audioFileName` 为 nil → 使用 TTS 朗读
+    /// - 音频文件缺失时自动降级到 TTS
     static let builtIn: [StoryItem] = [
         StoryItem(
             id: "meditation_breath",
@@ -87,7 +100,8 @@ extension StoryItem {
 
             带着这份平静，慢慢进入梦乡。
             晚安。
-            """
+            """,
+            audioFileName: "meditation_breath"
         ),
         StoryItem(
             id: "meditation_body_scan",
@@ -117,7 +131,8 @@ extension StoryItem {
 
             你安全、温暖、被这个世界温柔地包裹着。
             安心地睡吧。
-            """
+            """,
+            audioFileName: "meditation_body_scan"
         ),
         StoryItem(
             id: "story_moon",
@@ -148,7 +163,8 @@ extension StoryItem {
             小男孩闭上了眼睛，做了一个很长很甜的梦。
 
             从那以后，每当小男孩睡不着，他就会对着窗外的月亮说说心里话。他知道，月亮婆婆总是温柔地听着。
-            """
+            """,
+            audioFileName: "story_moon"
         ),
     ]
 }
