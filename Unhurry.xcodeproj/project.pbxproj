@@ -11,6 +11,7 @@
 		096F7FE1676A5E3658CB32C6 /* AudioServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4D90D3BA990CDA0619CE4A /* AudioServiceProtocol.swift */; };
 		17CC7DEC9B1C03BA65FADC20 /* TimerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835AC1F2F44DBCE94A633AA5 /* TimerViewModel.swift */; };
 		1CF3BC208D145EAE7C3A9061 /* ActiveMixerPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE8A71CFC81B58BA87B9B70 /* ActiveMixerPanel.swift */; };
+		239EF5AF12084C47F6E9980F /* ai_ocean_calm.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4624D1490123714BF5B86DBE /* ai_ocean_calm.mp3 */; };
 		24C2E2A4D17F8A89EABA5AA1 /* AudioTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0158939461D8D2BADC60684 /* AudioTestHelpers.swift */; };
 		25906405A2AF9850AD104F9B /* TTSService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD2158E63E1C70905DC9358 /* TTSService.swift */; };
 		2DDF6050F2EC4C6D3302A6A1 /* StoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA23C3D196B84ECBA66F19FD /* StoryItem.swift */; };
@@ -28,8 +29,10 @@
 		7A6AC4E8F13DEB0741A854C7 /* SleepTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA089EE214C9919718FBE61 /* SleepTimer.swift */; };
 		81BF57499037809A7622321B /* AudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99AA12AED0CD184FD50991A /* AudioService.swift */; };
 		9A5639F8CA71B63443707E47 /* TimerControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A01270434FA0A5EA064CCD7 /* TimerControlView.swift */; };
+		AEDD12CAAF3F6A048A863D4A /* ai_rain_light.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E025955EC891F133ABD9EF10 /* ai_rain_light.mp3 */; };
 		B5D604B687B42C589A11D8F1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87F320BA273676D0C4F85AA /* ContentView.swift */; };
 		BFF591CE561BEA9B17A83E85 /* NoiseGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E938E643F0D74FC827830370 /* NoiseGenerator.swift */; };
+		C0E617E1F3348855D784840A /* ai_fire_camp.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C0E15775F74497BF360DA921 /* ai_fire_camp.mp3 */; };
 		D2BB3212783C259121F41BF0 /* SleepTimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E008D8EFC8B6FBA65826997 /* SleepTimerTests.swift */; };
 		DCE73DE29A794079E1A329DB /* SoundPlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24AF58F6D76DC20EC504ECE7 /* SoundPlayerViewModel.swift */; };
 		DF7DA69EB4CEC3CADC8A3505 /* StoryPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD42036CE57E6A3F79EC3E8 /* StoryPlayerView.swift */; };
@@ -54,6 +57,7 @@
 		24AF58F6D76DC20EC504ECE7 /* SoundPlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayerViewModel.swift; sourceTree = "<group>"; };
 		2CA089EE214C9919718FBE61 /* SleepTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepTimer.swift; sourceTree = "<group>"; };
 		32E332F16A2F6A35FFEE1649 /* NoiseGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseGeneratorTests.swift; sourceTree = "<group>"; };
+		4624D1490123714BF5B86DBE /* ai_ocean_calm.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ai_ocean_calm.mp3; sourceTree = "<group>"; };
 		4B879FB9BDE56B91A200F43C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4C7756D98C241798772FF113 /* UnhurryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnhurryApp.swift; sourceTree = "<group>"; };
 		57782B46D242303E244A21FD /* SoundTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundTrack.swift; sourceTree = "<group>"; };
@@ -68,17 +72,30 @@
 		B8A2051C42B066F062576332 /* SoundLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundLibrary.swift; sourceTree = "<group>"; };
 		B99AA12AED0CD184FD50991A /* AudioService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioService.swift; sourceTree = "<group>"; };
 		C0158939461D8D2BADC60684 /* AudioTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioTestHelpers.swift; sourceTree = "<group>"; };
+		C0E15775F74497BF360DA921 /* ai_fire_camp.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ai_fire_camp.mp3; sourceTree = "<group>"; };
 		C183323AD91CDB137F7C4061 /* AVAudioPCMBuffer+TestTone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVAudioPCMBuffer+TestTone.swift"; sourceTree = "<group>"; };
 		C87F320BA273676D0C4F85AA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		C9DD5A68B9B05B58B259B9D7 /* StoryLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryLibraryView.swift; sourceTree = "<group>"; };
 		CA23C3D196B84ECBA66F19FD /* StoryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryItem.swift; sourceTree = "<group>"; };
 		CD4D90D3BA990CDA0619CE4A /* AudioServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioServiceProtocol.swift; sourceTree = "<group>"; };
+		D40F315FF90B37EDF96FE226 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		E01DF2DEB9BA6E75BA0C612C /* SoundCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundCategory.swift; sourceTree = "<group>"; };
+		E025955EC891F133ABD9EF10 /* ai_rain_light.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ai_rain_light.mp3; sourceTree = "<group>"; };
 		E938E643F0D74FC827830370 /* NoiseGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseGenerator.swift; sourceTree = "<group>"; };
 		FCD42036CE57E6A3F79EC3E8 /* StoryPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryPlayerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		0EAE8FC20B329021ADA7F3BB /* New Folder */ = {
+			isa = PBXGroup;
+			children = (
+				C0E15775F74497BF360DA921 /* ai_fire_camp.mp3 */,
+				4624D1490123714BF5B86DBE /* ai_ocean_calm.mp3 */,
+				E025955EC891F133ABD9EF10 /* ai_rain_light.mp3 */,
+			);
+			path = "New Folder";
+			sourceTree = "<group>";
+		};
 		1E1FC264BB7F023710C9F89C /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -210,6 +227,8 @@
 		A01E44ADEC27FAEDD6ABA974 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D6728F5549366E18225D7E92 /* Audio */,
+				0EAE8FC20B329021ADA7F3BB /* New Folder */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -238,6 +257,14 @@
 				CA23C3D196B84ECBA66F19FD /* StoryItem.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		D6728F5549366E18225D7E92 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				D40F315FF90B37EDF96FE226 /* .gitkeep */,
+			);
+			path = Audio;
 			sourceTree = "<group>";
 		};
 		ED4F5E381262A7D561B7C218 /* Services */ = {
@@ -334,6 +361,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				402EBBC3FB487EC1C1CC935B /* Assets.xcassets in Resources */,
+				C0E617E1F3348855D784840A /* ai_fire_camp.mp3 in Resources */,
+				239EF5AF12084C47F6E9980F /* ai_ocean_calm.mp3 in Resources */,
+				AEDD12CAAF3F6A048A863D4A /* ai_rain_light.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

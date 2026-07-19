@@ -18,6 +18,9 @@ targets:
     platform: iOS
     sources:
       - path: Unhurry
+    resources:
+      - path: Unhurry/Resources/Audio
+        type: folder
     settings:
       base:
         DEVELOPMENT_TEAM: SJ8DC28NRH
