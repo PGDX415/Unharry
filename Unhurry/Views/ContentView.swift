@@ -9,23 +9,39 @@ struct ContentView: View {
 
     let playerVM: SoundPlayerViewModel
     let timerVM: TimerViewModel
+    let storyVM: StoryPlayerViewModel
 
     var body: some View {
-        VStack(spacing: 0) {
-            // 品牌头
-            brandHeader
-
-            // 计时器
-            TimerControlView(viewModel: timerVM)
-
-            // 音效库（可滚动）
-            SoundLibraryView(viewModel: playerVM)
-
-            // 底部混音面板（播放时浮现）
-            ActiveMixerPanel(viewModel: playerVM)
+        NavigationStack {
+            VStack(spacing: 0) {
+                brandHeader
+                storyEntry
+                TimerControlView(viewModel: timerVM)
+                SoundLibraryView(viewModel: playerVM)
+                ActiveMixerPanel(viewModel: playerVM)
+            }
+            .background(Color(red: 0.216, green: 0.184, blue: 0.322))
+            .foregroundStyle(Color(red: 0.941, green: 0.902, blue: 0.824))
         }
-        .background(Color(red: 0.216, green: 0.184, blue: 0.322))
-        .foregroundStyle(Color(red: 0.941, green: 0.902, blue: 0.824))
+    }
+
+    // MARK: - Story Entry
+
+    private var storyEntry: some View {
+        NavigationLink(destination: StoryLibraryView(viewModel: storyVM)) {
+            HStack {
+                Label("睡前陪伴", systemImage: "book.fill")
+                    .font(.subheadline)
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 10)
+            .background(Color(red: 0.941, green: 0.902, blue: 0.824).opacity(0.06))
+        }
+        .buttonStyle(.plain)
     }
 
     // MARK: - Brand Header
@@ -59,6 +75,7 @@ struct ContentView: View {
     let sleepTimer = SleepTimer(audioService: audioService)
     return ContentView(
         playerVM: SoundPlayerViewModel(audioService: audioService, soundLibrary: library),
-        timerVM: TimerViewModel(sleepTimer: sleepTimer)
+        timerVM: TimerViewModel(sleepTimer: sleepTimer),
+        storyVM: StoryPlayerViewModel(sleepTimer: sleepTimer)
     )
 }

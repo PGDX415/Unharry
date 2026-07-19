@@ -7,10 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03ED113A61BF488B7817D84A /* StoryPlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07ABF7D45EF0CD927B9527F9 /* StoryPlayerViewModel.swift */; };
 		096F7FE1676A5E3658CB32C6 /* AudioServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4D90D3BA990CDA0619CE4A /* AudioServiceProtocol.swift */; };
 		17CC7DEC9B1C03BA65FADC20 /* TimerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835AC1F2F44DBCE94A633AA5 /* TimerViewModel.swift */; };
 		1CF3BC208D145EAE7C3A9061 /* ActiveMixerPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE8A71CFC81B58BA87B9B70 /* ActiveMixerPanel.swift */; };
 		24C2E2A4D17F8A89EABA5AA1 /* AudioTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0158939461D8D2BADC60684 /* AudioTestHelpers.swift */; };
+		25906405A2AF9850AD104F9B /* TTSService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD2158E63E1C70905DC9358 /* TTSService.swift */; };
+		2DDF6050F2EC4C6D3302A6A1 /* StoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA23C3D196B84ECBA66F19FD /* StoryItem.swift */; };
 		30260D30BFA053C6EF5C8994 /* AudioSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A804160ED82C06AAA3C829 /* AudioSessionManager.swift */; };
 		3818EA2B3F27110C51EFEE08 /* SoundLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F535724712AE0F15D4A9F /* SoundLibraryView.swift */; };
 		402EBBC3FB487EC1C1CC935B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B879FB9BDE56B91A200F43C /* Assets.xcassets */; };
@@ -20,6 +23,7 @@
 		5503A6C9933137B0A762A469 /* AVAudioPCMBuffer+TestTone.swift in Sources */ = {isa = PBXBuildFile; fileRef = C183323AD91CDB137F7C4061 /* AVAudioPCMBuffer+TestTone.swift */; };
 		5A639CC012C213E8C33041D0 /* AudioServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 858D27EB4FF16FD5260FDD56 /* AudioServiceTests.swift */; };
 		6A0323E57ADD3C50600F7952 /* UnhurryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7756D98C241798772FF113 /* UnhurryApp.swift */; };
+		6C6BFD554BE349F4E383C0B6 /* StoryLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DD5A68B9B05B58B259B9D7 /* StoryLibraryView.swift */; };
 		6FF8FBA63AE2D7D0FD1F4214 /* SoundLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A2051C42B066F062576332 /* SoundLibrary.swift */; };
 		7A6AC4E8F13DEB0741A854C7 /* SleepTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA089EE214C9919718FBE61 /* SleepTimer.swift */; };
 		81BF57499037809A7622321B /* AudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99AA12AED0CD184FD50991A /* AudioService.swift */; };
@@ -28,6 +32,7 @@
 		BFF591CE561BEA9B17A83E85 /* NoiseGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E938E643F0D74FC827830370 /* NoiseGenerator.swift */; };
 		D2BB3212783C259121F41BF0 /* SleepTimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E008D8EFC8B6FBA65826997 /* SleepTimerTests.swift */; };
 		DCE73DE29A794079E1A329DB /* SoundPlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24AF58F6D76DC20EC504ECE7 /* SoundPlayerViewModel.swift */; };
+		DF7DA69EB4CEC3CADC8A3505 /* StoryPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD42036CE57E6A3F79EC3E8 /* StoryPlayerView.swift */; };
 		EB310644D6DA74A14FEDBAE7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F61AAF460487502E4A34E9E /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
@@ -43,6 +48,7 @@
 
 /* Begin PBXFileReference section */
 		040F535724712AE0F15D4A9F /* SoundLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundLibraryView.swift; sourceTree = "<group>"; };
+		07ABF7D45EF0CD927B9527F9 /* StoryPlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryPlayerViewModel.swift; sourceTree = "<group>"; };
 		0DE8A71CFC81B58BA87B9B70 /* ActiveMixerPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveMixerPanel.swift; sourceTree = "<group>"; };
 		1F61AAF460487502E4A34E9E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		24AF58F6D76DC20EC504ECE7 /* SoundPlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayerViewModel.swift; sourceTree = "<group>"; };
@@ -58,14 +64,18 @@
 		931B27D89BDC736DB9CBE1D1 /* UnhurryTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = UnhurryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E008D8EFC8B6FBA65826997 /* SleepTimerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepTimerTests.swift; sourceTree = "<group>"; };
 		A4A804160ED82C06AAA3C829 /* AudioSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSessionManager.swift; sourceTree = "<group>"; };
+		AAD2158E63E1C70905DC9358 /* TTSService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTSService.swift; sourceTree = "<group>"; };
 		B8A2051C42B066F062576332 /* SoundLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundLibrary.swift; sourceTree = "<group>"; };
 		B99AA12AED0CD184FD50991A /* AudioService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioService.swift; sourceTree = "<group>"; };
 		C0158939461D8D2BADC60684 /* AudioTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioTestHelpers.swift; sourceTree = "<group>"; };
 		C183323AD91CDB137F7C4061 /* AVAudioPCMBuffer+TestTone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVAudioPCMBuffer+TestTone.swift"; sourceTree = "<group>"; };
 		C87F320BA273676D0C4F85AA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		C9DD5A68B9B05B58B259B9D7 /* StoryLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryLibraryView.swift; sourceTree = "<group>"; };
+		CA23C3D196B84ECBA66F19FD /* StoryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryItem.swift; sourceTree = "<group>"; };
 		CD4D90D3BA990CDA0619CE4A /* AudioServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioServiceProtocol.swift; sourceTree = "<group>"; };
 		E01DF2DEB9BA6E75BA0C612C /* SoundCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundCategory.swift; sourceTree = "<group>"; };
 		E938E643F0D74FC827830370 /* NoiseGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseGenerator.swift; sourceTree = "<group>"; };
+		FCD42036CE57E6A3F79EC3E8 /* StoryPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryPlayerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -127,6 +137,7 @@
 				E938E643F0D74FC827830370 /* NoiseGenerator.swift */,
 				2CA089EE214C9919718FBE61 /* SleepTimer.swift */,
 				B8A2051C42B066F062576332 /* SoundLibrary.swift */,
+				AAD2158E63E1C70905DC9358 /* TTSService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -170,6 +181,7 @@
 			isa = PBXGroup;
 			children = (
 				24AF58F6D76DC20EC504ECE7 /* SoundPlayerViewModel.swift */,
+				07ABF7D45EF0CD927B9527F9 /* StoryPlayerViewModel.swift */,
 				835AC1F2F44DBCE94A633AA5 /* TimerViewModel.swift */,
 			);
 			path = ViewModels;
@@ -212,6 +224,8 @@
 		C47738C681E110DF16CB0C24 /* Stories */ = {
 			isa = PBXGroup;
 			children = (
+				C9DD5A68B9B05B58B259B9D7 /* StoryLibraryView.swift */,
+				FCD42036CE57E6A3F79EC3E8 /* StoryPlayerView.swift */,
 			);
 			path = Stories;
 			sourceTree = "<group>";
@@ -221,6 +235,7 @@
 			children = (
 				E01DF2DEB9BA6E75BA0C612C /* SoundCategory.swift */,
 				57782B46D242303E244A21FD /* SoundTrack.swift */,
+				CA23C3D196B84ECBA66F19FD /* StoryItem.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -343,6 +358,11 @@
 				3818EA2B3F27110C51EFEE08 /* SoundLibraryView.swift in Sources */,
 				DCE73DE29A794079E1A329DB /* SoundPlayerViewModel.swift in Sources */,
 				427DF40E5BC7A06C78CA1F1F /* SoundTrack.swift in Sources */,
+				2DDF6050F2EC4C6D3302A6A1 /* StoryItem.swift in Sources */,
+				6C6BFD554BE349F4E383C0B6 /* StoryLibraryView.swift in Sources */,
+				DF7DA69EB4CEC3CADC8A3505 /* StoryPlayerView.swift in Sources */,
+				03ED113A61BF488B7817D84A /* StoryPlayerViewModel.swift in Sources */,
+				25906405A2AF9850AD104F9B /* TTSService.swift in Sources */,
 				9A5639F8CA71B63443707E47 /* TimerControlView.swift in Sources */,
 				17CC7DEC9B1C03BA65FADC20 /* TimerViewModel.swift in Sources */,
 				6A0323E57ADD3C50600F7952 /* UnhurryApp.swift in Sources */,
