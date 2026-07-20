@@ -45,6 +45,9 @@ protocol AudioServiceProtocol: AnyObject {
     /// 当前正在播放的音效 ID 列表
     var activeSoundIds: [String] { get }
 
+    /// 主混音器节点（供可视化等外部 tap 使用）
+    var mainMixerNode: AVAudioMixerNode { get }
+
     // MARK: - Sound Loading
 
     /// 加载音频文件到内存 buffer。

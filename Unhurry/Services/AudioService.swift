@@ -73,6 +73,8 @@ final class AudioService: AudioServiceProtocol, @unchecked Sendable {
         queue.sync { Array(activePlayers.keys) }
     }
 
+    var mainMixerNode: AVAudioMixerNode { mainMixer }
+
     // MARK: - Init
 
     init(

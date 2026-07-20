@@ -25,6 +25,10 @@ struct ContentView: View {
                 storyEntry
                 breathEntry
                 TimerControlView(viewModel: timerVM)
+                AudioVisualizerView(
+                    magnitudes: playerVM.visualizer.magnitudes,
+                    hasSignal: playerVM.visualizer.hasSignal
+                )
                 SoundLibraryView(viewModel: playerVM)
                 ActiveMixerPanel(viewModel: playerVM)
             }

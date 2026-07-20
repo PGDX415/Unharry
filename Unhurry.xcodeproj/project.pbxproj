@@ -44,11 +44,13 @@
 		6BD31B59FADFDEF0E9CD5379 /* meditation_breath.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A73D0550E5419315AC3EF31C /* meditation_breath.mp3 */; };
 		6C6BFD554BE349F4E383C0B6 /* StoryLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DD5A68B9B05B58B259B9D7 /* StoryLibraryView.swift */; };
 		6FF8FBA63AE2D7D0FD1F4214 /* SoundLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A2051C42B066F062576332 /* SoundLibrary.swift */; };
+		716A281A74D8EA05254F2A02 /* AudioVisualizerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 868AC35AFA0272E6379EFF06 /* AudioVisualizerService.swift */; };
 		73DE5F7BB6F6686ACAFE86BE /* BreathViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99A354C1016842D99F1ADA0 /* BreathViewModel.swift */; };
 		7400C6E524757108D8DB71FC /* ai_car_rain.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C66FA3368B0DB7415D61AE8B /* ai_car_rain.mp3 */; };
 		761FEDC9D839DB12F889E3D0 /* ai_roof_rain.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A44F4F7FEB1999F8C8DF13AE /* ai_roof_rain.mp3 */; };
 		775B09C608F3E27383223A9F /* ai_stream_flow.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E57CB6060B9126E492EEE982 /* ai_stream_flow.mp3 */; };
 		7A6AC4E8F13DEB0741A854C7 /* SleepTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA089EE214C9919718FBE61 /* SleepTimer.swift */; };
+		7E61860A29F36DBEB00DDF73 /* AudioVisualizerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA61CB7EA8699FE28170446B /* AudioVisualizerView.swift */; };
 		81BF57499037809A7622321B /* AudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99AA12AED0CD184FD50991A /* AudioService.swift */; };
 		8BC3604F78E9C3E350CC297B /* ai_waterfall.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D50004F277CE66A847926E72 /* ai_waterfall.mp3 */; };
 		9A5639F8CA71B63443707E47 /* TimerControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A01270434FA0A5EA064CCD7 /* TimerControlView.swift */; };
@@ -143,6 +145,7 @@
 		82C93DFE4160299996992522 /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
 		835AC1F2F44DBCE94A633AA5 /* TimerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewModel.swift; sourceTree = "<group>"; };
 		858D27EB4FF16FD5260FDD56 /* AudioServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioServiceTests.swift; sourceTree = "<group>"; };
+		868AC35AFA0272E6379EFF06 /* AudioVisualizerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioVisualizerService.swift; sourceTree = "<group>"; };
 		88E938D694A5DC47E368A903 /* ai_deep_space.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ai_deep_space.mp3; sourceTree = "<group>"; };
 		8E92AF536DD0EEEDBC757A24 /* ai_fan_hum.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ai_fan_hum.mp3; sourceTree = "<group>"; };
 		90C8B4F64CAEBA198F828FA7 /* Unhurry.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Unhurry.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -160,6 +163,7 @@
 		B8A2051C42B066F062576332 /* SoundLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundLibrary.swift; sourceTree = "<group>"; };
 		B968C4C9B86A61105AE63C69 /* story_moon.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = story_moon.mp3; sourceTree = "<group>"; };
 		B99AA12AED0CD184FD50991A /* AudioService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioService.swift; sourceTree = "<group>"; };
+		BA61CB7EA8699FE28170446B /* AudioVisualizerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioVisualizerView.swift; sourceTree = "<group>"; };
 		BDCEBC5CFAABCB31DD3BB7A4 /* Unhurry.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Unhurry.entitlements; sourceTree = "<group>"; };
 		C0158939461D8D2BADC60684 /* AudioTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioTestHelpers.swift; sourceTree = "<group>"; };
 		C183323AD91CDB137F7C4061 /* AVAudioPCMBuffer+TestTone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVAudioPCMBuffer+TestTone.swift"; sourceTree = "<group>"; };
@@ -200,6 +204,7 @@
 			isa = PBXGroup;
 			children = (
 				0DE8A71CFC81B58BA87B9B70 /* ActiveMixerPanel.swift */,
+				BA61CB7EA8699FE28170446B /* AudioVisualizerView.swift */,
 				040F535724712AE0F15D4A9F /* SoundLibraryView.swift */,
 			);
 			path = Sounds;
@@ -260,6 +265,7 @@
 				B99AA12AED0CD184FD50991A /* AudioService.swift */,
 				CD4D90D3BA990CDA0619CE4A /* AudioServiceProtocol.swift */,
 				A4A804160ED82C06AAA3C829 /* AudioSessionManager.swift */,
+				868AC35AFA0272E6379EFF06 /* AudioVisualizerService.swift */,
 				CC0C0551B380A83704FDC47F /* HealthService.swift */,
 				E938E643F0D74FC827830370 /* NoiseGenerator.swift */,
 				DDDC4569646AC2755F8897B8 /* NowPlayingController.swift */,
@@ -596,6 +602,8 @@
 				81BF57499037809A7622321B /* AudioService.swift in Sources */,
 				096F7FE1676A5E3658CB32C6 /* AudioServiceProtocol.swift in Sources */,
 				30260D30BFA053C6EF5C8994 /* AudioSessionManager.swift in Sources */,
+				716A281A74D8EA05254F2A02 /* AudioVisualizerService.swift in Sources */,
+				7E61860A29F36DBEB00DDF73 /* AudioVisualizerView.swift in Sources */,
 				30C4B90A75EEA049A81A549D /* BreathView.swift in Sources */,
 				73DE5F7BB6F6686ACAFE86BE /* BreathViewModel.swift in Sources */,
 				B5D604B687B42C589A11D8F1 /* ContentView.swift in Sources */,

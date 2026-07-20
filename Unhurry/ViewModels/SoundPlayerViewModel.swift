@@ -53,6 +53,10 @@ final class SoundPlayerViewModel {
         tracks.filter { favoriteTrackIDs.contains($0.id) }
     }
 
+    // MARK: - Visualizer
+
+    let visualizer = AudioVisualizerService()
+
     // MARK: - Constants
 
     /// 音频播放前准备缓冲时间（秒）——优先读取用户设置
@@ -128,10 +132,14 @@ final class SoundPlayerViewModel {
     /// 直接播放指定音效（不经过缓冲，用于内部 flush）。
     private func executePlay(trackId: String, volume: Float, loop: Bool) {
         do {
+            let wasEmpty = activeTrackIds.isEmpty
             try audioService.play(soundId: trackId, volume: volume, loop: loop)
             activeTrackIds.insert(trackId)
             volumes[trackId] = volume
             UsageTracker.shared.trackStarted(trackId)
+            if wasEmpty {
+                startVisualizer()
+            }
         } catch {
             print("⚠️ Failed to play \(trackId): \(error)")
         }
@@ -206,6 +214,7 @@ final class SoundPlayerViewModel {
         UsageTracker.shared.trackStopped(track.id)
         if activeTrackIds.isEmpty {
             clearNowPlaying()
+            stopVisualizer()
         }
     }
 
@@ -223,6 +232,7 @@ final class SoundPlayerViewModel {
         volumes.removeAll()
         UsageTracker.shared.allStopped()
         clearNowPlaying()
+        stopVisualizer()
     }
 
     /// 获取指定音效的名称。
@@ -350,6 +360,7 @@ final class SoundPlayerViewModel {
         volumes = savedVolumes
         isSystemPaused = false
         startNowPlaying()
+        startVisualizer()
     }
 
     private func handleRemotePause() {
@@ -390,6 +401,20 @@ final class SoundPlayerViewModel {
         let currentIndex = presets.firstIndex { Set($0.trackIds) == currentIds } ?? presets.count
         let prevIndex = (currentIndex - 1 + presets.count) % presets.count
         loadPreset(presets[prevIndex])
+    }
+
+    // MARK: - Visualizer
+
+    private func startVisualizer() {
+        guard let mixer = (audioService as? AudioService)?.mainMixerNode else {
+            visualizer.start(on: audioService.mainMixerNode)
+            return
+        }
+        visualizer.start(on: mixer)
+    }
+
+    private func stopVisualizer() {
+        visualizer.stop()
     }
 
     // MARK: - Private: Persistence
