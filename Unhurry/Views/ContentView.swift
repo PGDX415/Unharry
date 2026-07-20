@@ -149,16 +149,41 @@ struct ContentView: View {
     // MARK: - Mode Picker
 
     private var modePicker: some View {
-        Picker("模式", selection: $isFocusMode) {
-            Text("助眠").tag(false)
-            Text("专注").tag(true)
+        HStack(spacing: 0) {
+            modeButton("助眠", icon: "moon.zzz.fill", isSelected: !isFocusMode) {
+                isFocusMode = false
+            }
+            modeButton("专注", icon: "brain.head.profile", isSelected: isFocusMode) {
+                isFocusMode = true
+            }
         }
-        .pickerStyle(.segmented)
-        .tint(Theme.accentColor)
-        .foregroundStyle(.primary)
         .padding(.horizontal, 20)
         .padding(.vertical, 6)
         .sensoryFeedback(.selection, trigger: isFocusMode)
+    }
+
+    private func modeButton(_ title: String, icon: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            HStack(spacing: 4) {
+                Image(systemName: icon)
+                    .font(.caption2)
+                Text(title)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 10)
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(isSelected ? Theme.accentColor : .clear)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .strokeBorder(isSelected ? .clear : Theme.accentColor.opacity(0.25), lineWidth: 1)
+            )
+            .foregroundStyle(isSelected ? .black : Theme.accentColor)
+        }
+        .buttonStyle(.plain)
     }
 }
 
