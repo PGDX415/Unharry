@@ -43,6 +43,15 @@ final class SleepRitualViewModel {
 
     // MARK: - Timers
 
+    /// 打破 CADisplayLink → target 的强引用
+    private final class DisplayLinkProxy {
+        weak var owner: SleepRitualViewModel?
+        init(owner: SleepRitualViewModel) { self.owner = owner }
+        @objc func tick() { owner?.breathTick() }
+        @objc func timerTick() { owner?.timerTick() }
+    }
+
+    private var proxy: DisplayLinkProxy?
     private var stepTimer: Timer?
     private var displayLink: CADisplayLink?
     private var breathStartDate: Date = .now
@@ -50,6 +59,7 @@ final class SleepRitualViewModel {
     private var currentStepStartDate: Date = .now
     private(set) var stepElapsed: TimeInterval = 0  // 当前步骤已过时间
     private(set) var stepDuration: TimeInterval = 0   // 当前步骤总时长
+
 
     // MARK: - Dependencies
 
@@ -170,7 +180,9 @@ final class SleepRitualViewModel {
     // MARK: - Breath Display Link
 
     private func startBreathDisplayLink() {
-        let link = CADisplayLink(target: self, selector: #selector(breathTick))
+        let p = DisplayLinkProxy(owner: self)
+        proxy = p
+        let link = CADisplayLink(target: p, selector: #selector(DisplayLinkProxy.tick))
         link.preferredFrameRateRange = CAFrameRateRange(minimum: 30, maximum: 60)
         link.add(to: .main, forMode: .common)
         displayLink = link
@@ -210,7 +222,9 @@ final class SleepRitualViewModel {
     // MARK: - Timer Display Link
 
     private func startTimerDisplayLink() {
-        let link = CADisplayLink(target: self, selector: #selector(timerTick))
+        let p = DisplayLinkProxy(owner: self)
+        proxy = p
+        let link = CADisplayLink(target: p, selector: #selector(DisplayLinkProxy.timerTick))
         link.preferredFrameRateRange = CAFrameRateRange(minimum: 10, maximum: 30)
         link.add(to: .main, forMode: .common)
         displayLink = link
@@ -228,11 +242,17 @@ final class SleepRitualViewModel {
 
     // MARK: - Cleanup
 
+    /// 暂停内部计时/动画，但保留音效和计时器继续运行（用于视图消失时）
+    func suspend() {
+        stopStepTimers()
+    }
+
     private func stopStepTimers() {
         stepTimer?.invalidate()
         stepTimer = nil
         displayLink?.invalidate()
         displayLink = nil
+        proxy = nil
     }
 
     private func stopAllTimers() {

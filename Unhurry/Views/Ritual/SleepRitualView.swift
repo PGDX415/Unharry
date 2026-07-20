@@ -39,6 +39,10 @@ struct SleepRitualView: View {
                 viewModel.start(ritual: ritual)
             }
         }
+        .onDisappear {
+            // 视图消失时停止动画循环，但保留音效和计时器继续运行
+            viewModel.suspend()
+        }
     }
 
     // MARK: - Header
