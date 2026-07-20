@@ -201,6 +201,7 @@ struct SoundLibraryView: View {
                     .padding(8)
             }
             .buttonStyle(.plain)
+            .accessibilityLabel(isFav ? "取消收藏\(track.name)" : "收藏\(track.name)")
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
         }
         .contextMenu {

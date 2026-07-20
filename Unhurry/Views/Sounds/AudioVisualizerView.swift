@@ -37,6 +37,7 @@ struct AudioVisualizerView: View {
                     .transition(.opacity)
             }
         }
+        .accessibilityHidden(true)
         .frame(height: isVisible ? maxHeight + 12 : 0)
         .animation(.easeInOut(duration: 0.6), value: isVisible)
         .onChange(of: hasSignal) { _, newVal in

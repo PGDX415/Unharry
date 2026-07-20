@@ -55,6 +55,7 @@ struct ContentView: View {
                         Image(systemName: "gearshape.fill")
                             .font(.subheadline)
                     }
+                    .accessibilityLabel("设置")
                 }
             }
             .sheet(isPresented: $showSettings) {

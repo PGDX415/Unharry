@@ -143,6 +143,7 @@ struct ActiveMixerPanel: View {
                             .font(.caption)
                             .foregroundStyle(accentColor.opacity(0.7))
                     }
+                    .accessibilityHint("将当前音效组合保存为预设")
                 }
 
                 Button(action: { viewModel.stopAll() }) {
@@ -150,6 +151,7 @@ struct ActiveMixerPanel: View {
                         .font(.caption)
                         .foregroundStyle(.red.opacity(0.8))
                 }
+                .accessibilityLabel("停止所有音效")
             }
 
             // 等待中的音效（缓冲期间）
@@ -201,6 +203,7 @@ struct ActiveMixerPanel: View {
                         .font(.caption)
                         .foregroundStyle(isExpanded ? accentColor : accentColor.opacity(0.45))
                 }
+                .accessibilityLabel(isExpanded ? "收起\(name)音效调节" : "展开\(name)音效调节")
                 .frame(width: 20)
 
                 Text(name)
@@ -213,6 +216,7 @@ struct ActiveMixerPanel: View {
                     set: { viewModel.setVolume(Float($0), for: trackId) }
                 ), in: 0...1)
                     .tint(accentColor)
+                    .accessibilityLabel("\(name)音量")
 
                 Text(String(format: "%.0f%%", volume * 100))
                     .font(.caption2)

@@ -82,6 +82,7 @@ struct TimerControlView: View {
                     .font(.subheadline)
             }
             .buttonStyle(.plain)
+            .accessibilityLabel("取消计时器")
         }
     }
 }

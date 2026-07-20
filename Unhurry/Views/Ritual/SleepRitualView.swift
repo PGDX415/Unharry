@@ -56,6 +56,7 @@ struct SleepRitualView: View {
                 Image(systemName: "xmark")
                     .font(.body)
             }
+            .accessibilityLabel("关闭仪式")
 
             Spacer()
 
@@ -239,6 +240,9 @@ struct SleepRitualView: View {
                     .foregroundStyle(accentColor.opacity(0.4))
             }
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("呼吸引导，当前\(viewModel.breathPhase.rawValue)")
+        .accessibilityHint("圆圈放大时吸气，缩小时呼气")
     }
 
     // MARK: - Sounds
@@ -276,6 +280,8 @@ struct SleepRitualView: View {
                 .font(.title)
                 .foregroundStyle(accentColor.opacity(0.5))
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("睡眠计时器，剩余\(viewModel.formatRemaining())")
     }
 
     // MARK: - Paused
@@ -335,6 +341,7 @@ struct SleepRitualView: View {
                     }
                     .foregroundStyle(accentColor.opacity(0.5))
                 }
+                .accessibilityLabel("跳过当前步骤")
                 .sensoryFeedback(.selection, trigger: viewModel.phase)
 
                 Button(action: { viewModel.cancel(); dismiss() }) {
@@ -347,6 +354,7 @@ struct SleepRitualView: View {
                             .foregroundStyle(.red.opacity(0.6))
                     }
                 }
+                .accessibilityLabel("结束仪式")
                 .sensoryFeedback(.warning, trigger: viewModel.phase == .cancelled)
             }
             .padding(.bottom, 40)

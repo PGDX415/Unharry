@@ -53,6 +53,7 @@ struct BreathView: View {
                     Image(systemName: "xmark")
                         .font(.body)
                 }
+                .accessibilityLabel("关闭呼吸练习")
             } else {
                 Button(action: {
                     viewModel.stop()
@@ -61,6 +62,7 @@ struct BreathView: View {
                     Image(systemName: "xmark")
                         .font(.body)
                 }
+                .accessibilityLabel("停止并关闭呼吸练习")
             }
             Spacer()
             Text("呼吸练习")
@@ -110,6 +112,9 @@ struct BreathView: View {
                 .foregroundStyle(accentColor.opacity(0.6))
             }
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(viewModel.state == .idle ? "准备呼吸练习" : "呼吸练习完成")
+        .accessibilityHint("跟随圆圈的缩放节奏吸气与呼气")
     }
 
     // MARK: - Phase Label
