@@ -5,18 +5,30 @@
 
 import SwiftUI
 
-/// 睡眠计时器控件。
+/// 睡眠/专注计时器控件。
 ///
 /// 展示预设时长按钮 + 倒计时 + 取消操作。
+/// 专注模式使用番茄钟预设（25/45/60 分钟）。
 struct TimerControlView: View {
 
     let viewModel: TimerViewModel
+    let isFocusMode: Bool
+
+    private var currentPresets: [(label: String, seconds: TimeInterval)] {
+        isFocusMode
+            ? [("25 分钟", 25 * 60), ("45 分钟", 45 * 60), ("60 分钟", 60 * 60)]
+            : viewModel.presets
+    }
+
+    private var timerLabel: String {
+        isFocusMode ? "专注计时器" : "睡眠计时器"
+    }
 
     var body: some View {
         VStack(spacing: 12) {
             HStack(spacing: 10) {
-                Image(systemName: "timer")
-                Text("睡眠计时器")
+                Image(systemName: isFocusMode ? "clock.badge" : "timer")
+                Text(timerLabel)
                     .font(.subheadline)
                     .fontWeight(.medium)
                 Spacer()
@@ -37,7 +49,7 @@ struct TimerControlView: View {
 
     private var presetButtons: some View {
         HStack(spacing: 8) {
-            ForEach(viewModel.presets, id: \.seconds) { preset in
+            ForEach(currentPresets, id: \.seconds) { preset in
                 Button(action: { viewModel.start(duration: preset.seconds) }) {
                     Text(preset.label)
                         .font(.caption)

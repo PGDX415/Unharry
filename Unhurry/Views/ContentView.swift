@@ -14,17 +14,30 @@ struct ContentView: View {
     @State private var showSettings = false
     @AppStorage("useBlackBackground") private var useBlackBackground = false
     @AppStorage("accentTheme") private var accentTheme = "gold"
+    @AppStorage("isFocusMode") private var isFocusMode = false
 
     /// 主题变化时递增，强制重建整个视图树
     @State private var themeVersion = 0
+
+    /// 专注模式下的番茄钟预设
+    private static let focusPresets: [(String, TimeInterval)] = [
+        ("25 分钟", 25 * 60),
+        ("45 分钟", 45 * 60),
+        ("60 分钟", 60 * 60),
+    ]
 
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
                 brandHeader
-                storyEntry
-                breathEntry
-                TimerControlView(viewModel: timerVM)
+                modePicker
+
+                if !isFocusMode {
+                    storyEntry
+                    breathEntry
+                }
+
+                TimerControlView(viewModel: timerVM, isFocusMode: isFocusMode)
                 AudioVisualizerView(
                     magnitudes: playerVM.visualizer.magnitudes,
                     hasSignal: playerVM.visualizer.hasSignal
@@ -98,7 +111,7 @@ struct ContentView: View {
 
     private var brandHeader: some View {
         VStack(spacing: 4) {
-            Image(systemName: "moon.stars.fill")
+            Image(systemName: isFocusMode ? "brain.head.profile" : "moon.stars.fill")
                 .font(.system(size: 36))
                 .padding(.top, 8)
 
@@ -106,8 +119,7 @@ struct ContentView: View {
                 .font(.title2)
                 .fontWeight(.medium)
 
-            // 白居易《闲眠》
-            Text("暖床斜卧日曛腰，一觉闲眠百病销")
+            Text(isFocusMode ? "静以修身，俭以养德" : "暖床斜卧日曛腰，一觉闲眠百病销")
                 .font(.system(size: 11, design: .serif))
                 .italic()
                 .foregroundStyle(Theme.accentColor.opacity(0.45))
@@ -115,6 +127,18 @@ struct ContentView: View {
         }
         .frame(maxWidth: .infinity)
         .background(useBlackBackground ? Color(red: 0.05, green: 0.05, blue: 0.05) : Theme.bgColor)
+    }
+
+    // MARK: - Mode Picker
+
+    private var modePicker: some View {
+        Picker("模式", selection: $isFocusMode) {
+            Text("助眠").tag(false)
+            Text("专注").tag(true)
+        }
+        .pickerStyle(.segmented)
+        .padding(.horizontal, 20)
+        .padding(.vertical, 8)
     }
 }
 
