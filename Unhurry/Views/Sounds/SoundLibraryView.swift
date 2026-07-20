@@ -187,8 +187,11 @@ struct SoundLibraryView: View {
                             : accentColor.opacity(0.08)
                         )
                 )
+                .scaleEffect(isOn ? 0.96 : 1.0)
+                .animation(.bouncy(duration: 0.3), value: isOn)
             }
             .buttonStyle(.plain)
+            .sensoryFeedback(isActive ? .stop : .start, trigger: isActive)
 
             // 收藏按钮（覆盖在右上角）
             Button(action: { viewModel.toggleFavorite(track.id) }) {

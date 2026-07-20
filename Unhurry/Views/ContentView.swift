@@ -46,6 +46,7 @@ struct ContentView: View {
                 SoundLibraryView(viewModel: playerVM)
                 ActiveMixerPanel(viewModel: playerVM)
             }
+            .animation(.smooth(duration: 0.3), value: isFocusMode)
             .background(useBlackBackground ? Color(red: 0.05, green: 0.05, blue: 0.05) : Theme.bgColor)
             .foregroundStyle(Theme.accentColor)
             .toolbar {
@@ -159,6 +160,7 @@ struct ContentView: View {
         .pickerStyle(.segmented)
         .padding(.horizontal, 20)
         .padding(.vertical, 8)
+        .sensoryFeedback(.selection, trigger: isFocusMode)
     }
 }
 

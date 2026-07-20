@@ -62,6 +62,7 @@ struct TimerControlView: View {
                         )
                 }
                 .buttonStyle(.plain)
+                .sensoryFeedback(.start, trigger: viewModel.isRunning)
             }
         }
     }

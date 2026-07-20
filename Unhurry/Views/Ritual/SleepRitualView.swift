@@ -335,6 +335,7 @@ struct SleepRitualView: View {
                     }
                     .foregroundStyle(accentColor.opacity(0.5))
                 }
+                .sensoryFeedback(.selection, trigger: viewModel.phase)
 
                 Button(action: { viewModel.cancel(); dismiss() }) {
                     VStack(spacing: 4) {
@@ -346,6 +347,7 @@ struct SleepRitualView: View {
                             .foregroundStyle(.red.opacity(0.6))
                     }
                 }
+                .sensoryFeedback(.warning, trigger: viewModel.phase == .cancelled)
             }
             .padding(.bottom, 40)
         }
