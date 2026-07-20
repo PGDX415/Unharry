@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 /// 设置页面：默认音量、缓冲时长、主题切换、使用统计。
 struct SettingsView: View {
@@ -16,11 +17,14 @@ struct SettingsView: View {
 
     let nameResolver: (String) -> String
     let presets: [MixPreset]
+    var onImportTrack: ((URL) -> Void)?
 
     @State private var reminderOn = Theme.reminderEnabled
     @State private var reminderTime = Theme.reminderDate
     @State private var reminderPresetId = Theme.reminderPresetId ?? ""
     @State private var healthSync = Theme.healthSyncEnabled
+    @State private var showFileImporter = false
+    @State private var importError: String?
 
     var body: some View {
         ZStack {
@@ -33,6 +37,7 @@ struct SettingsView: View {
                     volumeSection
                     bufferSection
                     accentSection
+                    importSection
                     backgroundSection
                     healthSection
                 }
@@ -55,6 +60,28 @@ struct SettingsView: View {
         .onChange(of: reminderPresetId) { _, _ in saveReminder() }
         .onChange(of: healthSync) { _, newVal in
             Theme.healthSyncEnabled = newVal
+        }
+        .fileImporter(
+            isPresented: $showFileImporter,
+            allowedContentTypes: [.audio, .mp3, .wav],
+            allowsMultipleSelection: true
+        ) { result in
+            switch result {
+            case .success(let urls):
+                for url in urls {
+                    onImportTrack?(url)
+                }
+            case .failure(let error):
+                importError = error.localizedDescription
+            }
+        }
+        .alert("导入失败", isPresented: Binding(
+            get: { importError != nil },
+            set: { if !$0 { importError = nil } }
+        )) {
+            Button("确定", role: .cancel) { importError = nil }
+        } message: {
+            Text(importError ?? "未知错误")
         }
     }
 
@@ -159,6 +186,36 @@ struct SettingsView: View {
                     .buttonStyle(.plain)
                 }
             }
+        }
+        .padding(16)
+        .background(RoundedRectangle(cornerRadius: 14).fill(Theme.accentColor.opacity(0.05)))
+    }
+
+    // MARK: - Import
+
+    private var importSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            sectionHeader("自定义音效", icon: "square.and.arrow.down")
+            sectionDescription("导入你自己的 mp3 / wav / m4a 音频文件")
+
+            Button(action: { showFileImporter = true }) {
+                HStack {
+                    Image(systemName: "plus.circle.fill")
+                        .font(.subheadline)
+                    Text("导入音频文件")
+                        .font(.subheadline)
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .foregroundStyle(Theme.accentColor.opacity(0.3))
+                }
+                .padding(12)
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Theme.accentColor.opacity(0.08))
+                )
+            }
+            .buttonStyle(.plain)
         }
         .padding(16)
         .background(RoundedRectangle(cornerRadius: 14).fill(Theme.accentColor.opacity(0.05)))

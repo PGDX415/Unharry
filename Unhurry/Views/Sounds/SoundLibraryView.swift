@@ -4,16 +4,13 @@
 //
 
 import SwiftUI
-import UniformTypeIdentifiers
 
 /// 音效库浏览视图——按分类展示可播放的音效。
 struct SoundLibraryView: View {
 
     let viewModel: SoundPlayerViewModel
 
-    @State private var showFileImporter = false
     @State private var trackToDelete: SoundTrack?
-    @State private var importError: String?
 
     private var accentColor: Color { Theme.accentColor }
 
@@ -29,9 +26,6 @@ struct SoundLibraryView: View {
                 if let err = viewModel.playbackErrorMessage {
                     errorBanner(err)
                 }
-
-                // 导入按钮
-                importButton
 
                 // 收藏区
                 if !viewModel.favoriteTracks.isEmpty {
@@ -53,28 +47,6 @@ struct SoundLibraryView: View {
             .padding(.horizontal, 20)
             .padding(.vertical, 16)
         }
-        .fileImporter(
-            isPresented: $showFileImporter,
-            allowedContentTypes: [.audio, .mp3, .wav],
-            allowsMultipleSelection: true
-        ) { result in
-            switch result {
-            case .success(let urls):
-                for url in urls {
-                    viewModel.importCustomTrack(from: url)
-                }
-            case .failure(let error):
-                importError = error.localizedDescription
-            }
-        }
-        .alert("导入失败", isPresented: Binding(
-            get: { importError != nil },
-            set: { if !$0 { importError = nil } }
-        )) {
-            Button("确定", role: .cancel) { importError = nil }
-        } message: {
-            Text(importError ?? "未知错误")
-        }
         .confirmationDialog(
             "删除自定义音效？",
             isPresented: Binding(
@@ -95,33 +67,6 @@ struct SoundLibraryView: View {
                 Text("「\(track.name)」将被永久删除")
             }
         }
-    }
-
-    // MARK: - Import Button
-
-    private var importButton: some View {
-        Button(action: { showFileImporter = true }) {
-            HStack(spacing: 8) {
-                Image(systemName: "plus.circle.fill")
-                    .font(.subheadline)
-                Text("导入自定义音效")
-                    .font(.subheadline)
-                Spacer()
-                Text("mp3 / wav / m4a")
-                    .font(.caption2)
-                    .foregroundStyle(accentColor.opacity(0.35))
-            }
-            .padding(14)
-            .background(
-                RoundedRectangle(cornerRadius: 14)
-                    .stroke(accentColor.opacity(0.2), lineWidth: 1)
-                    .background(
-                        RoundedRectangle(cornerRadius: 14)
-                            .fill(accentColor.opacity(0.04))
-                    )
-            )
-        }
-        .buttonStyle(.plain)
     }
 
     // MARK: - Error Banner

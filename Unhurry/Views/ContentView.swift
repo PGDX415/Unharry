@@ -55,7 +55,8 @@ struct ContentView: View {
                 NavigationStack {
                     SettingsView(
                         nameResolver: { playerVM.name(for: $0) },
-                        presets: playerVM.presets
+                        presets: playerVM.presets,
+                        onImportTrack: { playerVM.importCustomTrack(from: $0) }
                     )
                 }
             }
