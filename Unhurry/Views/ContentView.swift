@@ -33,6 +33,7 @@ struct ContentView: View {
                 modePicker
 
                 if !isFocusMode {
+                    ritualEntry
                     storyEntry
                     breathEntry
                 }
@@ -127,6 +128,25 @@ struct ContentView: View {
         }
         .frame(maxWidth: .infinity)
         .background(useBlackBackground ? Color(red: 0.05, green: 0.05, blue: 0.05) : Theme.bgColor)
+    }
+
+    // MARK: - Ritual Entry
+
+    private var ritualEntry: some View {
+        NavigationLink(destination: RitualPresetView(playerVM: playerVM, timerVM: timerVM)) {
+            HStack {
+                Label("入睡仪式", systemImage: "sparkles")
+                    .font(.subheadline)
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundStyle(Theme.accentColor.opacity(0.45))
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 10)
+            .background(Theme.accentColor.opacity(0.06))
+        }
+        .buttonStyle(.plain)
     }
 
     // MARK: - Mode Picker
