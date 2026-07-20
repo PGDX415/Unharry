@@ -58,6 +58,7 @@
 		81BF57499037809A7622321B /* AudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99AA12AED0CD184FD50991A /* AudioService.swift */; };
 		8BC3604F78E9C3E350CC297B /* ai_waterfall.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D50004F277CE66A847926E72 /* ai_waterfall.mp3 */; };
 		9A5639F8CA71B63443707E47 /* TimerControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A01270434FA0A5EA064CCD7 /* TimerControlView.swift */; };
+		A0B13C95D7FB2B10CFC70EE3 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810B372808EBBAAD1AE0B63D /* EmptyStateView.swift */; };
 		A0C031E357AECB130030D63F /* MixPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F92A75918A217703E2DD24 /* MixPreset.swift */; };
 		A1005343114A020D75B67BA2 /* MixPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F92A75918A217703E2DD24 /* MixPreset.swift */; };
 		AA240F34CA8B465A60936CCE /* ai_underwater_piano.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 40207D90B103FAE1E83BA696 /* ai_underwater_piano.mp3 */; };
@@ -153,6 +154,7 @@
 		7882500A4F7982A5C3A4B010 /* story_star.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = story_star.mp3; sourceTree = "<group>"; };
 		7D6C0D44EB0FF32C5FF82A7F /* ai_summer_bugs.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ai_summer_bugs.mp3; sourceTree = "<group>"; };
 		7E3F86FFB50D9E0105674597 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		810B372808EBBAAD1AE0B63D /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
 		8279917F3EBDD188F529890F /* ai_bamboo_wind.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ai_bamboo_wind.mp3; sourceTree = "<group>"; };
 		82C93DFE4160299996992522 /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
 		835AC1F2F44DBCE94A633AA5 /* TimerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewModel.swift; sourceTree = "<group>"; };
@@ -312,6 +314,14 @@
 			path = Theme;
 			sourceTree = "<group>";
 		};
+		74825DD188092B4980A5DBF5 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				810B372808EBBAAD1AE0B63D /* EmptyStateView.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
 		775636A314569D3853AE2404 /* Breath */ = {
 			isa = PBXGroup;
 			children = (
@@ -374,6 +384,7 @@
 				775636A314569D3853AE2404 /* Breath */,
 				96896AC1A9E09D72B46E5DEF /* Ritual */,
 				B17FE0D21700EB479976CB93 /* Settings */,
+				74825DD188092B4980A5DBF5 /* Shared */,
 				9904FAAD596019B7CDFF83CB /* SleepTracking */,
 				3574DDA8F0DE50EED316B507 /* Sounds */,
 				8274B0C2953BA51302257C43 /* Stats */,
@@ -647,6 +658,7 @@
 				30C4B90A75EEA049A81A549D /* BreathView.swift in Sources */,
 				73DE5F7BB6F6686ACAFE86BE /* BreathViewModel.swift in Sources */,
 				B5D604B687B42C589A11D8F1 /* ContentView.swift in Sources */,
+				A0B13C95D7FB2B10CFC70EE3 /* EmptyStateView.swift in Sources */,
 				39AC0E0205A6B994D5719739 /* HealthService.swift in Sources */,
 				B665F0B683108412281BF63D /* IntentBridge.swift in Sources */,
 				A1005343114A020D75B67BA2 /* MixPreset.swift in Sources */,

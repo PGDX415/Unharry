@@ -44,10 +44,23 @@ struct RitualPresetView: View {
                         ForEach(customRituals) { ritual in
                             customRitualCard(ritual)
                         }
+                    } else {
+                        EmptyStateView(
+                            icon: "slider.horizontal.3",
+                            title: "还没有自定义仪式",
+                            subtitle: "你可以自由搭配呼吸、音效和定时，打造专属的入睡流程",
+                            actionLabel: "创建第一个",
+                            action: {
+                                editingRitual = nil
+                                showBuilder = true
+                            }
+                        )
                     }
 
                     // 创建按钮
-                    createButton
+                    if !customRituals.isEmpty {
+                        createButton
+                    }
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 16)

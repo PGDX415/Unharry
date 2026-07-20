@@ -108,7 +108,7 @@ final class SoundPlayerViewModel {
     init(
         audioService: AudioServiceProtocol,
         soundLibrary: SoundLibrary,
-        nowPlayingController: NowPlayingController = NowPlayingController()
+        nowPlayingController: NowPlayingController
     ) {
         self.audioService = audioService
         self.soundLibrary = soundLibrary

@@ -29,6 +29,12 @@ struct ActiveMixerPanel: View {
             // ── 活跃/等待中音轨 ──
             if viewModel.isAnythingPlaying || viewModel.isSoundPreparing {
                 activeMixerSection
+            } else {
+                EmptyStateView(
+                    icon: "speaker.wave.2.fill",
+                    title: "选择音效开始播放",
+                    subtitle: "从上方音效库挑选一个或多个音效，组合出你喜欢的氛围"
+                )
             }
         }
         .alert("保存组合", isPresented: $showSaveAlert) {

@@ -46,6 +46,8 @@ struct UnhurryWidgetEntryView: View {
             accessoryRectangularView
         case .accessoryInline:
             accessoryInlineView
+        case .systemLarge, .systemExtraLarge:
+            systemSmallView
         @unknown default:
             systemSmallView
         }

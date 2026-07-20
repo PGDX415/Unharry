@@ -50,9 +50,9 @@ final class StoryPlayerViewModel {
 
     // MARK: - Init
 
-    init(ttsService: TTSService = TTSService(),
+    init(ttsService: TTSService,
          sleepTimer: SleepTimer,
-         stories: [StoryItem] = StoryItem.builtIn) {
+         stories: [StoryItem]) {
         self.ttsService = ttsService
         self.sleepTimer = sleepTimer
         self.stories = stories

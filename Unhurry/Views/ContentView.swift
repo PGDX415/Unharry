@@ -168,8 +168,8 @@ struct ContentView: View {
     library.preloadBuiltInSounds(into: audioService)
     let sleepTimer = SleepTimer(audioService: audioService)
     return ContentView(
-        playerVM: SoundPlayerViewModel(audioService: audioService, soundLibrary: library),
+        playerVM: SoundPlayerViewModel(audioService: audioService, soundLibrary: library, nowPlayingController: NowPlayingController()),
         timerVM: TimerViewModel(sleepTimer: sleepTimer),
-        storyVM: StoryPlayerViewModel(sleepTimer: sleepTimer)
+        storyVM: StoryPlayerViewModel(ttsService: TTSService(), sleepTimer: sleepTimer, stories: StoryItem.builtIn)
     )
 }

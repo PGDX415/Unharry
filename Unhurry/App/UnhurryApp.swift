@@ -21,9 +21,9 @@ struct UnhurryApp: App {
 
     init() {
         sleepTimer = SleepTimer(audioService: audioService)
-        playerVM = SoundPlayerViewModel(audioService: audioService, soundLibrary: soundLibrary)
+        playerVM = SoundPlayerViewModel(audioService: audioService, soundLibrary: soundLibrary, nowPlayingController: NowPlayingController())
         timerVM = TimerViewModel(sleepTimer: sleepTimer)
-        storyVM = StoryPlayerViewModel(ttsService: ttsService, sleepTimer: sleepTimer)
+        storyVM = StoryPlayerViewModel(ttsService: ttsService, sleepTimer: sleepTimer, stories: StoryItem.builtIn)
 
         // 通知点击 → 加载对应预设
         appDelegate.onNotificationPreset = { [weak playerVM] presetId in
