@@ -33,6 +33,9 @@ final class SoundPlayerViewModel {
     /// 播放前准备缓冲中
     private(set) var isSoundPreparing = false
 
+    /// 最近一次播放错误消息（UI 展示后清除）
+    private(set) var playbackErrorMessage: String?
+
     /// 等待缓冲结束后播放的音效 ID（含组合加载）
     private(set) var pendingTrackIds: Set<String> = []
 
@@ -157,7 +160,8 @@ final class SoundPlayerViewModel {
                 startVisualizer()
             }
         } catch {
-            print("⚠️ Failed to play \(trackId): \(error)")
+            let name = tracks.first(where: { $0.id == trackId })?.name ?? trackId
+            playbackErrorMessage = "「\(name)」加载失败: \(error.localizedDescription)"
         }
     }
 
@@ -263,6 +267,10 @@ final class SoundPlayerViewModel {
     }
 
     /// 获取指定音效的名称。
+    func clearPlaybackError() {
+        playbackErrorMessage = nil
+    }
+
     func name(for trackId: String) -> String {
         tracks.first { $0.id == trackId }?.name ?? trackId
     }

@@ -13,6 +13,7 @@ struct SoundLibraryView: View {
 
     @State private var showFileImporter = false
     @State private var trackToDelete: SoundTrack?
+    @State private var importError: String?
 
     private var accentColor: Color { Theme.accentColor }
 
@@ -22,6 +23,11 @@ struct SoundLibraryView: View {
                 // 缓冲提示
                 if viewModel.isSoundPreparing {
                     preparingBanner
+                }
+
+                // 播放错误提示
+                if let err = viewModel.playbackErrorMessage {
+                    errorBanner(err)
                 }
 
                 // 导入按钮
@@ -58,8 +64,16 @@ struct SoundLibraryView: View {
                     viewModel.importCustomTrack(from: url)
                 }
             case .failure(let error):
-                print("⚠️ File import failed: \(error)")
+                importError = error.localizedDescription
             }
+        }
+        .alert("导入失败", isPresented: Binding(
+            get: { importError != nil },
+            set: { if !$0 { importError = nil } }
+        )) {
+            Button("确定", role: .cancel) { importError = nil }
+        } message: {
+            Text(importError ?? "未知错误")
         }
         .confirmationDialog(
             "删除自定义音效？",
@@ -108,6 +122,31 @@ struct SoundLibraryView: View {
             )
         }
         .buttonStyle(.plain)
+    }
+
+    // MARK: - Error Banner
+
+    private func errorBanner(_ message: String) -> some View {
+        HStack(spacing: 10) {
+            Image(systemName: "exclamationmark.triangle.fill")
+                .font(.caption)
+                .foregroundStyle(.orange)
+            Text(message)
+                .font(.caption)
+                .foregroundStyle(.orange.opacity(0.8))
+                .lineLimit(2)
+            Spacer()
+            Button("关闭") {
+                viewModel.clearPlaybackError()
+            }
+            .font(.caption2)
+            .foregroundStyle(.orange)
+        }
+        .padding(12)
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .fill(.orange.opacity(0.08))
+        )
     }
 
     // MARK: - Preparing Banner
