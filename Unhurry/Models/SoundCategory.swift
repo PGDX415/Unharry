@@ -30,6 +30,9 @@ enum SoundCategory: String, CaseIterable, Identifiable {
     /// AI 生成助眠音乐（八音盒、颂钵、大提琴等）
     case music
 
+    /// 用户自定义导入的音效
+    case custom
+
     var id: String { rawValue }
 
     /// 分类中文显示名
@@ -42,6 +45,7 @@ enum SoundCategory: String, CaseIterable, Identifiable {
         case .meditation: return "冥想"
         case .story:      return "睡前故事"
         case .music:      return "助眠音乐"
+        case .custom:     return "自定义"
         }
     }
 
@@ -55,6 +59,7 @@ enum SoundCategory: String, CaseIterable, Identifiable {
         case .meditation: return "sparkles"
         case .story:      return "book.fill"
         case .music:      return "music.note"
+        case .custom:     return "square.and.arrow.down"
         }
     }
 }

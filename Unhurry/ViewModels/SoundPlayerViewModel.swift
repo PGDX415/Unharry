@@ -82,7 +82,8 @@ final class SoundPlayerViewModel {
 
     private let audioService: AudioServiceProtocol
     private let nowPlaying: NowPlayingController
-    let tracks: [SoundTrack]
+    private let soundLibrary: SoundLibrary
+    private(set) var tracks: [SoundTrack]
 
     // MARK: - Private: Preparation
 
@@ -110,6 +111,7 @@ final class SoundPlayerViewModel {
         nowPlayingController: NowPlayingController = NowPlayingController()
     ) {
         self.audioService = audioService
+        self.soundLibrary = soundLibrary
         self.tracks = soundLibrary.tracks
         self.nowPlaying = nowPlayingController
         loadPresetsFromDisk()
@@ -603,6 +605,33 @@ final class SoundPlayerViewModel {
         } catch {
             print("⚠️ Failed to save presets: \(error)")
         }
+    }
+
+    // MARK: - Custom Tracks
+
+    /// 导入用户自定义音效（从 document picker URL）。
+    func importCustomTrack(from url: URL) {
+        guard url.startAccessingSecurityScopedResource() else {
+            print("⚠️ Cannot access security-scoped resource")
+            return
+        }
+        defer { url.stopAccessingSecurityScopedResource() }
+
+        if let _ = soundLibrary.importCustomTrack(from: url, into: audioService) {
+            tracks = soundLibrary.tracks
+        }
+    }
+
+    /// 删除用户自定义音效。
+    func deleteCustomTrack(_ trackId: String) {
+        // 如果正在播放，先停止
+        if activeTrackIds.contains(trackId) {
+            audioService.stop(soundId: trackId)
+            activeTrackIds.remove(trackId)
+            volumes.removeValue(forKey: trackId)
+        }
+        soundLibrary.deleteCustomTrack(trackId)
+        tracks = soundLibrary.tracks
     }
 
     // MARK: - Favorites

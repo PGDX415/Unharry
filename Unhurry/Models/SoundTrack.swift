@@ -34,6 +34,9 @@ struct SoundTrack: Identifiable, Hashable {
     /// 音频时长（秒），加载后填充；-1 表示未知
     var duration: TimeInterval = -1
 
+    /// 自定义音效的本地文件 URL（Bundle 内置音效为 nil）
+    let localFileURL: URL?
+
     init(
         id: String,
         name: String,
@@ -41,7 +44,8 @@ struct SoundTrack: Identifiable, Hashable {
         fileName: String,
         fileExtension: String = "m4a",
         defaultVolume: Float = 0.5,
-        isLoopable: Bool = true
+        isLoopable: Bool = true,
+        localFileURL: URL? = nil
     ) {
         self.id = id
         self.name = name
@@ -50,5 +54,6 @@ struct SoundTrack: Identifiable, Hashable {
         self.fileExtension = fileExtension
         self.defaultVolume = defaultVolume
         self.isLoopable = isLoopable
+        self.localFileURL = localFileURL
     }
 }

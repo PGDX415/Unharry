@@ -19,7 +19,24 @@ final class SoundLibrary {
     // MARK: - Properties
 
     /// 所有可用音效的元数据列表
-    let tracks: [SoundTrack]
+    private(set) var tracks: [SoundTrack]
+
+    /// 自定义音效存储目录
+    private static var customAudioDir: URL {
+        let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("CustomAudio", isDirectory: true)
+        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        return dir
+    }
+
+    private static let customTracksKey = "com.unhurry.customTracks"
+
+    /// 可持久化的自定义音效元数据
+    private struct CustomTrackMeta: Codable {
+        let id: String
+        let name: String
+        let fileExtension: String
+    }
 
     /// 代码生成的噪声（零版权，永远可用）
     enum GeneratedNoise: String, CaseIterable {
@@ -152,11 +169,122 @@ final class SoundLibrary {
     // MARK: - Init
 
     init() {
-        // 合并所有音效：代码生成 + AI 自然音 + AI 音乐
+        // 内置音效：代码生成 + AI 自然音 + AI 音乐
         let noiseTracks = GeneratedNoise.allCases.map { $0.track }
         let aiNatureTracks = AINature.allCases.map { $0.track }
         let aiMusicTracks = AIMusic.allCases.map { $0.track }
-        self.tracks = noiseTracks + aiNatureTracks + aiMusicTracks
+        let builtIn = noiseTracks + aiNatureTracks + aiMusicTracks
+
+        // 用户自定义音效
+        let customTracks = Self.loadCustomTracks()
+
+        self.tracks = builtIn + customTracks
+    }
+
+    // MARK: - Custom Tracks
+
+    /// 导入用户自定义音效。
+    /// - Parameters:
+    ///   - sourceURL: 用户选择的文件 URL（来自 document picker）
+    ///   - audioService: 用于加载音频
+    /// - Returns: 导入成功返回 SoundTrack，失败返回 nil
+    func importCustomTrack(from sourceURL: URL, into audioService: AudioServiceProtocol) -> SoundTrack? {
+        let ext = sourceURL.pathExtension.lowercased()
+        let id = "custom_\(UUID().uuidString)"
+        let name = sourceURL.deletingPathExtension().lastPathComponent
+        let destURL = Self.customAudioDir.appendingPathComponent("\(id).\(ext)")
+
+        // 复制文件到 App 沙盒
+        do {
+            try FileManager.default.copyItem(at: sourceURL, to: destURL)
+        } catch {
+            print("⚠️ Failed to copy custom audio: \(error)")
+            return nil
+        }
+
+        // 加载到 AudioService
+        do {
+            try audioService.loadSound(id: id, from: destURL)
+        } catch {
+            print("⚠️ Failed to load custom audio: \(error)")
+            try? FileManager.default.removeItem(at: destURL)
+            return nil
+        }
+
+        let track = SoundTrack(
+            id: id,
+            name: name,
+            category: .custom,
+            fileName: id,
+            fileExtension: ext,
+            defaultVolume: 0.4,
+            isLoopable: true,
+            localFileURL: destURL
+        )
+
+        tracks.append(track)
+        persistCustomTracks()
+        return track
+    }
+
+    /// 删除用户自定义音效。
+    func deleteCustomTrack(_ trackId: String) {
+        guard let track = tracks.first(where: { $0.id == trackId }),
+              track.category == .custom else { return }
+
+        // 删除文件
+        if let url = track.localFileURL {
+            try? FileManager.default.removeItem(at: url)
+        }
+        // 从 AudioService 卸载
+        // (AudioService 没有公开的 unload，由 ViewModel 在调用前 stopTrack 处理)
+
+        tracks.removeAll { $0.id == trackId }
+        persistCustomTracks()
+    }
+
+    /// 重新加载自定义音效到 AudioService（App 启动时调用）。
+    func preloadCustomTracks(into audioService: AudioServiceProtocol) {
+        for track in tracks where track.category == .custom {
+            guard let url = track.localFileURL else { continue }
+            do {
+                try audioService.loadSound(id: track.id, from: url)
+            } catch {
+                print("⚠️ Failed to reload custom track \(track.name): \(error)")
+            }
+        }
+    }
+
+    // MARK: - Persistence
+
+    private func persistCustomTracks() {
+        let customTracks = tracks
+            .filter { $0.category == .custom }
+            .map { CustomTrackMeta(id: $0.id, name: $0.name, fileExtension: $0.fileExtension) }
+        if let data = try? JSONEncoder().encode(customTracks) {
+            UserDefaults.standard.set(data, forKey: Self.customTracksKey)
+        }
+    }
+
+    private static func loadCustomTracks() -> [SoundTrack] {
+        guard let data = UserDefaults.standard.data(forKey: customTracksKey),
+              let metas = try? JSONDecoder().decode([CustomTrackMeta].self, from: data)
+        else { return [] }
+
+        return metas.compactMap { meta in
+            let url = customAudioDir.appendingPathComponent("\(meta.id).\(meta.fileExtension)")
+            guard FileManager.default.fileExists(atPath: url.path) else { return nil }
+            return SoundTrack(
+                id: meta.id,
+                name: meta.name,
+                category: .custom,
+                fileName: meta.id,
+                fileExtension: meta.fileExtension,
+                defaultVolume: 0.4,
+                isLoopable: true,
+                localFileURL: url
+            )
+        }
     }
 
     // MARK: - Preload

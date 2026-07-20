@@ -49,6 +49,7 @@ struct UnhurryApp: App {
             ContentView(playerVM: playerVM, timerVM: timerVM, storyVM: storyVM)
                 .onAppear {
                     soundLibrary.preloadBuiltInSounds(into: audioService)
+                    soundLibrary.preloadCustomTracks(into: audioService)
                 }
                 .task {
                     await HealthService.requestAuthorization()
