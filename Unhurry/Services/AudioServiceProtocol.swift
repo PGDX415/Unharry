@@ -99,6 +99,27 @@ protocol AudioServiceProtocol: AnyObject {
     /// 淡出：在指定时长内从当前音量渐变到 0，完成后自动停止并释放节点。
     func fadeOut(soundId: String, duration: TimeInterval, completion: (() -> Void)?)
 
+    // MARK: - EQ & Reverb
+
+    /// 设置指定音效的低音/高音增益（dB）。
+    /// - Parameters:
+    ///   - soundId: 音效 ID
+    ///   - bassGain: 低音增益，-12...+12 dB
+    ///   - trebleGain: 高音增益，-12...+12 dB
+    func setEQ(for soundId: String, bassGain: Float, trebleGain: Float)
+
+    /// 设置指定音效的混响（reverb）湿/干比。
+    /// - Parameters:
+    ///   - soundId: 音效 ID
+    ///   - wetDryMix: 0 = 纯干声，100 = 纯湿声
+    func setReverb(for soundId: String, wetDryMix: Float)
+
+    // MARK: - Crossfade
+
+    /// 交叉淡入淡出：在指定时长内把 fromId 淡出，同时把 toId 淡入。
+    /// 完成后自动停止 fromId。
+    func crossfade(from fromId: String, to toId: String, duration: TimeInterval, completion: (() -> Void)?)
+
     // MARK: - Engine Lifecycle
 
     /// 启动音频引擎并激活 audio session。

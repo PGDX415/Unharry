@@ -186,28 +186,116 @@ struct ActiveMixerPanel: View {
     private func volumeRow(for trackId: String) -> some View {
         let name = viewModel.name(for: trackId)
         let volume = viewModel.volumes[trackId] ?? 0.5
+        let isExpanded = viewModel.expandedEQTrackIds.contains(trackId)
 
-        return HStack(spacing: 10) {
-            Image(systemName: "waveform")
-                .font(.caption)
-                .foregroundStyle(Theme.accentColor.opacity(0.5))
+        return VStack(spacing: 4) {
+            HStack(spacing: 10) {
+                Button(action: { viewModel.toggleEQExpanded(trackId) }) {
+                    Image(systemName: isExpanded ? "slider.horizontal.3" : "slider.horizontal.2.square")
+                        .font(.caption)
+                        .foregroundStyle(isExpanded ? accentColor : accentColor.opacity(0.45))
+                }
                 .frame(width: 20)
 
-            Text(name)
-                .font(.caption)
-                .frame(width: 50, alignment: .leading)
-                .lineLimit(1)
+                Text(name)
+                    .font(.caption)
+                    .frame(width: 50, alignment: .leading)
+                    .lineLimit(1)
+
+                Slider(value: Binding(
+                    get: { Double(volume) },
+                    set: { viewModel.setVolume(Float($0), for: trackId) }
+                ), in: 0...1)
+                    .tint(accentColor)
+
+                Text(String(format: "%.0f%%", volume * 100))
+                    .font(.caption2)
+                    .foregroundStyle(Theme.accentColor.opacity(0.5))
+                    .frame(width: 36, alignment: .trailing)
+            }
+
+            if isExpanded {
+                eqReverbPanel(for: trackId)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+            }
+        }
+        .animation(.easeInOut(duration: 0.25), value: isExpanded)
+    }
+
+    // MARK: - EQ + Reverb Panel
+
+    private func eqReverbPanel(for trackId: String) -> some View {
+        let bass = viewModel.bassGains[trackId] ?? 0
+        let treble = viewModel.trebleGains[trackId] ?? 0
+        let reverb = viewModel.reverbMixes[trackId] ?? 0
+
+        return VStack(spacing: 6) {
+            // 低音
+            eqRow(
+                icon: "speaker.wave.1",
+                label: "低音",
+                value: bass,
+                range: -12...12,
+                format: { String(format: "%+.0f dB", $0) }
+            ) { viewModel.setBassGain(Float($0), for: trackId) }
+
+            // 高音
+            eqRow(
+                icon: "speaker.wave.3",
+                label: "高音",
+                value: treble,
+                range: -12...12,
+                format: { String(format: "%+.0f dB", $0) }
+            ) { viewModel.setTrebleGain(Float($0), for: trackId) }
+
+            // 混响
+            eqRow(
+                icon: "circle.dotted.circle",
+                label: "混响",
+                value: reverb,
+                range: 0...100,
+                format: { String(format: "%.0f%%", $0) }
+            ) { viewModel.setReverbMix(Float($0), for: trackId) }
+        }
+        .padding(.horizontal, 4)
+        .padding(.vertical, 6)
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .fill(accentColor.opacity(0.04))
+        )
+        .padding(.leading, 30)
+        .padding(.trailing, 8)
+    }
+
+    private func eqRow(
+        icon: String,
+        label: String,
+        value: Float,
+        range: ClosedRange<Double>,
+        format: @escaping (Double) -> String,
+        onChange: @escaping (Double) -> Void
+    ) -> some View {
+        HStack(spacing: 6) {
+            Image(systemName: icon)
+                .font(.system(size: 8))
+                .foregroundStyle(accentColor.opacity(0.45))
+                .frame(width: 12)
+
+            Text(label)
+                .font(.system(size: 10))
+                .foregroundStyle(accentColor.opacity(0.45))
+                .frame(width: 22, alignment: .leading)
 
             Slider(value: Binding(
-                get: { Double(volume) },
-                set: { viewModel.setVolume(Float($0), for: trackId) }
-            ), in: 0...1)
-                .tint(accentColor)
+                get: { Double(value) },
+                set: { onChange($0) }
+            ), in: range)
+                .tint(accentColor.opacity(0.6))
 
-            Text(String(format: "%.0f%%", volume * 100))
-                .font(.caption2)
-                .foregroundStyle(Theme.accentColor.opacity(0.5))
-                .frame(width: 36, alignment: .trailing)
+            Text(format(Double(value)))
+                .font(.system(size: 9))
+                .foregroundStyle(accentColor.opacity(0.5))
+                .frame(width: 44, alignment: .trailing)
         }
     }
 }

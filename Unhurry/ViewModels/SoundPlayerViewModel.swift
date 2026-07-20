@@ -57,6 +57,20 @@ final class SoundPlayerViewModel {
 
     let visualizer = AudioVisualizerService()
 
+    // MARK: - EQ & Reverb State
+
+    /// 每个音效的低音增益 (trackId → dB, -12...+12)
+    private(set) var bassGains: [String: Float] = [:]
+
+    /// 每个音效的高音增益
+    private(set) var trebleGains: [String: Float] = [:]
+
+    /// 每个音效的混响湿/干比 (trackId → 0...100)
+    private(set) var reverbMixes: [String: Float] = [:]
+
+    /// 音效调节面板展开状态
+    private(set) var expandedEQTrackIds: Set<String> = []
+
     // MARK: - Constants
 
     /// 音频播放前准备缓冲时间（秒）——优先读取用户设置
@@ -211,6 +225,10 @@ final class SoundPlayerViewModel {
         audioService.stop(soundId: track.id)
         activeTrackIds.remove(track.id)
         volumes.removeValue(forKey: track.id)
+        bassGains.removeValue(forKey: track.id)
+        trebleGains.removeValue(forKey: track.id)
+        reverbMixes.removeValue(forKey: track.id)
+        expandedEQTrackIds.remove(track.id)
         UsageTracker.shared.trackStopped(track.id)
         if activeTrackIds.isEmpty {
             clearNowPlaying()
@@ -230,6 +248,10 @@ final class SoundPlayerViewModel {
         audioService.stopAll()
         activeTrackIds.removeAll()
         volumes.removeAll()
+        bassGains.removeAll()
+        trebleGains.removeAll()
+        reverbMixes.removeAll()
+        expandedEQTrackIds.removeAll()
         UsageTracker.shared.allStopped()
         clearNowPlaying()
         stopVisualizer()
@@ -238,6 +260,71 @@ final class SoundPlayerViewModel {
     /// 获取指定音效的名称。
     func name(for trackId: String) -> String {
         tracks.first { $0.id == trackId }?.name ?? trackId
+    }
+
+    // MARK: - EQ
+
+    func setBassGain(_ gain: Float, for trackId: String) {
+        bassGains[trackId] = max(-12, min(12, gain))
+        audioService.setEQ(for: trackId, bassGain: bassGains[trackId]!, trebleGain: trebleGains[trackId] ?? 0)
+    }
+
+    func setTrebleGain(_ gain: Float, for trackId: String) {
+        trebleGains[trackId] = max(-12, min(12, gain))
+        audioService.setEQ(for: trackId, bassGain: bassGains[trackId] ?? 0, trebleGain: trebleGains[trackId]!)
+    }
+
+    // MARK: - Reverb
+
+    func setReverbMix(_ mix: Float, for trackId: String) {
+        reverbMixes[trackId] = max(0, min(100, mix))
+        audioService.setReverb(for: trackId, wetDryMix: reverbMixes[trackId]!)
+    }
+
+    // MARK: - Crossfade
+
+    /// 交叉淡入淡出：oldTrackId → newTrack，duration 秒内完成。
+    func crossfade(from oldTrackId: String, to newTrack: SoundTrack, duration: TimeInterval = 2.0) {
+        // 确保新音效在播放，且已存在于 activeTrackIds
+        guard activeTrackIds.contains(oldTrackId) else {
+            // 旧音效不在播放 → 直接切换
+            toggleTrack(newTrack)
+            return
+        }
+
+        if !activeTrackIds.contains(newTrack.id) {
+            // 以 0 音量启动新音效
+            executePlay(trackId: newTrack.id, volume: 0.01, loop: newTrack.isLoopable)
+            volumes[newTrack.id] = 0.01
+        }
+
+        audioService.crossfade(
+            from: oldTrackId,
+            to: newTrack.id,
+            duration: duration
+        ) { [weak self] in
+            Task { @MainActor [weak self] in
+                guard let self = self else { return }
+                self.activeTrackIds.remove(oldTrackId)
+                self.volumes.removeValue(forKey: oldTrackId)
+                self.bassGains.removeValue(forKey: oldTrackId)
+                self.trebleGains.removeValue(forKey: oldTrackId)
+                self.reverbMixes.removeValue(forKey: oldTrackId)
+                UsageTracker.shared.trackStopped(oldTrackId)
+                if self.activeTrackIds.isEmpty {
+                    self.clearNowPlaying()
+                    self.stopVisualizer()
+                }
+            }
+        }
+    }
+
+    func toggleEQExpanded(_ trackId: String) {
+        if expandedEQTrackIds.contains(trackId) {
+            expandedEQTrackIds.remove(trackId)
+        } else {
+            expandedEQTrackIds.insert(trackId)
+        }
     }
 
     // MARK: - Presets

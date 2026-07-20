@@ -9,20 +9,20 @@ import AVFoundation
 ///
 /// ## 架构设计
 ///
-/// ### 混音拓扑
+/// ### 混音拓扑（含 EQ + Reverb）
 /// ```
 /// AVAudioEngine
 ///   ├── mainMixerNode ──→ outputNode ──→ 硬件输出
-///   ├── playerNode[rain]  ──→ mainMixerNode
-///   ├── playerNode[ocean] ──→ mainMixerNode
-///   └── playerNode[fire]  ──→ mainMixerNode
+///   ├── playerNode[rain]  ──→ eqNode ──→ reverbNode ──→ mainMixerNode
+///   ├── playerNode[ocean] ──→ eqNode ──→ reverbNode ──→ mainMixerNode
+///   └── playerNode[fire]  ──→ eqNode ──→ reverbNode ──→ mainMixerNode
 /// ```
 ///
 /// **关键决策：**
-/// - **每个音效 = 一个独立的 `AVAudioPlayerNode`**：
-///   每个并发播放的音效拥有自己的 player node，直接连接到 engine 的
-///   `mainMixerNode`。这保证了每个音轨的独立音量控制和淡入淡出，
-///   不需要自定义 mixer 层级（引擎自带主 mixer 足够处理混音）。
+/// - **每个音效 = player → EQ → reverb → mainMixer 链**：
+///   EQ 默认平坦（0 dB），reverb 默认干声（wet = 0），不增加额外音染。
+///   用户调节时动态更新节点参数。
+///
 ///
 /// - **Buffer 预加载**：音频文件在 `loadSound` 时读入
 ///   `AVAudioPCMBuffer` 并缓存。播放时直接从缓存取 buffer 调度，
@@ -56,8 +56,30 @@ final class AudioService: AudioServiceProtocol, @unchecked Sendable {
     /// 活跃的 player node。key = soundId
     private var activePlayers: [String: AVAudioPlayerNode] = [:]
 
+    /// EQ 节点。key = soundId
+    private var activeEQNodes: [String: AVAudioUnitEQ] = [:]
+
+    /// Reverb 节点。key = soundId
+    private var activeReverbNodes: [String: AVAudioUnitReverb] = [:]
+
+    /// 保存的 EQ 设置（供重新播放时恢复）。key = soundId
+    private var savedEQSettings: [String: (bass: Float, treble: Float)] = [:]
+
+    /// 保存的 Reverb 设置。key = soundId
+    private var savedReverbSettings: [String: Float] = [:]
+
     /// 淡入淡出计时器。key = soundId
     private var fadeTimers: [String: Timer] = [:]
+
+    /// 交叉淡入淡出计时器
+    private var crossfadeTimers: [String: Timer] = [:]
+
+    /// Reverb 预设
+    private static let reverbPreset: AVAudioUnitReverbPreset = .largeHall
+
+    /// EQ 频段定义
+    private static let eqBassFrequency: Float = 200
+    private static let eqTrebleFrequency: Float = 4000
 
     /// 序列化所有状态操作的队列
     private let queue = DispatchQueue(label: "com.unhurry.audioservice")
@@ -142,13 +164,24 @@ final class AudioService: AudioServiceProtocol, @unchecked Sendable {
                 activePlayers.removeValue(forKey: soundId)
             }
 
-            // 创建新 player node，挂载并连接
+            // 创建节点链：player → EQ → reverb → mainMixer
             let player = AVAudioPlayerNode()
+            let eqNode = makeEQNode(for: soundId)
+            let reverbNode = makeReverbNode(for: soundId)
+
             engine.attach(player)
-            engine.connect(player, to: mainMixer, format: buf.format)
+            engine.attach(eqNode)
+            engine.attach(reverbNode)
+
+            engine.connect(player, to: eqNode, format: buf.format)
+            engine.connect(eqNode, to: reverbNode, format: buf.format)
+            engine.connect(reverbNode, to: mainMixer, format: buf.format)
+
             player.volume = max(0, min(1, volume))
 
             activePlayers[soundId] = player
+            activeEQNodes[soundId] = eqNode
+            activeReverbNodes[soundId] = reverbNode
             return buf
         }
 
@@ -165,7 +198,6 @@ final class AudioService: AudioServiceProtocol, @unchecked Sendable {
                 player.scheduleBuffer(buffer, at: nil, options: .loops)
             } else {
                 player.scheduleBuffer(buffer, at: nil, completionCallbackType: .dataPlayedBack) { [weak self] _ in
-                    // 非循环播放完成后自动清理
                     self?.queue.async {
                         self?.cleanupPlayer(for: soundId)
                     }
@@ -174,6 +206,119 @@ final class AudioService: AudioServiceProtocol, @unchecked Sendable {
 
             player.play()
         }
+    }
+
+    // MARK: - EQ
+
+    func setEQ(for soundId: String, bassGain: Float, trebleGain: Float) {
+        queue.async { [weak self] in
+            guard let self = self else { return }
+            self.savedEQSettings[soundId] = (bass: bassGain, treble: trebleGain)
+
+            guard let eq = self.activeEQNodes[soundId] else { return }
+            eq.bands[0].gain = max(-12, min(12, bassGain))
+            eq.bands[1].gain = max(-12, min(12, trebleGain))
+        }
+    }
+
+    // MARK: - Reverb
+
+    func setReverb(for soundId: String, wetDryMix: Float) {
+        queue.async { [weak self] in
+            guard let self = self else { return }
+            self.savedReverbSettings[soundId] = max(0, min(100, wetDryMix))
+
+            guard let reverb = self.activeReverbNodes[soundId] else { return }
+            reverb.wetDryMix = max(0, min(100, wetDryMix))
+        }
+    }
+
+    // MARK: - Crossfade
+
+    func crossfade(from fromId: String, to toId: String, duration: TimeInterval, completion: (() -> Void)?) {
+        let steps = max(1, Int(duration / Self.fadeStepInterval))
+
+        queue.async { [weak self] in
+            guard let self = self else {
+                DispatchQueue.main.async { completion?() }
+                return
+            }
+
+            guard let fromPlayer = self.activePlayers[fromId],
+                  let toPlayer = self.activePlayers[toId] else {
+                DispatchQueue.main.async { completion?() }
+                return
+            }
+
+            let fromStartVol = fromPlayer.volume
+            let toStartVol = toPlayer.volume
+
+            self.crossfadeTimers[fromId]?.invalidate()
+            self.crossfadeTimers[toId]?.invalidate()
+            var currentStep = 0
+
+            let timerId = "\(fromId)→\(toId)"
+            DispatchQueue.main.async {
+                let timer = Timer.scheduledTimer(
+                    withTimeInterval: Self.fadeStepInterval,
+                    repeats: true
+                ) { [weak self] timer in
+                    guard let self = self else {
+                        timer.invalidate()
+                        return
+                    }
+                    currentStep += 1
+                    if currentStep >= steps {
+                        timer.invalidate()
+                        self.queue.async { [weak self] in
+                            guard let self = self else { return }
+                            self.cleanupPlayer(for: fromId)
+                            self.crossfadeTimers.removeValue(forKey: timerId)
+                            DispatchQueue.main.async { completion?() }
+                        }
+                    } else {
+                        let progress = Float(currentStep) / Float(steps)
+                        self.queue.async { [weak self] in
+                            guard let self = self else { return }
+                            self.activePlayers[fromId]?.volume = max(0, fromStartVol * (1.0 - progress))
+                            self.activePlayers[toId]?.volume = max(0, min(1, toStartVol + (1.0 - toStartVol) * progress))
+                        }
+                    }
+                }
+
+                RunLoop.main.add(timer, forMode: .common)
+                self.crossfadeTimers[timerId] = timer
+            }
+        }
+    }
+
+    // MARK: - Private: Node Factory
+
+    private func makeEQNode(for soundId: String) -> AVAudioUnitEQ {
+        let eq = AVAudioUnitEQ(numberOfBands: 2)
+
+        // 低频搁架
+        eq.bands[0].filterType = .lowShelf
+        eq.bands[0].frequency = Self.eqBassFrequency
+        eq.bands[0].bandwidth = 1.0
+        eq.bands[0].bypass = false
+        eq.bands[0].gain = savedEQSettings[soundId]?.bass ?? 0
+
+        // 高频搁架
+        eq.bands[1].filterType = .highShelf
+        eq.bands[1].frequency = Self.eqTrebleFrequency
+        eq.bands[1].bandwidth = 1.0
+        eq.bands[1].bypass = false
+        eq.bands[1].gain = savedEQSettings[soundId]?.treble ?? 0
+
+        return eq
+    }
+
+    private func makeReverbNode(for soundId: String) -> AVAudioUnitReverb {
+        let reverb = AVAudioUnitReverb()
+        reverb.loadFactoryPreset(Self.reverbPreset)
+        reverb.wetDryMix = savedReverbSettings[soundId] ?? 0
+        return reverb
     }
 
     func stop(soundId: String) {
@@ -346,8 +491,18 @@ final class AudioService: AudioServiceProtocol, @unchecked Sendable {
         if let player = activePlayers[soundId] {
             player.stop()
             engine.disconnectNodeOutput(player)
-            // 注意：不调用 engine.detach()，因为 detach 会导致已连接的
-            // 其他节点重新配置。disconnectNodeOutput 足以阻止其发声。
+        }
+
+        // 清理 EQ 节点：断开 → 分离
+        if let eq = activeEQNodes.removeValue(forKey: soundId) {
+            engine.disconnectNodeOutput(eq)
+            engine.detach(eq)
+        }
+
+        // 清理 Reverb 节点：断开 → 分离
+        if let reverb = activeReverbNodes.removeValue(forKey: soundId) {
+            engine.disconnectNodeOutput(reverb)
+            engine.detach(reverb)
         }
 
         activePlayers.removeValue(forKey: soundId)
