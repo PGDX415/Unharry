@@ -199,6 +199,23 @@ final class BreathViewModel {
     private func startPhaseHaptics() {
         guard supportsHaptics, let engine = hapticEngine else { return }
 
+        // 先停掉旧的触觉播放器
+        stopHaptics()
+
+        // 引擎可能已自动休眠，每次播放前重新激活
+        engine.start { [weak self] error in
+            guard error == nil else {
+                print("⚠️ Haptic engine start failed: \(String(describing: error))")
+                return
+            }
+            Task { @MainActor [weak self] in
+                guard let self, let engine = self.hapticEngine else { return }
+                self.playPhaseHaptics(engine: engine)
+            }
+        }
+    }
+
+    private func playPhaseHaptics(engine: CHHapticEngine) {
         let duration = currentPhase.duration
         let startIntensity: Float = currentPhase == .inhale ? 0.3 : 0.8
         let endIntensity: Float   = currentPhase == .inhale ? 0.8 : 0.3
@@ -219,7 +236,6 @@ final class BreathViewModel {
                 duration: duration
             )
 
-            // 渐变强度曲线
             let intensityCurve = CHHapticParameterCurve(
                 parameterID: .hapticIntensityControl,
                 controlPoints: [
@@ -233,10 +249,11 @@ final class BreathViewModel {
                 events: [event],
                 parameterCurves: [intensityCurve]
             )
-            hapticPlayer = try engine.makePlayer(with: pattern)
-            try hapticPlayer?.start(atTime: 0)
+            let player = try engine.makePlayer(with: pattern)
+            self.hapticPlayer = player
+            try player.start(atTime: CHHapticTimeImmediate)
         } catch {
-            // 静默降级，不影响主功能
+            print("⚠️ Haptic player error: \(error)")
         }
     }
 
