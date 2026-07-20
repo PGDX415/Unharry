@@ -82,6 +82,7 @@
 		EB310644D6DA74A14FEDBAE7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F61AAF460487502E4A34E9E /* AppDelegate.swift */; };
 		EF82287EF46398A5A9959351 /* UnhurryWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 71BC4DC56E615EBC7D334DBF /* UnhurryWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F48AA7D394B13977F04AD1D7 /* SleepRitual.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AF920E1A848451E2182E39 /* SleepRitual.swift */; };
+		F9BA4D7D71D06040FAE1D845 /* RitualBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F0B017BA2FE8DBB7812601 /* RitualBuilderView.swift */; };
 		FC704B0CECB1EB35C744CA26 /* UnhurryWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFC8C6640DEB7B1B58AED49 /* UnhurryWidget.swift */; };
 		FE6DA940F4572A015EA10CC6 /* ai_guqin.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 5B05B7B86BA32D52B515469F /* ai_guqin.mp3 */; };
 		FF82AD831A5A14FCAD33055B /* ai_music_box.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D6B3E232CDDE200450136FBE /* ai_music_box.mp3 */; };
@@ -136,6 +137,7 @@
 		3DDF1596B86A5B25702FE6C5 /* StartSleepIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartSleepIntent.swift; sourceTree = "<group>"; };
 		40207D90B103FAE1E83BA696 /* ai_underwater_piano.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ai_underwater_piano.mp3; sourceTree = "<group>"; };
 		43DC6A0C34F40BB2DA5C2A82 /* SleepRitualViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepRitualViewModel.swift; sourceTree = "<group>"; };
+		48F0B017BA2FE8DBB7812601 /* RitualBuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RitualBuilderView.swift; sourceTree = "<group>"; };
 		4B879FB9BDE56B91A200F43C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4C7756D98C241798772FF113 /* UnhurryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnhurryApp.swift; sourceTree = "<group>"; };
 		4D947FF652F559C59AAE0E13 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -384,6 +386,7 @@
 		96896AC1A9E09D72B46E5DEF /* Ritual */ = {
 			isa = PBXGroup;
 			children = (
+				48F0B017BA2FE8DBB7812601 /* RitualBuilderView.swift */,
 				2DADEE17EDBE5C031D19AF5C /* RitualPresetView.swift */,
 				C8CBD8D68816F96F8D229C1E /* SleepRitualView.swift */,
 			);
@@ -650,6 +653,7 @@
 				BFF591CE561BEA9B17A83E85 /* NoiseGenerator.swift in Sources */,
 				66104E54DD38A627694C27BE /* NowPlayingController.swift in Sources */,
 				B74F03A4D0BAF0CA6782347E /* ReminderService.swift in Sources */,
+				F9BA4D7D71D06040FAE1D845 /* RitualBuilderView.swift in Sources */,
 				E98CA9F447F40850356A31B0 /* RitualPresetView.swift in Sources */,
 				E8B32C72C56F054C16CE77F5 /* SettingsView.swift in Sources */,
 				F48AA7D394B13977F04AD1D7 /* SleepRitual.swift in Sources */,

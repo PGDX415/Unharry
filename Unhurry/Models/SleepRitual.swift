@@ -8,17 +8,18 @@ import Foundation
 // MARK: - Ritual Model
 
 /// 入睡仪式——将呼吸、音效、计时器编排为自动化流程。
-struct SleepRitual: Identifiable, Hashable {
-    let id = UUID()
+struct SleepRitual: Identifiable, Hashable, Codable {
+    var id = UUID()
     let name: String
     let description: String
     let icon: String
     let steps: [RitualStep]
+    var isCustom: Bool = false
 }
 
 // MARK: - Ritual Step
 
-enum RitualStep: Hashable {
+enum RitualStep: Hashable, Codable {
     /// 呼吸练习（引导吸气/呼气，时长秒）
     case breath(duration: TimeInterval)
     /// 启动音效组合（trackId 列表）
@@ -90,4 +91,41 @@ extension SleepRitual {
             ]
         ),
     ]
+
+    // MARK: - Custom Ritual Persistence
+
+    private static let customRitualsKey = "com.unhurry.customRituals"
+
+    /// 加载用户自定义仪式
+    static func loadCustom() -> [SleepRitual] {
+        guard let data = UserDefaults.standard.data(forKey: customRitualsKey),
+              let rituals = try? JSONDecoder().decode([SleepRitual].self, from: data)
+        else { return [] }
+        return rituals
+    }
+
+    /// 保存自定义仪式
+    static func saveCustom(_ rituals: [SleepRitual]) {
+        if let data = try? JSONEncoder().encode(rituals) {
+            UserDefaults.standard.set(data, forKey: customRitualsKey)
+        }
+    }
+
+    /// 生成描述文字
+    func buildDescription(trackNames: @escaping (String) -> String) -> String {
+        let parts: [String] = steps.map { step in
+            switch step {
+            case .breath(let d):
+                let m = Int(d) / 60
+                return "\(m) 分钟呼吸"
+            case .sounds(let ids):
+                let names = ids.map { trackNames($0) }.joined(separator: "+")
+                return names
+            case .timer(let d):
+                let m = Int(d) / 60
+                return "\(m) 分钟定时"
+            }
+        }
+        return parts.joined(separator: " → ")
+    }
 }
