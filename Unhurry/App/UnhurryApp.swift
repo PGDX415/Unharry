@@ -33,6 +33,15 @@ struct UnhurryApp: App {
             else { return }
             playerVM.loadPreset(preset)
         }
+
+        // Siri / Shortcuts Intent 桥接
+        IntentBridge.onStartSleep = { [weak playerVM] in
+            playerVM?.loadLastOrDefaultPreset()
+        }
+        IntentBridge.onStopSounds = { [weak playerVM, weak storyVM] in
+            playerVM?.stopAll()
+            storyVM?.stop()
+        }
     }
 
     var body: some Scene {

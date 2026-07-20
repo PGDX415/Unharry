@@ -196,9 +196,10 @@ final class SoundPlayerViewModel {
             executePlay(trackId: trackId, volume: volume, loop: loop)
         }
 
-        // 有音效开始播放 → 更新锁屏
+        // 有音效开始播放 → 更新锁屏 + 保存用于 Siri 恢复
         if !activeTrackIds.isEmpty {
             startNowPlaying()
+            saveLastActivePreset()
         }
     }
 
@@ -233,6 +234,8 @@ final class SoundPlayerViewModel {
         if activeTrackIds.isEmpty {
             clearNowPlaying()
             stopVisualizer()
+        } else {
+            saveLastActivePreset()
         }
     }
 
@@ -354,6 +357,67 @@ final class SoundPlayerViewModel {
     func deletePreset(_ preset: MixPreset) {
         presets.removeAll { $0.id == preset.id }
         persistPresets()
+    }
+
+    /// Siri / Shortcuts 触发：恢复上次使用的预设，或加载第一个预设，或默认轻雨。
+    func loadLastOrDefaultPreset() {
+        // 1. 尝试恢复上次保存的活跃音效组合
+        if let savedIds = lastActivePresetTrackIds(), !savedIds.isEmpty {
+            stopAll()
+            for trackId in savedIds {
+                let vol = lastActivePresetVolumes()[trackId] ?? 0.5
+                schedulePlay(trackId: trackId, volume: vol, loop: true)
+            }
+            // 清理旧记录，下次使用新的活跃组合
+            clearLastActivePreset()
+            return
+        }
+
+        // 2. 尝试加载第一个已保存的预设
+        if let firstPreset = presets.first {
+            loadPreset(firstPreset)
+            return
+        }
+
+        // 3. 默认：播放轻雨
+        stopAll()
+        let defaultTrack = tracks.first { $0.id == "ai_rain_light" }
+            ?? tracks.first { $0.category == .rain }
+            ?? tracks.first
+        if let track = defaultTrack {
+            toggleTrack(track)
+        }
+    }
+
+    /// 持久化当前活跃音效组合（供 Siri Intent 恢复）。
+    func saveLastActivePreset() {
+        guard !activeTrackIds.isEmpty else { return }
+        let defaults = UserDefaults.standard
+        defaults.set(Array(activeTrackIds), forKey: Self.lastActiveTrackIdsKey)
+        // 保存音量映射为 JSON 字符串
+        if let data = try? JSONEncoder().encode(volumes) {
+            defaults.set(data, forKey: Self.lastActiveVolumesKey)
+        }
+    }
+
+    private static let lastActiveTrackIdsKey = "com.unhurry.lastActiveTrackIds"
+    private static let lastActiveVolumesKey = "com.unhurry.lastActiveVolumes"
+
+    private func lastActivePresetTrackIds() -> [String]? {
+        UserDefaults.standard.stringArray(forKey: Self.lastActiveTrackIdsKey)
+    }
+
+    private func lastActivePresetVolumes() -> [String: Float] {
+        guard let data = UserDefaults.standard.data(forKey: Self.lastActiveVolumesKey),
+              let dict = try? JSONDecoder().decode([String: Float].self, from: data)
+        else { return [:] }
+        return dict
+    }
+
+    private func clearLastActivePreset() {
+        let defaults = UserDefaults.standard
+        defaults.removeObject(forKey: Self.lastActiveTrackIdsKey)
+        defaults.removeObject(forKey: Self.lastActiveVolumesKey)
     }
 
     // MARK: - NowPlaying & Remote Commands
