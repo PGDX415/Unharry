@@ -154,6 +154,8 @@ struct ContentView: View {
             Text("专注").tag(true)
         }
         .pickerStyle(.segmented)
+        .tint(Theme.accentColor)
+        .foregroundStyle(.primary)
         .padding(.horizontal, 20)
         .padding(.vertical, 6)
         .sensoryFeedback(.selection, trigger: isFocusMode)
