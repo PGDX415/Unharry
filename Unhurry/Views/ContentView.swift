@@ -19,13 +19,6 @@ struct ContentView: View {
     /// 主题变化时递增，强制重建整个视图树
     @State private var themeVersion = 0
 
-    /// 专注模式下的番茄钟预设
-    private static let focusPresets: [(String, TimeInterval)] = [
-        ("25 分钟", 25 * 60),
-        ("45 分钟", 45 * 60),
-        ("60 分钟", 60 * 60),
-    ]
-
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
@@ -78,14 +71,14 @@ struct ContentView: View {
         NavigationLink(destination: BreathView()) {
             HStack {
                 Label("呼吸练习", systemImage: "wind")
-                    .font(.subheadline)
+                    .font(.caption)
                 Spacer()
                 Image(systemName: "chevron.right")
-                    .font(.caption)
+                    .font(.caption2)
                     .foregroundStyle(Theme.accentColor.opacity(0.45))
             }
             .padding(.horizontal, 20)
-            .padding(.vertical, 10)
+            .padding(.vertical, 7)
             .background(Theme.accentColor.opacity(0.06))
         }
         .buttonStyle(.plain)
@@ -97,14 +90,14 @@ struct ContentView: View {
         NavigationLink(destination: StoryLibraryView(viewModel: storyVM, soundPlayerVM: playerVM)) {
             HStack {
                 Label("睡前陪伴", systemImage: "book.fill")
-                    .font(.subheadline)
+                    .font(.caption)
                 Spacer()
                 Image(systemName: "chevron.right")
-                    .font(.caption)
+                    .font(.caption2)
                     .foregroundStyle(Theme.accentColor.opacity(0.45))
             }
             .padding(.horizontal, 20)
-            .padding(.vertical, 10)
+            .padding(.vertical, 7)
             .background(Theme.accentColor.opacity(0.06))
         }
         .buttonStyle(.plain)
@@ -113,22 +106,23 @@ struct ContentView: View {
     // MARK: - Brand Header
 
     private var brandHeader: some View {
-        VStack(spacing: 4) {
-            Image(systemName: isFocusMode ? "brain.head.profile" : "moon.stars.fill")
-                .font(.system(size: 36))
-                .padding(.top, 8)
-
-            Text("闲眠")
-                .font(.title2)
-                .fontWeight(.medium)
+        VStack(spacing: 2) {
+            HStack(spacing: 6) {
+                Image(systemName: isFocusMode ? "brain.head.profile" : "moon.stars.fill")
+                    .font(.title3)
+                Text("闲眠")
+                    .font(.title3)
+                    .fontWeight(.medium)
+            }
 
             Text(isFocusMode ? "静以修身，俭以养德" : "暖床斜卧日曛腰，一觉闲眠百病销")
-                .font(.system(size: 11, design: .serif))
+                .font(.system(size: 10, design: .serif))
                 .italic()
-                .foregroundStyle(Theme.accentColor.opacity(0.45))
-                .padding(.bottom, 4)
+                .foregroundStyle(Theme.accentColor.opacity(0.35))
         }
         .frame(maxWidth: .infinity)
+        .padding(.top, 4)
+        .padding(.bottom, 2)
         .background(useBlackBackground ? Color(red: 0.05, green: 0.05, blue: 0.05) : Theme.bgColor)
     }
 
@@ -138,14 +132,14 @@ struct ContentView: View {
         NavigationLink(destination: RitualPresetView(playerVM: playerVM, timerVM: timerVM)) {
             HStack {
                 Label("入睡仪式", systemImage: "sparkles")
-                    .font(.subheadline)
+                    .font(.caption)
                 Spacer()
                 Image(systemName: "chevron.right")
-                    .font(.caption)
+                    .font(.caption2)
                     .foregroundStyle(Theme.accentColor.opacity(0.45))
             }
             .padding(.horizontal, 20)
-            .padding(.vertical, 10)
+            .padding(.vertical, 7)
             .background(Theme.accentColor.opacity(0.06))
         }
         .buttonStyle(.plain)
@@ -160,7 +154,7 @@ struct ContentView: View {
         }
         .pickerStyle(.segmented)
         .padding(.horizontal, 20)
-        .padding(.vertical, 8)
+        .padding(.vertical, 6)
         .sensoryFeedback(.selection, trigger: isFocusMode)
     }
 }

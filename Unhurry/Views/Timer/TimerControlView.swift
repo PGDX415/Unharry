@@ -42,7 +42,7 @@ struct TimerControlView: View {
             }
         }
         .padding(.horizontal, 20)
-        .padding(.vertical, 14)
+        .padding(.vertical, 8)
     }
 
     // MARK: - Preset Buttons
