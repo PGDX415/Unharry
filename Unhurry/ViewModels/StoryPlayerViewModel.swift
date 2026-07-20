@@ -31,7 +31,7 @@ final class StoryPlayerViewModel {
     // MARK: - Constants
 
     /// 播放前准备缓冲时间（秒）
-    static let prepareDelay: TimeInterval = 3.0
+    static var prepareDelay: TimeInterval { Theme.bufferDuration }
 
     // MARK: - Dependencies
 

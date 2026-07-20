@@ -24,6 +24,15 @@ struct UnhurryApp: App {
         playerVM = SoundPlayerViewModel(audioService: audioService, soundLibrary: soundLibrary)
         timerVM = TimerViewModel(sleepTimer: sleepTimer)
         storyVM = StoryPlayerViewModel(ttsService: ttsService, sleepTimer: sleepTimer)
+
+        // 通知点击 → 加载对应预设
+        appDelegate.onNotificationPreset = { [weak playerVM] presetId in
+            guard let playerVM,
+                  let uuid = UUID(uuidString: presetId),
+                  let preset = playerVM.presets.first(where: { $0.id == uuid })
+            else { return }
+            playerVM.loadPreset(preset)
+        }
     }
 
     var body: some Scene {
@@ -31,6 +40,9 @@ struct UnhurryApp: App {
             ContentView(playerVM: playerVM, timerVM: timerVM, storyVM: storyVM)
                 .onAppear {
                     soundLibrary.preloadBuiltInSounds(into: audioService)
+                }
+                .task {
+                    await HealthService.requestAuthorization()
                 }
                 .onOpenURL { url in
                     handleDeepLink(url)

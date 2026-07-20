@@ -6,6 +6,10 @@
     <string>$(DEVELOPMENT_LANGUAGE)</string>
     <key>CFBundleDisplayName</key>
     <string>闲眠</string>
+    <key>NSHealthShareUsageDescription</key>
+    <string>闲眠需要访问健康数据以记录正念分钟数。</string>
+    <key>NSHealthUpdateUsageDescription</key>
+    <string>闲眠会将您的睡眠/冥想/呼吸时间记录为正念分钟数。</string>
     <key>CFBundleExecutable</key>
     <string>$(EXECUTABLE_NAME)</string>
     <key>CFBundleIdentifier</key>

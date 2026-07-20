@@ -21,7 +21,7 @@ struct TimerControlView: View {
                     .fontWeight(.medium)
                 Spacer()
             }
-            .foregroundStyle(.secondary)
+            .foregroundStyle(Theme.accentColor.opacity(0.5))
 
             if viewModel.isRunning {
                 runningState
@@ -46,7 +46,7 @@ struct TimerControlView: View {
                         .padding(.vertical, 10)
                         .background(
                             RoundedRectangle(cornerRadius: 10)
-                                .fill(Color(red: 0.941, green: 0.902, blue: 0.824).opacity(0.12))
+                                .fill(Theme.accentColor.opacity(0.12))
                         )
                 }
                 .buttonStyle(.plain)
@@ -60,7 +60,7 @@ struct TimerControlView: View {
         HStack {
             Label("剩余 \(viewModel.formattedTime)", systemImage: "timer.circle.fill")
                 .font(.title3.monospacedDigit())
-                .foregroundStyle(Color(red: 0.941, green: 0.902, blue: 0.824))
+                .foregroundStyle(Theme.accentColor)
 
             Spacer()
 

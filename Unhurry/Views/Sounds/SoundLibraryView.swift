@@ -10,7 +10,7 @@ struct SoundLibraryView: View {
 
     let viewModel: SoundPlayerViewModel
 
-    private let accentColor = Color(red: 0.941, green: 0.902, blue: 0.824)
+    private var accentColor: Color { Theme.accentColor }
 
     var body: some View {
         ScrollView {
@@ -20,8 +20,21 @@ struct SoundLibraryView: View {
                     preparingBanner
                 }
 
+                // 收藏区
+                if !viewModel.favoriteTracks.isEmpty {
+                    categorySection(
+                        title: "收藏",
+                        icon: "heart.fill",
+                        tracks: viewModel.favoriteTracks
+                    )
+                }
+
                 ForEach(viewModel.categorizedTracks, id: \.0) { category, tracks in
-                    categorySection(category: category, tracks: tracks)
+                    categorySection(
+                        title: category.displayName,
+                        icon: category.iconName,
+                        tracks: tracks
+                    )
                 }
             }
             .padding(.horizontal, 20)
@@ -37,7 +50,7 @@ struct SoundLibraryView: View {
                 .tint(accentColor)
             Text("即将开始播放……")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.accentColor.opacity(0.5))
             Spacer()
             Button("取消") {
                 viewModel.cancelPreparation()
@@ -54,12 +67,12 @@ struct SoundLibraryView: View {
 
     // MARK: - Category Section
 
-    private func categorySection(category: SoundCategory, tracks: [SoundTrack]) -> some View {
+    private func categorySection(title: String, icon: String, tracks: [SoundTrack]) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            Label(category.displayName, systemImage: category.iconName)
+            Label(title, systemImage: icon)
                 .font(.subheadline)
                 .fontWeight(.medium)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(accentColor.opacity(0.6))
 
             LazyVGrid(
                 columns: [GridItem(.adaptive(minimum: 100), spacing: 12)],
@@ -78,31 +91,46 @@ struct SoundLibraryView: View {
         let isActive = viewModel.activeTrackIds.contains(track.id)
         let isPending = viewModel.pendingTrackIds.contains(track.id)
         let isOn = isActive || isPending
+        let isFav = viewModel.isFavorite(track.id)
 
-        return Button(action: { viewModel.toggleTrack(track) }) {
-            VStack(spacing: 6) {
-                if isPending {
-                    Image(systemName: "hourglass")
-                        .font(.title)
-                        .symbolEffect(.pulse)
-                } else {
-                    Image(systemName: isActive ? "stop.circle.fill" : "play.circle.fill")
-                        .font(.title)
+        return ZStack {
+            // 主按钮：播放/停止
+            Button(action: { viewModel.toggleTrack(track) }) {
+                VStack(spacing: 6) {
+                    if isPending {
+                        Image(systemName: "hourglass")
+                            .font(.title)
+                            .symbolEffect(.pulse)
+                    } else {
+                        Image(systemName: isActive ? "stop.circle.fill" : "play.circle.fill")
+                            .font(.title)
+                    }
+                    Text(track.name)
+                        .font(.caption2)
+                        .lineLimit(1)
                 }
-                Text(track.name)
-                    .font(.caption2)
-                    .lineLimit(1)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 14)
+                .padding(.horizontal, 6)
+                .background(
+                    RoundedRectangle(cornerRadius: 14)
+                        .fill(isOn
+                            ? accentColor.opacity(isPending ? 0.12 : 0.2)
+                            : accentColor.opacity(0.08)
+                        )
+                )
             }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 14)
-            .background(
-                RoundedRectangle(cornerRadius: 14)
-                    .fill(isOn
-                        ? accentColor.opacity(isPending ? 0.12 : 0.2)
-                        : accentColor.opacity(0.08)
-                    )
-            )
+            .buttonStyle(.plain)
+
+            // 收藏按钮（覆盖在右上角）
+            Button(action: { viewModel.toggleFavorite(track.id) }) {
+                Image(systemName: isFav ? "heart.fill" : "heart")
+                    .font(.system(size: 12))
+                    .foregroundStyle(isFav ? Color.red : accentColor.opacity(0.3))
+                    .padding(8)
+            }
+            .buttonStyle(.plain)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
         }
-        .buttonStyle(.plain)
     }
 }

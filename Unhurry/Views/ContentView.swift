@@ -11,6 +11,13 @@ struct ContentView: View {
     let timerVM: TimerViewModel
     let storyVM: StoryPlayerViewModel
 
+    @State private var showSettings = false
+    @AppStorage("useBlackBackground") private var useBlackBackground = false
+    @AppStorage("accentTheme") private var accentTheme = "gold"
+
+    /// 主题变化时递增，强制重建整个视图树
+    @State private var themeVersion = 0
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
@@ -21,8 +28,27 @@ struct ContentView: View {
                 SoundLibraryView(viewModel: playerVM)
                 ActiveMixerPanel(viewModel: playerVM)
             }
-            .background(Color(red: 0.216, green: 0.184, blue: 0.322))
-            .foregroundStyle(Color(red: 0.941, green: 0.902, blue: 0.824))
+            .background(useBlackBackground ? Color(red: 0.05, green: 0.05, blue: 0.05) : Theme.bgColor)
+            .foregroundStyle(Theme.accentColor)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(action: { showSettings = true }) {
+                        Image(systemName: "gearshape.fill")
+                            .font(.subheadline)
+                    }
+                }
+            }
+            .sheet(isPresented: $showSettings) {
+                NavigationStack {
+                    SettingsView(
+                        nameResolver: { playerVM.name(for: $0) },
+                        presets: playerVM.presets
+                    )
+                }
+            }
+            .id(themeVersion)
+            .onChange(of: accentTheme) { _, _ in themeVersion += 1 }
+            .onChange(of: useBlackBackground) { _, _ in themeVersion += 1 }
         }
     }
 
@@ -36,11 +62,11 @@ struct ContentView: View {
                 Spacer()
                 Image(systemName: "chevron.right")
                     .font(.caption)
-                    .foregroundStyle(Color(red: 0.941, green: 0.902, blue: 0.824).opacity(0.45))
+                    .foregroundStyle(Theme.accentColor.opacity(0.45))
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 10)
-            .background(Color(red: 0.941, green: 0.902, blue: 0.824).opacity(0.06))
+            .background(Theme.accentColor.opacity(0.06))
         }
         .buttonStyle(.plain)
     }
@@ -55,11 +81,11 @@ struct ContentView: View {
                 Spacer()
                 Image(systemName: "chevron.right")
                     .font(.caption)
-                    .foregroundStyle(Color(red: 0.941, green: 0.902, blue: 0.824).opacity(0.45))
+                    .foregroundStyle(Theme.accentColor.opacity(0.45))
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 10)
-            .background(Color(red: 0.941, green: 0.902, blue: 0.824).opacity(0.06))
+            .background(Theme.accentColor.opacity(0.06))
         }
         .buttonStyle(.plain)
     }
@@ -80,11 +106,11 @@ struct ContentView: View {
             Text("暖床斜卧日曛腰，一觉闲眠百病销")
                 .font(.system(size: 11, design: .serif))
                 .italic()
-                .foregroundStyle(Color(red: 0.941, green: 0.902, blue: 0.824).opacity(0.45))
+                .foregroundStyle(Theme.accentColor.opacity(0.45))
                 .padding(.bottom, 4)
         }
         .frame(maxWidth: .infinity)
-        .background(Color(red: 0.216, green: 0.184, blue: 0.322))
+        .background(useBlackBackground ? Color(red: 0.05, green: 0.05, blue: 0.05) : Theme.bgColor)
     }
 }
 

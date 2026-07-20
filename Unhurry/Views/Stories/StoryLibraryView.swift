@@ -10,12 +10,13 @@ struct StoryLibraryView: View {
 
     let viewModel: StoryPlayerViewModel
 
-    private let accentColor = Color(red: 0.941, green: 0.902, blue: 0.824)
-    private let bgColor = Color(red: 0.216, green: 0.184, blue: 0.322)
+    private var accentColor: Color { Theme.accentColor }
+    @AppStorage("useBlackBackground") private var useBlackBg = false
+    private var bgColor: Color { Theme.bgColor }
 
     var body: some View {
         ZStack {
-            bgColor.ignoresSafeArea()
+            (useBlackBg ? Color(red: 0.05, green: 0.05, blue: 0.05) : Theme.bgColor).ignoresSafeArea()
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {

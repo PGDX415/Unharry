@@ -9,13 +9,13 @@ import SwiftUI
 struct BreathView: View {
     @State var viewModel = BreathViewModel()
     @Environment(\.dismiss) private var dismiss
+    @AppStorage("useBlackBackground") private var useBlackBg = false
 
-    private let accentColor = Color(red: 0.941, green: 0.902, blue: 0.824)
-    private let bgColor = Color(red: 0.216, green: 0.184, blue: 0.322)
+    private var accentColor: Color { Theme.accentColor }
 
     var body: some View {
         ZStack {
-            bgColor.ignoresSafeArea()
+            (useBlackBg ? Color(red: 0.05, green: 0.05, blue: 0.05) : Theme.bgColor).ignoresSafeArea()
 
             VStack(spacing: 0) {
                 // 顶部
@@ -124,7 +124,7 @@ struct BreathView: View {
 
             Text("第 \(viewModel.breathCount + 1) 次呼吸")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.accentColor.opacity(0.5))
         }
         .padding(.top, 40)
     }
@@ -152,7 +152,7 @@ struct BreathView: View {
         VStack(spacing: 16) {
             Text("选择时长")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.accentColor.opacity(0.5))
 
             HStack(spacing: 12) {
                 ForEach(viewModel.presets, id: \.1) { name, seconds in
@@ -212,7 +212,7 @@ struct BreathView: View {
             // 剩余时间
             Text(formatRemaining())
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.accentColor.opacity(0.5))
 
             // 暂停/停止
             HStack(spacing: 40) {
@@ -240,7 +240,7 @@ struct BreathView: View {
         VStack(spacing: 16) {
             Text("呼吸练习完成")
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.accentColor.opacity(0.5))
 
             HStack(spacing: 20) {
                 Button(action: { viewModel.start() }) {

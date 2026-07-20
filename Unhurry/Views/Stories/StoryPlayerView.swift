@@ -13,13 +13,14 @@ struct StoryPlayerView: View {
 
     @Environment(\.dismiss) private var dismiss
     @State private var countdown: Int = 3
+    @AppStorage("useBlackBackground") private var useBlackBg = false
 
-    private let accentColor = Color(red: 0.941, green: 0.902, blue: 0.824)
-    private let bgColor = Color(red: 0.216, green: 0.184, blue: 0.322)
+    private var accentColor: Color { Theme.accentColor }
+    private var bgColor: Color { Theme.bgColor }
 
     var body: some View {
         ZStack {
-            bgColor.ignoresSafeArea()
+            (useBlackBg ? Color(red: 0.05, green: 0.05, blue: 0.05) : Theme.bgColor).ignoresSafeArea()
 
             // 播放主界面
             VStack(spacing: 0) {
@@ -81,7 +82,7 @@ struct StoryPlayerView: View {
             Spacer()
         }
         .frame(maxWidth: .infinity)
-        .background(bgColor.opacity(0.95))
+        .background((useBlackBg ? Color(red: 0.05, green: 0.05, blue: 0.05) : Theme.bgColor).opacity(0.95))
         .onTapGesture {
             viewModel.skipPreparation()
         }
@@ -153,13 +154,13 @@ struct StoryPlayerView: View {
     /// 当前朗读的句子用暖白色全亮，其余为 50% 透明度。
     private func highlightedAttributedString(from text: String) -> AttributedString {
         var attributed = AttributedString(text)
-        attributed.foregroundColor = UIColor(accentColor).withAlphaComponent(0.5)
+        attributed.foregroundColor = Theme.accent.uiColor.withAlphaComponent(0.5)
 
         if let range = viewModel.highlightedRange,
            let swiftRange = Range(range, in: text),
            let lower = AttributedString.Index(swiftRange.lowerBound, within: attributed),
            let upper = AttributedString.Index(swiftRange.upperBound, within: attributed) {
-            attributed[lower..<upper].foregroundColor = UIColor(accentColor)
+            attributed[lower..<upper].foregroundColor = Theme.accent.uiColor
         }
 
         return attributed
@@ -194,7 +195,7 @@ struct StoryPlayerView: View {
         .frame(maxWidth: .infinity)
         .background(
             Rectangle()
-                .fill(Color(red: 0.216, green: 0.184, blue: 0.322))
+                .fill(useBlackBg ? Color(red: 0.05, green: 0.05, blue: 0.05) : Theme.bgColor)
                 .shadow(color: .black.opacity(0.3), radius: 8, y: -2)
         )
     }

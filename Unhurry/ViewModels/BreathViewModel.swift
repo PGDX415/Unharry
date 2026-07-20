@@ -68,6 +68,7 @@ final class BreathViewModel {
 
     private var displayLink: CADisplayLink?
     private var phaseStartDate: Date = .now
+    private var sessionStartDate: Date = .now
 
     // MARK: - Init
 
@@ -89,6 +90,7 @@ final class BreathViewModel {
         currentPhase = .inhale
         phaseProgress = 0
         phaseStartDate = .now
+        sessionStartDate = .now
         scale = 1.0
         startPhaseHaptics()
         startDisplayLink()
@@ -175,6 +177,11 @@ final class BreathViewModel {
             state = .finished
             stopDisplayLink()
             stopHaptics()
+            // 同步到 Apple Health
+            let duration = Date().timeIntervalSince(sessionStartDate)
+            if duration >= 60 {
+                HealthService.saveMindfulSession(start: sessionStartDate, duration: duration)
+            }
         }
     }
 

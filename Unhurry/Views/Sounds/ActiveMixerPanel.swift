@@ -14,7 +14,7 @@ struct ActiveMixerPanel: View {
     @State private var presetName = ""
     @State private var presetToDelete: MixPreset?
 
-    private let accentColor = Color(red: 0.941, green: 0.902, blue: 0.824)
+    private var accentColor: Color { Theme.accentColor }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -73,7 +73,7 @@ struct ActiveMixerPanel: View {
         VStack(alignment: .leading, spacing: 8) {
             Label("我的组合", systemImage: "rectangle.stack.fill")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.accentColor.opacity(0.5))
                 .padding(.horizontal, 20)
 
             ScrollView(.horizontal, showsIndicators: false) {
@@ -123,7 +123,7 @@ struct ActiveMixerPanel: View {
                 )
                     .font(.subheadline)
                     .fontWeight(.medium)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.accentColor.opacity(0.5))
 
                 Spacer()
 
@@ -166,12 +166,12 @@ struct ActiveMixerPanel: View {
         HStack(spacing: 10) {
             Image(systemName: "hourglass")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.accentColor.opacity(0.5))
                 .frame(width: 20)
 
             Text(viewModel.name(for: trackId))
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.accentColor.opacity(0.5))
 
             Spacer()
 
@@ -190,7 +190,7 @@ struct ActiveMixerPanel: View {
         return HStack(spacing: 10) {
             Image(systemName: "waveform")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.accentColor.opacity(0.5))
                 .frame(width: 20)
 
             Text(name)
@@ -206,7 +206,7 @@ struct ActiveMixerPanel: View {
 
             Text(String(format: "%.0f%%", volume * 100))
                 .font(.caption2)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.accentColor.opacity(0.5))
                 .frame(width: 36, alignment: .trailing)
         }
     }

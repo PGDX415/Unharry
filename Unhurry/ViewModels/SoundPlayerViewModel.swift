@@ -45,10 +45,20 @@ final class SoundPlayerViewModel {
     /// 已保存的混音预设
     private(set) var presets: [MixPreset] = []
 
+    /// 收藏的音效 ID 集合
+    private(set) var favoriteTrackIDs: Set<String> = []
+
+    /// 收藏的音效列表
+    var favoriteTracks: [SoundTrack] {
+        tracks.filter { favoriteTrackIDs.contains($0.id) }
+    }
+
     // MARK: - Constants
 
-    /// 音频播放前准备缓冲时间（秒）
-    static let soundPrepareDelay: TimeInterval = 3.0
+    /// 音频播放前准备缓冲时间（秒）——优先读取用户设置
+    static var soundPrepareDelay: TimeInterval {
+        Theme.bufferDuration
+    }
 
     // MARK: - Dependencies
 
@@ -72,6 +82,7 @@ final class SoundPlayerViewModel {
     // MARK: - Persistence
 
     private static let presetsKey = "com.unhurry.mixpresets"
+    private static let favoritesKey = "com.unhurry.favorites"
 
     // MARK: - Init
 
@@ -84,6 +95,7 @@ final class SoundPlayerViewModel {
         self.tracks = soundLibrary.tracks
         self.nowPlaying = nowPlayingController
         loadPresetsFromDisk()
+        loadFavoritesFromDisk()
         setupRemoteCommands()
     }
 
@@ -107,8 +119,9 @@ final class SoundPlayerViewModel {
             // 在等待队列中 → 取消
             cancelPendingTrack(track.id)
         } else {
-            // 新音效 → 安排缓冲播放
-            schedulePlay(trackId: track.id, volume: track.defaultVolume, loop: track.isLoopable)
+            // 新音效 → 基础音量 × 全局默认音量
+            let volume = track.defaultVolume * Float(Theme.defaultVolume)
+            schedulePlay(trackId: track.id, volume: volume, loop: track.isLoopable)
         }
     }
 
@@ -118,6 +131,7 @@ final class SoundPlayerViewModel {
             try audioService.play(soundId: trackId, volume: volume, loop: loop)
             activeTrackIds.insert(trackId)
             volumes[trackId] = volume
+            UsageTracker.shared.trackStarted(trackId)
         } catch {
             print("⚠️ Failed to play \(trackId): \(error)")
         }
@@ -189,6 +203,7 @@ final class SoundPlayerViewModel {
         audioService.stop(soundId: track.id)
         activeTrackIds.remove(track.id)
         volumes.removeValue(forKey: track.id)
+        UsageTracker.shared.trackStopped(track.id)
         if activeTrackIds.isEmpty {
             clearNowPlaying()
         }
@@ -206,6 +221,7 @@ final class SoundPlayerViewModel {
         audioService.stopAll()
         activeTrackIds.removeAll()
         volumes.removeAll()
+        UsageTracker.shared.allStopped()
         clearNowPlaying()
     }
 
@@ -411,5 +427,38 @@ final class SoundPlayerViewModel {
         } catch {
             print("⚠️ Failed to save presets: \(error)")
         }
+    }
+
+    // MARK: - Favorites
+
+    /// 切换音效的收藏状态。
+    func toggleFavorite(_ trackId: String) {
+        if favoriteTrackIDs.contains(trackId) {
+            favoriteTrackIDs.remove(trackId)
+        } else {
+            favoriteTrackIDs.insert(trackId)
+        }
+        persistFavorites()
+    }
+
+    /// 是否已收藏指定音效。
+    func isFavorite(_ trackId: String) -> Bool {
+        favoriteTrackIDs.contains(trackId)
+    }
+
+    private func loadFavoritesFromDisk() {
+        let defaults = Self.sharedDefaults
+        if let ids = defaults.stringArray(forKey: Self.favoritesKey) {
+            favoriteTrackIDs = Set(ids)
+        } else if let ids = UserDefaults.standard.stringArray(forKey: Self.favoritesKey) {
+            // 从旧存储迁移
+            favoriteTrackIDs = Set(ids)
+            defaults.set(ids, forKey: Self.favoritesKey)
+        }
+    }
+
+    private func persistFavorites() {
+        Self.sharedDefaults.set(Array(favoriteTrackIDs), forKey: Self.favoritesKey)
+        WidgetCenter.shared.reloadAllTimelines()
     }
 }
