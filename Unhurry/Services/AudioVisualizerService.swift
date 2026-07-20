@@ -37,8 +37,8 @@ final class AudioVisualizerService {
 
     // MARK: - Tap State
 
-    private nonisolated var isTapInstalled = false
-    private nonisolated weak var mixerNode: AVAudioMixerNode?
+    private nonisolated(unsafe) var isTapInstalled = false
+    private nonisolated(unsafe) weak var mixerNode: AVAudioMixerNode?
 
     // MARK: - Init
 
