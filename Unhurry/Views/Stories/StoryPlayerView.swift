@@ -19,6 +19,8 @@ struct StoryPlayerView: View {
 
     var body: some View {
         ZStack {
+            bgColor.ignoresSafeArea()
+
             // 播放主界面
             VStack(spacing: 0) {
                 headerBar
@@ -29,13 +31,13 @@ struct StoryPlayerView: View {
 
                 controlBar
             }
+            .foregroundStyle(accentColor)
 
             // 准备缓冲遮罩
             if viewModel.isPreparing {
                 preparationOverlay
             }
         }
-        .background(bgColor)
         .foregroundStyle(accentColor)
         .navigationBarBackButtonHidden(true)
         .onAppear {
@@ -63,7 +65,7 @@ struct StoryPlayerView: View {
 
             Text("闭上眼睛，放松身体……")
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(accentColor.opacity(0.5))
 
             Text("\(countdown)")
                 .font(.system(size: 64, design: .rounded))
@@ -73,7 +75,7 @@ struct StoryPlayerView: View {
 
             Text("轻点屏幕 立即开始")
                 .font(.caption)
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(accentColor.opacity(0.3))
                 .padding(.top, 8)
 
             Spacer()
@@ -105,7 +107,7 @@ struct StoryPlayerView: View {
                     .fontWeight(.medium)
                 Text(story.category.displayName)
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(accentColor.opacity(0.45))
             }
 
             Spacer()

@@ -36,7 +36,7 @@ struct ContentView: View {
                 Spacer()
                 Image(systemName: "chevron.right")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color(red: 0.941, green: 0.902, blue: 0.824).opacity(0.45))
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 10)
@@ -55,7 +55,7 @@ struct ContentView: View {
                 Spacer()
                 Image(systemName: "chevron.right")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color(red: 0.941, green: 0.902, blue: 0.824).opacity(0.45))
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 10)
@@ -80,7 +80,7 @@ struct ContentView: View {
             Text("暖床斜卧日曛腰，一觉闲眠百病销")
                 .font(.system(size: 11, design: .serif))
                 .italic()
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color(red: 0.941, green: 0.902, blue: 0.824).opacity(0.45))
                 .padding(.bottom, 4)
         }
         .frame(maxWidth: .infinity)

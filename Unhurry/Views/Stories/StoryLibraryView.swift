@@ -11,20 +11,26 @@ struct StoryLibraryView: View {
     let viewModel: StoryPlayerViewModel
 
     private let accentColor = Color(red: 0.941, green: 0.902, blue: 0.824)
+    private let bgColor = Color(red: 0.216, green: 0.184, blue: 0.322)
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                ForEach(StoryCategory.allCases) { category in
-                    let items = viewModel.stories.filter { $0.category == category }
-                    if !items.isEmpty {
-                        categorySection(category: category, stories: items)
+        ZStack {
+            bgColor.ignoresSafeArea()
+
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    ForEach(StoryCategory.allCases) { category in
+                        let items = viewModel.stories.filter { $0.category == category }
+                        if !items.isEmpty {
+                            categorySection(category: category, stories: items)
+                        }
                     }
                 }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 16)
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 16)
         }
+        .foregroundStyle(accentColor)
         .navigationTitle("睡前陪伴")
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -36,7 +42,7 @@ struct StoryLibraryView: View {
             Label(category.displayName, systemImage: category.iconName)
                 .font(.subheadline)
                 .fontWeight(.medium)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(accentColor.opacity(0.6))
 
             ForEach(stories) { story in
                 storyCard(story)
@@ -59,15 +65,16 @@ struct StoryLibraryView: View {
                     Text(story.title)
                         .font(.subheadline)
                         .fontWeight(.medium)
+                        .foregroundStyle(accentColor)
 
                     Text(story.summary)
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(accentColor.opacity(0.55))
                         .lineLimit(2)
 
                     Text(formatDuration(story.estimatedDuration))
                         .font(.caption2)
-                        .foregroundStyle(.tertiary)
+                        .foregroundStyle(accentColor.opacity(0.35))
                 }
 
                 Spacer()
