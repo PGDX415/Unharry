@@ -37,6 +37,9 @@ final class AudioVisualizerService {
 
     // MARK: - Tap State
 
+    // nonisolated(unsafe) 是必要的：deinit 需要访问这些属性来移除 audio tap，
+    // 但 @MainActor @Observable 类中不能用 nonisolated（Swift 6 限制可变属性）。
+    // 编译器警告"has no effect"是误报——去掉会直接编译错误。
     private nonisolated(unsafe) var isTapInstalled = false
     private nonisolated(unsafe) weak var mixerNode: AVAudioMixerNode?
 
