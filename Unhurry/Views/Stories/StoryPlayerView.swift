@@ -10,9 +10,11 @@ struct StoryPlayerView: View {
 
     let viewModel: StoryPlayerViewModel
     let story: StoryItem
+    let soundPlayerVM: SoundPlayerViewModel
 
     @Environment(\.dismiss) private var dismiss
     @State private var countdown: Int = 3
+    @State private var showBackgroundSounds = false
     @AppStorage("useBlackBackground") private var useBlackBg = false
 
     private var accentColor: Color { Theme.accentColor }
@@ -25,6 +27,8 @@ struct StoryPlayerView: View {
             // 播放主界面
             VStack(spacing: 0) {
                 headerBar
+
+                backgroundSoundStrip
 
                 if let story = viewModel.currentStory {
                     textContent(story.content)
@@ -120,6 +124,100 @@ struct StoryPlayerView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
+    }
+
+    // MARK: - Background Sound Strip
+
+    /// 常用背景音（供睡前故事页面快速切换）
+    private static let quickSoundIDs: [String] = [
+        "ai_rain_light",
+        "ai_ocean_calm",
+        "ai_fire_camp",
+        "builtin_white_noise",
+        "ai_fan_hum",
+        "ai_summer_bugs",
+    ]
+
+    private var backgroundSoundStrip: some View {
+        let hasActive = soundPlayerVM.isAnythingPlaying || soundPlayerVM.isSoundPreparing
+        let activeHighlight = soundPlayerVM.allActiveOrPendingIds
+
+        return VStack(spacing: 0) {
+            // Toggle button
+            Button(action: {
+                withAnimation(.easeInOut(duration: 0.25)) {
+                    showBackgroundSounds.toggle()
+                }
+            }) {
+                HStack(spacing: 6) {
+                    Image(systemName: hasActive ? "speaker.wave.2.fill" : "speaker.wave.1")
+                        .font(.caption)
+                        .foregroundStyle(hasActive ? accentColor : accentColor.opacity(0.4))
+
+                    Text("背景音")
+                        .font(.caption)
+                        .foregroundStyle(accentColor.opacity(0.55))
+
+                    if hasActive {
+                        Circle()
+                            .fill(accentColor)
+                            .frame(width: 5, height: 5)
+                    }
+
+                    Spacer()
+
+                    Image(systemName: showBackgroundSounds ? "chevron.up" : "chevron.down")
+                        .font(.caption2)
+                        .foregroundStyle(accentColor.opacity(0.35))
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 8)
+                .background(accentColor.opacity(0.04))
+            }
+            .buttonStyle(.plain)
+
+            // Sound chips
+            if showBackgroundSounds {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 6) {
+                        ForEach(Self.quickSoundIDs, id: \.self) { trackId in
+                            bgChip(trackId: trackId, isActive: activeHighlight.contains(trackId))
+                        }
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 6)
+                }
+                .transition(.move(edge: .top).combined(with: .opacity))
+            }
+        }
+    }
+
+    private func bgChip(trackId: String, isActive: Bool) -> some View {
+        let name = soundPlayerVM.name(for: trackId)
+
+        return Button(action: {
+            guard let track = soundPlayerVM.tracks.first(where: { $0.id == trackId }) else { return }
+            soundPlayerVM.toggleTrack(track)
+        }) {
+            HStack(spacing: 4) {
+                Image(systemName: isActive ? "speaker.wave.2.fill" : "speaker.wave.1")
+                    .font(.system(size: 8))
+                Text(name)
+                    .font(.caption2)
+                    .lineLimit(1)
+            }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(
+                Capsule()
+                    .fill(isActive ? accentColor.opacity(0.25) : accentColor.opacity(0.08))
+            )
+            .overlay(
+                Capsule()
+                    .stroke(isActive ? accentColor.opacity(0.5) : Color.clear, lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
     }
 
     // MARK: - Text Content

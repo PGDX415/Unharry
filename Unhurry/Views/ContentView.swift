@@ -78,7 +78,7 @@ struct ContentView: View {
     // MARK: - Story Entry
 
     private var storyEntry: some View {
-        NavigationLink(destination: StoryLibraryView(viewModel: storyVM)) {
+        NavigationLink(destination: StoryLibraryView(viewModel: storyVM, soundPlayerVM: playerVM)) {
             HStack {
                 Label("睡前陪伴", systemImage: "book.fill")
                     .font(.subheadline)

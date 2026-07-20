@@ -9,6 +9,7 @@ import SwiftUI
 struct StoryLibraryView: View {
 
     let viewModel: StoryPlayerViewModel
+    let soundPlayerVM: SoundPlayerViewModel
 
     private var accentColor: Color { Theme.accentColor }
     @AppStorage("useBlackBackground") private var useBlackBg = false
@@ -54,7 +55,7 @@ struct StoryLibraryView: View {
     // MARK: - Story Card
 
     private func storyCard(_ story: StoryItem) -> some View {
-        NavigationLink(destination: StoryPlayerView(viewModel: viewModel, story: story)) {
+        NavigationLink(destination: StoryPlayerView(viewModel: viewModel, story: story, soundPlayerVM: soundPlayerVM)) {
             HStack(spacing: 14) {
                 Image(systemName: story.category.iconName)
                     .font(.title2)
